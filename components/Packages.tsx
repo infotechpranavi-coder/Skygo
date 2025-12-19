@@ -64,11 +64,6 @@ const Packages = () => {
                   alt={pkg.title}
                   className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
                 />
-                {pkg.originalPrice && (
-                  <Badge className="absolute top-4 left-4 bg-destructive">
-                    {Math.round((1 - parseFloat(pkg.price) / parseFloat(pkg.originalPrice)) * 100)}% OFF
-                  </Badge>
-                )}
               </div>
               
               <CardHeader className="pb-2">
@@ -92,14 +87,9 @@ const Packages = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="text-2xl font-bold text-primary">
-                      ₹ {pkg.price}/
+                      AED {pkg.price}/
                     </div>
                     <div className="text-sm text-muted-foreground">per person</div>
-                    {pkg.originalPrice && (
-                      <div className="text-sm text-muted-foreground line-through">
-                        ₹ {pkg.originalPrice}
-                      </div>
-                    )}
                   </div>
                   <Button className="bg-primary hover:bg-primary/90">
                     Book now
