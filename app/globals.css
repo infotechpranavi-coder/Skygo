@@ -1,0 +1,188 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 100%; /* White */
+    --foreground: 0 0% 0%; /* Black */
+
+    --card: 0 0% 96%; /* Light grey for cards */
+    --card-foreground: 0 0% 0%; /* Black text on cards */
+
+    --popover: 0 0% 100%; /* White */
+    --popover-foreground: 0 0% 0%; /* Black */
+
+    --primary: 0 0% 0%; /* Black as primary */
+    --primary-foreground: 0 0% 100%; /* White text on primary */
+
+    --secondary: 0 0% 50%; /* Medium grey */
+    --secondary-foreground: 0 0% 100%; /* White text */
+
+    --muted: 0 0% 96%; /* Light grey */
+    --muted-foreground: 0 0% 45%; /* Dark grey text */
+
+    --accent: 0 0% 90%; /* Light grey accent */
+    --accent-foreground: 0 0% 0%; /* Black text */
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 0 0% 85%; /* Light grey border */
+    --input: 0 0% 96%; /* Light grey input */
+    --ring: 0 0% 0%; /* Black ring */
+
+    /* Travel website specific colors - updated to grey scale */
+    --travel-teal: 0 0% 50%; /* Medium grey */
+    --travel-navy: 0 0% 20%; /* Dark grey */
+    --travel-light-teal: 0 0% 95%; /* Very light grey */
+    --travel-light-bg: 0 0% 98%; /* Almost white grey */
+
+    /* Animation variables */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%; /* Light grey */
+
+    --sidebar-foreground: 0 0% 0%; /* Black */
+
+    --sidebar-primary: 0 0% 0%; /* Black */
+
+    --sidebar-primary-foreground: 0 0% 100%; /* White */
+
+    --sidebar-accent: 0 0% 95%; /* Light grey */
+
+    --sidebar-accent-foreground: 0 0% 0%; /* Black */
+
+    --sidebar-border: 0 0% 85%; /* Light grey */
+
+    --sidebar-ring: 0 0% 0%; /* Black */
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 200 80% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 100% 25%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 200 80% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 200 80% 50%;
+
+    /* Travel website specific colors */
+    --travel-teal: 200 80% 50%;
+    --travel-navy: 220 100% 25%;
+    --travel-light-teal: 180 40% 85%;
+    --travel-light-bg: 200 20% 98%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-white text-foreground;
+  }
+  
+  /* Ensure sections use white background */
+  section {
+    @apply bg-white;
+  }
+  
+  /* Main content areas */
+  main {
+    @apply bg-white;
+  }
+}
+
+/* Animation utilities */
+@layer utilities {
+  .fade-in {
+    animation: fade-in 0.6s ease-out forwards;
+  }
+  
+  .slide-up {
+    animation: slide-up 0.8s ease-out forwards;
+  }
+  
+  .scale-in {
+    animation: scale-in 0.5s ease-out forwards;
+  }
+  
+  .hover-lift {
+    transition: var(--transition-smooth);
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+  }
