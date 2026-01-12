@@ -378,8 +378,8 @@ const InternationalPackagesPage = () => {
                 <Card
                   key={index}
                   className={`text-center hover:shadow-lg transition-all cursor-pointer ${selectedDestination === country.name.toLowerCase()
-                      ? 'ring-2 ring-primary bg-primary/5'
-                      : 'hover:bg-gray-50'
+                    ? 'ring-2 ring-primary bg-primary/5'
+                    : 'hover:bg-gray-50'
                     }`}
                   onClick={() => setSelectedDestination(
                     selectedDestination === country.name.toLowerCase() ? "" : country.name.toLowerCase()
@@ -387,14 +387,14 @@ const InternationalPackagesPage = () => {
                 >
                   <CardContent className="p-6">
                     <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${selectedDestination === country.name.toLowerCase()
-                        ? 'bg-primary text-white'
-                        : 'bg-primary/10 text-primary'
+                      ? 'bg-primary text-white'
+                      : 'bg-primary/10 text-primary'
                       }`}>
                       <country.icon className="h-8 w-8" />
                     </div>
                     <h3 className={`text-lg font-semibold mb-2 ${selectedDestination === country.name.toLowerCase()
-                        ? 'text-primary'
-                        : 'text-gray-900'
+                      ? 'text-primary'
+                      : 'text-gray-900'
                       }`}>
                       {country.name}
                     </h3>
