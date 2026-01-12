@@ -42,6 +42,7 @@ interface Package {
   }>;
   bookings: number;
   rating: number;
+  packageCategory?: string;
 }
 
 interface FilterState {
