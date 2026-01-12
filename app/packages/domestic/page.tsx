@@ -138,6 +138,35 @@ const DomesticPackagesPage = () => {
         const domesticPackages = result.data.filter((pkg: Package) =>
           pkg.packageType === 'domestic'
         );
+
+        // Demo Package
+        const demoPackage: Package = {
+          _id: 'demo-package-id',
+          title: 'Royal Dubai Experience',
+          subtitle: 'Luxury Desert & City Tour',
+          about: 'Experience the ultimate luxury in Dubai with our premium package including 5-star accommodation, private desert safari, and VIP access to Burj Khalifa.',
+          services: ['5-Star Hotel', 'Private Transfer', 'Guide', 'All Meals'],
+          tourDetails: 'A comprehensive 5-day tour of Dubai.',
+          itinerary: [
+            { day: 1, title: 'Arrival in Style', description: 'Private transfer to Atlantis The Palm.' },
+            { day: 2, title: 'Modern Dubai', description: 'VIP tour of Burj Khalifa and Dubai Mall.' },
+            { day: 3, title: 'Desert Magic', description: 'Luxury desert safari with private dinner.' }
+          ],
+          price: 5500,
+          duration: '5 Days',
+          location: 'Dubai',
+          capacity: '2 - 4 People',
+          packageType: 'domestic',
+          place: 'Dubai',
+          images: [
+            { url: '/domestic-tour-packages-services.jpg', alt: 'Royal Dubai Experience' }
+          ],
+          bookings: 128,
+          rating: 4.9,
+          packageCategory: 'Luxury'
+        };
+
+        domesticPackages.unshift(demoPackage);
         setPackages(domesticPackages);
       }
     } catch (error) {
