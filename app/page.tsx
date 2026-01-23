@@ -9,7 +9,7 @@ import FloatingCallButton from "../components/FloatingCallButton";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
-import { ArrowRight, MapPin, Package, Book, Phone, MessageCircle, Plane, Calendar, User, Eye, Heart, Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, MapPin, Package, Book, Phone, MessageCircle, Plane, Calendar, User, Eye, Heart, Star, ChevronLeft, ChevronRight, Clock, Car } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -87,8 +87,6 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <Hero />
-
-
 
       {/* Tour Packages Slider Section */}
       <TourPackagesSlider />
@@ -256,7 +254,7 @@ export default function Home() {
               THE <span className="text-primary underline decoration-primary/30 underline-offset-8">PREMIUM</span> COLLECTION
             </h2>
             <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-4 leading-relaxed font-medium">
-              Elevate your journey with our top-tier premium selections. Professional service meets high-end comfort for those who demand excellence in every detail of their Dubai adventure.
+              A curated selection of elevated travel experiences designed around comfort, privacy, and refined service. Each journey reflects our commitment to thoughtful planning and exceptional care.
             </p>
           </div>
 
@@ -404,11 +402,11 @@ export default function Home() {
               }`}
           >
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-6 text-white tracking-tighter">
-              ULTIMATE <span className="text-amber-500 underline decoration-amber-500/30 underline-offset-8">LUXURY</span> VOYAGES
+              SIGNATURE <span className="text-amber-500 underline decoration-amber-500/30 underline-offset-8">LUXURY</span> JOURNEYS
             </h2>
             <div className="w-20 h-1 bg-amber-500/20 mx-auto mb-6 rounded-full"></div>
             <p className="text-base sm:text-lg text-gray-400 max-w-3xl mx-auto px-4 leading-relaxed font-light">
-              The pinnacle of Arabian opulence. Indulge in exclusive experiences designed for those who seek the extraordinary, from royal retreats to private sky voyages.
+             Highly curated travel experiences defined by privacy, comfort, and seamless execution.
             </p>
           </div>
 
@@ -546,7 +544,7 @@ export default function Home() {
           >
             <h2 className="text-4xl font-bold mb-4 text-secondary">Dubai Travel Blog</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Discover Dubai through our expert guides, travel tips, and insider stories. Everything you need to know for an unforgettable Dubai experience.
+              Insights, local knowledge, and practical advice that help you to plan your Dubai and the UAE journey with confidence.
             </p>
           </div>
 
@@ -844,9 +842,9 @@ export default function Home() {
       {/* Contact Section */}
       <section className="py-20 bg-primary text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-4">Ready for Your Dubai Adventure?</h2>
+          <h2 className="text-4xl font-bold mb-4">Ready to Plan Your Dubai & The UAE Experience?</h2>
           <p className="text-lg mb-8 max-w-2xl mx-auto">
-            Contact us today to start planning your dream trip to Dubai. Experience luxury, adventure, and unforgettable memories with Premium Dubai Tours.
+            Speak with our team to design a well-planned Dubai & the UAE journey focused on comfort, clarity, and professional service.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button

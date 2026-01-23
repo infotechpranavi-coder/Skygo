@@ -12,8 +12,8 @@ import { InquiryFormProvider } from "../contexts/InquiryFormContext"
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Premium Dubai Tours - Your Gateway to Dubai',
-  description: 'Discover amazing tour packages in Dubai with Premium Dubai Tours',
+  title: 'Premium Dubai Tours | Customized & Luxury Dubai Travel Experiences',
+  description: 'Discover Dubai with Premium Dubai Tours. Enjoy personalized travel experiences tailored to your preferences. Book now for reliable, premium Dubai tours.',
 }
 
 export const viewport = {
