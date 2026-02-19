@@ -34,7 +34,7 @@ import {
   MapPin, Clock, Users, Star, Calendar, Phone, Mail, ArrowLeft,
   CheckCircle, Plane, Camera, Globe, Heart, Share, Car, Hotel,
   Utensils, Info, X, Car as CarIcon, Building, Bed,
-  Calendar as CalendarIcon, ChevronRight, PlayCircle, Sparkles, ShieldCheck
+  Calendar as CalendarIcon, ChevronRight, PlayCircle, Sparkles, ShieldCheck, Ticket, ArrowRight
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -56,9 +56,21 @@ interface Package {
   _id: string;
   title: string;
   subtitle: string;
+  ideaFor?: string;
   about: string;
   services: string[] | string;
   tourDetails: string;
+  abstract?: string;
+  tourOverview?: string;
+  keyHighlights?: string[];
+  hotelOptions?: string[];
+  bestTimeToVisit?: {
+    yearRound?: string;
+    winter?: string;
+    summer?: string;
+  };
+  whyChooseThisTrip?: string[];
+  whyPremiumDubaiTours?: string[];
   itinerary: Array<{
     day: number;
     title: string;
@@ -89,8 +101,10 @@ interface Package {
   location: string;
   capacity: string;
   packageType: 'domestic' | 'international';
-  place: 'bhutan' | 'nepal';
+  place: string;
+  packageCategory?: string;
   images: Array<{
+    public_id?: string;
     url: string;
     alt: string;
   }>;
@@ -108,7 +122,88 @@ const PackageDetailPage = () => {
   const [activeTab, setActiveTab] = useState<'overview' | 'itinerary' | 'policy'>('overview');
 
   useEffect(() => {
-    if (params?.id) {
+    const fetchPackage = async () => {
+      if (!params?.id) return;
+      
+      // Skip API fetch for demo packages (handled by second useEffect)
+      // Attraction packages (like burj-khalifa-tickets) should always fetch from API
+      const demoPackageIds = [
+        'demo-package-id', 
+        'premium-dubai-tours-default',
+        'dubai-grand-signature-journey', 
+        'dubai-signature-explorer',
+        'dubai-stopover-signature', 
+        'dubai-transit-escape',
+        'dubai-grand-explorer', 
+        'dubai-essential-experience',
+        'dubai-grand-experience', 
+        'classic-discovery-dubai-abu-dhabi',
+        'dubai-private-classic-discovery', 
+        'dubai-elite-grand-explorer'
+      ];
+      
+      // For attraction packages, always fetch from API (no hardcoded fallback)
+      const isAttractionPackage = params.id.includes('ticket') || params.id.includes('attraction') || params.id === 'burj-khalifa-tickets';
+      
+      if (!isAttractionPackage && demoPackageIds.includes(params.id)) {
+        return;
+      }
+      
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // Always fetch from API for attraction packages
+        const response = await fetch(`/api/packages/${params.id}`);
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+          // Transform images if needed
+          const transformedData = {
+            ...result.data,
+            images: result.data.images?.map((img: any) => ({
+              url: img.url || img.public_id,
+              alt: img.alt || result.data.title,
+              public_id: img.public_id
+            })) || []
+          };
+          setPackageData(transformedData);
+        } else {
+          // For attraction packages, show error if not found (no fallback)
+          if (isAttractionPackage) {
+            setError('Attraction package not found. Please check the package ID or contact support.');
+          } else {
+            setError('Package not found');
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching package:', err);
+        // For attraction packages, show specific error message
+        if (isAttractionPackage) {
+          setError('Failed to load attraction package details. Please try again or contact support.');
+        } else {
+          setError('Failed to load package details');
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPackage();
+  }, [params?.id]);
+
+  // Keep old hardcoded data as fallback for demo (only for specific demo IDs)
+  // Attraction packages should NEVER use hardcoded data - only API data
+  useEffect(() => {
+    if (!params?.id) return;
+    
+    // Skip hardcoded data for attraction packages - they must use API data only
+    const isAttractionPackage = params.id.includes('ticket') || params.id.includes('attraction') || params.id === 'burj-khalifa-tickets';
+    if (isAttractionPackage) {
+      return; // Don't set any hardcoded data for attraction packages
+    }
+    
+    // Only set hardcoded data for specific demo IDs, skip API fetch for these
       if (params.id === 'demo-package-id') {
         // Set hardcoded demo data
         setPackageData({
@@ -402,8 +497,8 @@ Why Premium Dubai Tours for This Journey?
 • Discounted attraction tickets arranged on request
 • Transparent pricing and local expertise`,
           itinerary: [
-            {
-              day: 1,
+            { 
+              day: 1, 
               title: 'Arrival in Dubai & Private Yacht Dinner Cruise',
               description: `Arrive at Dubai International Airport, where you will be greeted by our representative and transferred via private vehicle to your hotel (if accommodation is selected).
 
@@ -411,8 +506,8 @@ In the evening, enjoy a private yacht dinner cruise at Dubai Marina. Glide past 
 
 Overnight in Dubai.`
             },
-            {
-              day: 2,
+            { 
+              day: 2, 
               title: 'Private Dubai City Tour & Iconic Attractions',
               description: `After breakfast, begin a private Dubai city tour covering the city’s most important landmarks.
 
@@ -427,8 +522,8 @@ Return to the hotel with time to relax or explore independently.
 
 Overnight in Dubai.`
             },
-            {
-              day: 3,
+            { 
+              day: 3, 
               title: 'Dubai Frame, Miracle Garden & Evening Entertainment',
               description: `This day showcases Dubai’s architectural creativity and leisure attractions.
 
@@ -444,8 +539,8 @@ OR
 
 Overnight in Dubai.`
             },
-            {
-              day: 4,
+            { 
+              day: 4, 
               title: 'Private Abu Dhabi City Tour with One Theme Park',
               description: `After breakfast, travel in a private vehicle to Abu Dhabi, the UAE’s capital.
 
@@ -462,8 +557,8 @@ Return to Dubai in the evening.
 
 Overnight in Dubai.`
             },
-            {
-              day: 5,
+            { 
+              day: 5, 
               title: 'Dolphin Show, Limousine Ride & Private Desert Safari',
               description: `Begin the day with a dolphin show at Dubai Creek, a favorite for families.
 
@@ -473,9 +568,9 @@ In the afternoon, proceed for a private desert safari, featuring dune bashing, s
 
 Overnight in Dubai.`
             },
-            {
-              day: 6,
-              title: 'Departure',
+            { 
+              day: 6, 
+              title: 'Departure', 
               description: `After breakfast, enjoy a relaxed morning before your private transfer to the airport, concluding your premium Dubai journey.`
             }
           ],
@@ -2000,7 +2095,7 @@ Key Highlights`,
             'Dedicated customer support before and during travel'
           ]
         } as any);
-        setLoading(false);
+      setLoading(false);
       } else if (params.id === 'dubai-signature-explorer') {
         // Set Dubai Signature Explorer package data
         setPackageData({
@@ -2345,29 +2440,10 @@ Key Highlights`,
           ]
         } as any);
         setLoading(false);
-      } else {
-        fetchPackageDetails(params.id as string);
+        return; // Skip API fetch for demo package
       }
-    }
+      // For other package IDs, the first useEffect will handle API fetching
   }, [params?.id]);
-
-  const fetchPackageDetails = async (id: string) => {
-    try {
-      const response = await fetch(`/api/packages/${id}`);
-      const result = await response.json();
-
-      if (result.success) {
-        setPackageData(result.data);
-      } else {
-        setError(result.message || 'Package not found');
-      }
-    } catch (error) {
-      console.error('Error fetching package details:', error);
-      setError('Failed to load package details');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-AE', {
@@ -2389,6 +2465,15 @@ Key Highlights`,
       </div>
     );
   }
+
+  // Check if this is an attraction package
+  const isAttractionPackage = packageData && (
+    packageData._id?.includes('ticket') || 
+    packageData._id?.includes('attraction') || 
+    packageData._id === 'burj-khalifa-tickets' ||
+    packageData.title?.toLowerCase().includes('ticket') ||
+    packageData.packageCategory === 'Cultural'
+  );
 
   if (error || !packageData) {
     return (
@@ -2537,6 +2622,239 @@ Key Highlights`,
           {/* Main Content Column */}
           <div className="lg:col-span-2 space-y-8">
 
+            {/* Special View for Attraction Packages - Dynamic Data from Database */}
+            {isAttractionPackage && (
+              <div className="space-y-8">
+                {/* Overview Section */}
+                {packageData.about && (
+                  <Card className="bg-gradient-to-br from-purple-50 via-white to-indigo-50 border-2 border-purple-200 shadow-xl">
+                    <CardHeader className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
+                      <CardTitle className="text-2xl font-bold">Overview</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                      <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                        {packageData.about}
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Abstract Section */}
+                {packageData.abstract && (
+                  <Card className="bg-gradient-to-br from-blue-50 to-white border-2 border-blue-200 shadow-xl">
+                    <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+                      <CardTitle className="text-2xl font-bold">Abstract</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                      <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                        {packageData.abstract}
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Key Highlights */}
+                {packageData.keyHighlights && packageData.keyHighlights.length > 0 && (
+                  <Card className="bg-gradient-to-br from-green-50 to-white border-2 border-green-200 shadow-xl">
+                    <CardHeader className="bg-gradient-to-r from-green-500 to-green-600 text-white">
+                      <CardTitle className="text-2xl font-bold flex items-center gap-3">
+                        <Star className="h-6 w-6" />
+                        Key Highlights
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                      <ul className="space-y-3">
+                        {packageData.keyHighlights.map((highlight: string, idx: number) => (
+                          <li key={idx} className="flex items-start gap-3">
+                            <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                            <span className="text-gray-700">{highlight}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Pricing Information */}
+                <Card className="bg-gradient-to-br from-purple-50 via-white to-indigo-50 border-2 border-purple-200 shadow-2xl">
+                  <CardHeader className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
+                    <CardTitle className="text-3xl font-bold flex items-center gap-3">
+                      <Ticket className="h-8 w-8" />
+                      {packageData.title} – Pricing Information
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-8">
+                    {/* Pricing from hotelOptions or tourDetails */}
+                    {packageData.hotelOptions && packageData.hotelOptions.length > 0 && (
+                      <div className="mb-8">
+                        <h3 className="text-2xl font-bold text-gray-900 mb-6">Pricing (Per Person)</h3>
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {packageData.hotelOptions.map((option: string, idx: number) => {
+                            // Extract price from option string (e.g., "Adult (12 years & above): AED 659")
+                            const priceMatch = option.match(/AED\s*(\d+)/i);
+                            const price = priceMatch ? priceMatch[1] : null;
+                            const isHighlighted = option.toLowerCase().includes('prime') || option.toLowerCase().includes('adult');
+                            
+                            return (
+                              <div 
+                                key={idx} 
+                                className={`p-6 rounded-xl border-2 shadow-lg hover:shadow-xl transition-all ${
+                                  isHighlighted 
+                                    ? 'bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-400' 
+                                    : 'bg-white border-purple-200'
+                                }`}
+                              >
+                                <div className="flex items-center justify-between mb-2">
+                                  <span className={`font-medium ${isHighlighted ? 'text-gray-800' : 'text-gray-600'}`}>
+                                    {option.split(':')[0]}
+                                  </span>
+                                  {isHighlighted && option.toLowerCase().includes('prime') && (
+                                    <Badge className="bg-indigo-600 text-white">Premium</Badge>
+                                  )}
+                                </div>
+                                {price && (
+                                  <>
+                                    <div className={`text-3xl font-bold ${isHighlighted ? 'text-indigo-700' : 'text-purple-600'}`}>
+                                      AED {price}
+                                    </div>
+                                    <p className={`text-sm mt-1 ${isHighlighted ? 'text-gray-600' : 'text-gray-500'}`}>
+                                      {option.includes('Free') ? 'Free of charge' : 'per person'}
+                                    </p>
+                                  </>
+                                )}
+                                {!price && (
+                                  <p className="text-gray-600 mt-2">{option.split(':')[1]?.trim() || option}</p>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Inclusions */}
+                    {packageData.inclusions && packageData.inclusions.length > 0 && (
+                      <div className="mb-8">
+                        <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                          <CheckCircle className="h-6 w-6 text-green-600" />
+                          Inclusions
+                        </h3>
+                        <div className="space-y-4">
+                          {packageData.inclusions.map((item: any, idx: number) => {
+                            if (typeof item === 'object' && 'category' in item) {
+                              return (
+                                <div key={idx} className="bg-white p-5 rounded-lg border border-green-200">
+                                  <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                                    <CheckCircle className="h-5 w-5 text-green-600" />
+                                    {item.category}
+                                  </h4>
+                                  <ul className="space-y-2 ml-7">
+                                    {item.items.map((subItem: string, subIdx: number) => (
+                                      <li key={subIdx} className="flex items-start gap-2 text-gray-700">
+                                        <span className="text-green-600 font-bold mt-0.5">•</span>
+                                        <span>{subItem}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              );
+                            }
+                            return null;
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Child Policy */}
+                    {packageData.exclusions && packageData.exclusions.length > 0 && (
+                      <div className="mb-8">
+                        {packageData.exclusions.map((item: any, idx: number) => {
+                          if (typeof item === 'object' && 'category' in item && item.category === 'Child Policy') {
+                            return (
+                              <div key={idx} className="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500 mb-6">
+                                <h3 className="text-xl font-bold text-gray-900 mb-4">Child Policy</h3>
+                                <ul className="space-y-2">
+                                  {item.items.map((policy: string, policyIdx: number) => (
+                                    <li key={policyIdx} className="flex items-start gap-2 text-gray-700">
+                                      <span className="text-blue-600 font-bold mt-0.5">•</span>
+                                      <span>{policy}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            );
+                          }
+                          return null;
+                        })}
+                      </div>
+                    )}
+
+                    {/* Terms & Conditions */}
+                    {packageData.exclusions && packageData.exclusions.length > 0 && (
+                      <div className="mb-8">
+                        {packageData.exclusions.map((item: any, idx: number) => {
+                          if (typeof item === 'object' && 'category' in item && item.category === 'Terms & Conditions') {
+                            return (
+                              <div key={idx} className="bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-lg">
+                                <div className="flex items-start gap-3">
+                                  <div className="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <Info className="h-5 w-5 text-yellow-900" />
+                                  </div>
+                                  <div>
+                                    <h4 className="text-lg font-bold text-gray-900 mb-3">Terms & Conditions</h4>
+                                    <ul className="space-y-2 text-gray-700">
+                                      {item.items.map((term: string, termIdx: number) => (
+                                        <li key={termIdx} className="flex items-start gap-2">
+                                          <span className="text-yellow-600 font-bold mt-0.5">•</span>
+                                          <span>{term}</span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          }
+                          return null;
+                        })}
+                      </div>
+                    )}
+
+                    {/* Transfers Note */}
+                    {packageData.exclusions && packageData.exclusions.length > 0 && (
+                      <div className="mb-8">
+                        {packageData.exclusions.map((item: any, idx: number) => {
+                          if (typeof item === 'object' && 'category' in item && item.category === 'Transfers') {
+                            return (
+                              <div key={idx} className="bg-gray-50 p-5 rounded-lg border border-gray-200">
+                                <p className="text-gray-700">
+                                  <strong>Note:</strong> {item.items[0]}
+                                </p>
+                              </div>
+                            );
+                          }
+                          return null;
+                        })}
+                      </div>
+                    )}
+
+                    {/* Contact Button */}
+                    <div className="mt-8 text-center">
+                      <Link href="/contact">
+                        <Button size="lg" className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-8 py-6 text-lg shadow-xl hover:shadow-2xl transition-all">
+                          Book Your Tickets Now
+                          <ArrowRight className="ml-2 h-5 w-5" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {/* Regular Package View - Only show if NOT an attraction package */}
+            {!isAttractionPackage && (
+              <>
             {/* Navigation Tabs */}
             <div className={`rounded-2xl shadow-xl border p-2 sticky top-[80px] z-10 backdrop-blur-xl ${isPremium ? 'bg-gradient-to-r from-white to-amber-50/50 border-amber-200/50' : 'bg-white/90 border-gray-100'}`}>
               <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
@@ -2582,9 +2900,186 @@ Key Highlights`,
                   </div>
                 </CardHeader>
                 <CardContent className="pt-6">
-                  <p className={`text-lg text-gray-700 leading-relaxed mb-8 ${isPremium ? 'font-poppins font-light' : 'font-light'}`}>
+                  {/* Package Title & Subtitle - Already shown in hero, but can add here if needed */}
+                  
+                  {/* Abstract */}
+                  {packageData.abstract && (
+                    <Card className="mb-6 bg-gradient-to-br from-blue-50/50 to-white border-2 border-blue-200/50 shadow-lg">
+                      <CardHeader className="bg-gradient-to-r from-blue-500/10 to-blue-600/10 border-b border-blue-200/50">
+                        <CardTitle className="text-xl font-bold text-gray-900 font-playfair">Abstract</CardTitle>
+                      </CardHeader>
+                      <CardContent className="pt-6">
+                        <div className="text-gray-700 leading-relaxed whitespace-pre-line font-poppins font-light">
+                          {packageData.abstract}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Tour Overview */}
+                  {packageData.tourOverview && (
+                    <Card className="mb-6 bg-gradient-to-br from-purple-50/50 to-white border-2 border-purple-200/50 shadow-lg">
+                      <CardHeader className="bg-gradient-to-r from-purple-500/10 to-purple-600/10 border-b border-purple-200/50">
+                        <CardTitle className="text-xl font-bold text-gray-900 font-playfair">Tour Overview</CardTitle>
+                      </CardHeader>
+                      <CardContent className="pt-6">
+                        <div className="text-gray-700 leading-relaxed whitespace-pre-line font-poppins font-light">
+                          {packageData.tourOverview}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Key Highlights */}
+                  {packageData.keyHighlights && packageData.keyHighlights.length > 0 && (
+                    <Card className="mb-6 bg-gradient-to-br from-green-50/50 to-white border-2 border-green-200/50 shadow-lg">
+                      <CardHeader className="bg-gradient-to-r from-green-500/10 to-green-600/10 border-b border-green-200/50">
+                        <CardTitle className="text-xl font-bold text-gray-900 flex items-center gap-3 font-playfair">
+                          <div className="p-2 bg-gradient-to-br from-green-500 to-green-600 rounded-lg">
+                            <Star className="h-5 w-5 text-white fill-white" />
+                          </div>
+                          Key Highlights
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="pt-6">
+                        <ul className="space-y-3">
+                          {packageData.keyHighlights.map((highlight: string, idx: number) => (
+                            <li key={idx} className="flex items-start">
+                              <CheckCircle className="h-5 w-5 mr-3 text-green-600 mt-0.5 flex-shrink-0" />
+                              <span className="text-gray-700 font-poppins font-light">{highlight}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Hotel Options */}
+                  {packageData.hotelOptions && packageData.hotelOptions.length > 0 && (
+                    <Card className="mb-6 bg-gradient-to-br from-indigo-50/50 to-white border-2 border-indigo-200/50 shadow-lg">
+                      <CardHeader className="bg-gradient-to-r from-indigo-500/10 to-indigo-600/10 border-b border-indigo-200/50">
+                        <CardTitle className="text-xl font-bold text-gray-900 flex items-center gap-3 font-playfair">
+                          <div className="p-2 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg">
+                            <Hotel className="h-5 w-5 text-white" />
+                          </div>
+                          Hotel Options
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="pt-6">
+                        <ul className="space-y-3">
+                          {packageData.hotelOptions.map((option: string, idx: number) => (
+                            <li key={idx} className="flex items-start">
+                              <span className="mr-3 text-indigo-600 font-bold">•</span>
+                              <span className="text-gray-700 font-poppins font-light">{option}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Best Time to Visit */}
+                  {packageData.bestTimeToVisit && (
+                    <Card className="mb-6 bg-gradient-to-br from-orange-50/50 to-white border-2 border-orange-200/50 shadow-lg">
+                      <CardHeader className="bg-gradient-to-r from-orange-500/10 to-orange-600/10 border-b border-orange-200/50">
+                        <CardTitle className="text-xl font-bold text-gray-900 flex items-center gap-3 font-playfair">
+                          <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg">
+                            <Calendar className="h-5 w-5 text-white" />
+                          </div>
+                          Best Time to Visit Dubai
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="pt-6 space-y-4">
+                        {packageData.bestTimeToVisit.yearRound && (
+                          <p className="text-gray-700 leading-relaxed font-poppins font-light">
+                            {packageData.bestTimeToVisit.yearRound}
+                          </p>
+                        )}
+                        {(packageData.bestTimeToVisit.winter || packageData.bestTimeToVisit.summer) && (
+                          <div className="grid md:grid-cols-2 gap-4">
+                            {packageData.bestTimeToVisit.winter && (
+                              <div className="bg-white/80 p-4 rounded-lg border border-orange-200/50">
+                                <h4 className="font-semibold text-gray-900 mb-2 font-cormorant">Winter:</h4>
+                                <p className="text-gray-700 text-sm font-poppins font-light">
+                                  {packageData.bestTimeToVisit.winter}
+                                </p>
+                              </div>
+                            )}
+                            {packageData.bestTimeToVisit.summer && (
+                              <div className="bg-white/80 p-4 rounded-lg border border-orange-200/50">
+                                <h4 className="font-semibold text-gray-900 mb-2 font-cormorant">Summer:</h4>
+                                <p className="text-gray-700 text-sm font-poppins font-light">
+                                  {packageData.bestTimeToVisit.summer}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Why Choose This Trip? */}
+                  {packageData.whyChooseThisTrip && packageData.whyChooseThisTrip.length > 0 && (
+                    <Card className="mb-6 bg-gradient-to-br from-pink-50/50 to-white border-2 border-pink-200/50 shadow-lg">
+                      <CardHeader className="bg-gradient-to-r from-pink-500/10 to-pink-600/10 border-b border-pink-200/50">
+                        <CardTitle className="text-xl font-bold text-gray-900 flex items-center gap-3 font-playfair">
+                          <div className="p-2 bg-gradient-to-br from-pink-500 to-pink-600 rounded-lg">
+                            <Heart className="h-5 w-5 text-white fill-white" />
+                          </div>
+                          Why Choose This Trip?
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="pt-6">
+                        <ul className="space-y-3">
+                          {packageData.whyChooseThisTrip.map((reason: string, idx: number) => (
+                            <li key={idx} className="flex items-start">
+                              <CheckCircle className="h-5 w-5 mr-3 text-pink-600 mt-0.5 flex-shrink-0" />
+                              <span className="text-gray-700 font-poppins font-light">{reason}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Why Premium Dubai Tours for This Journey? */}
+                  {packageData.whyPremiumDubaiTours && packageData.whyPremiumDubaiTours.length > 0 && (
+                    <Card className="mb-6 bg-gradient-to-br from-teal-50/50 to-white border-2 border-teal-200/50 shadow-lg">
+                      <CardHeader className="bg-gradient-to-r from-teal-500/10 to-teal-600/10 border-b border-teal-200/50">
+                        <CardTitle className="text-xl font-bold text-gray-900 flex items-center gap-3 font-playfair">
+                          <div className="p-2 bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg">
+                            <ShieldCheck className="h-5 w-5 text-white" />
+                          </div>
+                          Why Premium Dubai Tours for This Journey?
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="pt-6">
+                        <ul className="space-y-3">
+                          {packageData.whyPremiumDubaiTours.map((reason: string, idx: number) => (
+                            <li key={idx} className="flex items-start">
+                              <CheckCircle className="h-5 w-5 mr-3 text-teal-600 mt-0.5 flex-shrink-0" />
+                              <span className="text-gray-700 font-poppins font-light">{reason}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* About Premium Dubai Tours */}
+                  {packageData.about && (
+                    <Card className="mb-6 bg-gradient-to-br from-amber-50/50 to-white border-2 border-amber-200/50 shadow-lg">
+                      <CardHeader className="bg-gradient-to-r from-amber-500/10 to-amber-600/10 border-b border-amber-200/50">
+                        <CardTitle className="text-xl font-bold text-gray-900 font-playfair">About Premium Dubai Tours</CardTitle>
+                      </CardHeader>
+                      <CardContent className="pt-6">
+                        <p className={`text-lg text-gray-700 leading-relaxed ${isPremium ? 'font-poppins font-light' : 'font-light'}`}>
                     {packageData.about}
                   </p>
+                      </CardContent>
+                    </Card>
+                  )}
 
                   {/* Premium Package Specific Content - Dubai Private Classic Discovery */}
                   {(packageData as any).packageCategory === 'premium' && packageData._id === 'dubai-private-classic-discovery' && (
@@ -2761,7 +3256,7 @@ Key Highlights`,
                         </CardHeader>
                         <CardContent className="pt-6">
                           <ul className="space-y-3">
-                            {((packageData as any).whyPremiumDubaiTours || []).map((reason: string, idx: number) => (
+                            {((packageData as any).whyPremiumDubaiTours || (isAttractionPackage ? [] : [])).map((reason: string, idx: number) => (
                               <li key={idx} className="flex items-start">
                                 <CheckCircle className="h-5 w-5 mr-3 text-teal-600 mt-0.5 flex-shrink-0" />
                                 <span className="text-gray-700 font-poppins font-light">{reason}</span>
@@ -4077,10 +4572,10 @@ Key Highlights`,
                       );
                     } else {
                       return (
-                        <div key={idx} className={`flex items-start gap-3 p-2 rounded-lg ${isPremium ? 'hover:bg-green-50/50 transition-colors' : ''}`}>
-                          <CheckCircle className={`h-5 w-5 shrink-0 mt-0.5 ${isPremium ? 'text-green-600' : 'text-green-600'}`} />
-                          <span className={`text-gray-700 ${isPremium ? 'font-poppins font-light' : ''}`}>{item}</span>
-                        </div>
+                    <div key={idx} className={`flex items-start gap-3 p-2 rounded-lg ${isPremium ? 'hover:bg-green-50/50 transition-colors' : ''}`}>
+                      <CheckCircle className={`h-5 w-5 shrink-0 mt-0.5 ${isPremium ? 'text-green-600' : 'text-green-600'}`} />
+                      <span className={`text-gray-700 ${isPremium ? 'font-poppins font-light' : ''}`}>{item}</span>
+                    </div>
                       );
                     }
                   })}
@@ -4118,24 +4613,64 @@ Key Highlights`,
                       );
                     } else {
                       return (
-                        <div key={idx} className={`flex items-start gap-3 p-2 rounded-lg ${isPremium ? 'hover:bg-red-50/50 transition-colors' : ''}`}>
-                          <X className={`h-5 w-5 shrink-0 mt-0.5 ${isPremium ? 'text-red-600' : 'text-red-500'}`} />
-                          <span className={`text-gray-700 ${isPremium ? 'font-poppins font-light' : ''}`}>{item}</span>
-                        </div>
+                    <div key={idx} className={`flex items-start gap-3 p-2 rounded-lg ${isPremium ? 'hover:bg-red-50/50 transition-colors' : ''}`}>
+                      <X className={`h-5 w-5 shrink-0 mt-0.5 ${isPremium ? 'text-red-600' : 'text-red-500'}`} />
+                      <span className={`text-gray-700 ${isPremium ? 'font-poppins font-light' : ''}`}>{item}</span>
+                    </div>
                       );
                     }
                   })}
                 </CardContent>
               </Card>
             </section>
+              </>
+            )}
           </div>
 
           {/* Sticky Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-[100px] space-y-6">
+          {isAttractionPackage ? (
+            <div className="lg:col-span-1">
+              <div className="sticky top-[100px] space-y-6">
+                {/* Simplified Booking Card for Attraction Packages */}
+                <Card className="border-none shadow-2xl overflow-hidden ring-1 ring-black/5 bg-gradient-to-br from-purple-50 to-indigo-50 border-2 border-purple-200">
+                  <div className="p-6 text-white text-center bg-gradient-to-r from-purple-600 to-indigo-600">
+                    <Ticket className="h-8 w-8 mx-auto mb-3" />
+                    <h3 className="text-xl font-bold mb-2">Book Your Tickets</h3>
+                    <p className="text-sm opacity-90">Starting from AED 200</p>
+                  </div>
+                  <CardContent className="p-6">
+                    <div className="space-y-4">
+                      <div>
+                        <p className="text-sm text-gray-600 mb-2">Select Ticket Type:</p>
+                        <div className="space-y-2">
+                          <div className="p-3 bg-white rounded-lg border border-purple-200">
+                            <p className="font-semibold text-gray-900">At the Top</p>
+                            <p className="text-sm text-gray-600">Levels 124 & 125</p>
+                            <p className="text-lg font-bold text-purple-600 mt-1">From AED 200</p>
+                          </div>
+                          <div className="p-3 bg-white rounded-lg border border-indigo-200">
+                            <p className="font-semibold text-gray-900">At the Top SKY</p>
+                            <p className="text-sm text-gray-600">Levels 124, 125 & 148</p>
+                            <p className="text-lg font-bold text-indigo-600 mt-1">From AED 410</p>
+                          </div>
+                        </div>
+                      </div>
+                      <Link href="/contact" className="block">
+                        <Button className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white">
+                          Contact Us to Book
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          ) : (
+            <div className="lg:col-span-1">
+              <div className="sticky top-[100px] space-y-6">
 
-              {/* Booking Card */}
-              <Card className={`border-none shadow-2xl overflow-hidden ring-1 ring-black/5 ${isPremium ? 'bg-gradient-to-br from-white to-amber-50/30 border-2 border-amber-200/50' : 'bg-white'}`}>
+                {/* Booking Card */}
+                <Card className={`border-none shadow-2xl overflow-hidden ring-1 ring-black/5 ${isPremium ? 'bg-gradient-to-br from-white to-amber-50/30 border-2 border-amber-200/50' : 'bg-white'}`}>
                 <div className={`p-6 text-white text-center ${isPremium ? 'bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500' : 'bg-primary'}`}>
                   <p className="text-white/90 text-sm italic font-medium mb-2">Starting from</p>
                   <div className="flex items-baseline justify-center gap-2 mt-1">
@@ -4213,6 +4748,7 @@ Key Highlights`,
               </Card>
             </div>
           </div>
+          )}
 
         </div>
       </div>

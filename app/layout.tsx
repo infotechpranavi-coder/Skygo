@@ -8,6 +8,7 @@ import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
 import FloatingButtons from "../components/FloatingButtons"
 import { InquiryFormProvider } from "../contexts/InquiryFormContext"
+import ConditionalLayout from "../components/ConditionalLayout"
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -32,12 +33,9 @@ export default function RootLayout({
       <body className={`${inter.className} bg-white`} suppressHydrationWarning>
         <TooltipProvider>
           <InquiryFormProvider>
-            <Navbar />
-            <main className="min-h-screen bg-white">
+            <ConditionalLayout>
               {children}
-            </main>
-            <Footer />
-            <FloatingButtons />
+            </ConditionalLayout>
             <Toaster />
             <Sonner />
           </InquiryFormProvider>

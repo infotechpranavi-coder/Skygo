@@ -220,6 +220,13 @@ const PremiumPackagesPage = () => {
         return;
       }
 
+      // First, try to seed packages if database is empty
+      try {
+        await fetch('/api/packages/seed', { method: 'POST' });
+      } catch (seedError) {
+        console.log('Seed attempt completed or failed:', seedError);
+      }
+
       const baseUrl = '/api/packages';
       const searchParam = filters.searchTerm ? `?search=${encodeURIComponent(filters.searchTerm)}` : '';
       const url = `${baseUrl}${searchParam}`;
@@ -237,25 +244,21 @@ const PremiumPackagesPage = () => {
 
       const result = await response.json();
       if (result.success && result.data) {
-        // Filter for premium packages
+        // Filter STRICTLY for premium packages (packageCategory must be 'Premium' or 'premium')
         let premiumPackages = result.data.filter((pkg: Package) =>
-          pkg.packageCategory?.toLowerCase() === 'premium'
+          pkg.packageCategory && (
+            pkg.packageCategory === 'Premium' || 
+            pkg.packageCategory === 'premium'
+          )
         );
-
-        // Add default premium packages if no packages found
-        if (premiumPackages.length === 0) {
-          premiumPackages = getDefaultPremiumPackages();
-        }
 
         setPackages(premiumPackages);
       } else {
-        // If API doesn't return success, use default packages
-        setPackages(getDefaultPremiumPackages());
+        setPackages([]);
       }
     } catch (error) {
       console.error('Error fetching packages:', error);
-      // On error, show default premium packages
-      setPackages(getDefaultPremiumPackages());
+      setPackages([]);
     } finally {
       setLoading(false);
     }

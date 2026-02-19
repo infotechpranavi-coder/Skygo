@@ -20,18 +20,36 @@ import {
   Filter,
   Search,
   Download,
-  Copy
+  Copy,
+  MessageSquare,
+  FileText,
+  Menu,
+  X,
+  LayoutDashboard
 } from "lucide-react";
 import { Input } from "../../components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
+import { cn } from "../../lib/utils";
 
 interface PackageData {
   _id: string;
   title: string;
   subtitle: string;
+  ideaFor?: string;
   about: string;
   services: string;
   tourDetails: string;
+  abstract?: string;
+  tourOverview?: string;
+  keyHighlights?: string[];
+  hotelOptions?: string[];
+  bestTimeToVisit?: {
+    yearRound?: string;
+    winter?: string;
+    summer?: string;
+  };
+  whyChooseThisTrip?: string[];
+  whyPremiumDubaiTours?: string[];
   price: number;
   duration: string;
   location: string;
@@ -61,15 +79,25 @@ interface PackageData {
     roomType: string;
     nights: string;
   }>;
-  inclusions: string[];
-  exclusions: string[];
+  inclusions?: string[] | Array<{
+    category: string;
+    items: string[];
+  }>;
+  exclusions?: string[] | Array<{
+    category: string;
+    items: string[];
+  }>;
   bookings: number;
   rating: number;
   createdAt: string;
   updatedAt: string;
 }
 
+type DashboardView = 'packages' | 'testimonials' | 'blogs';
+
 export default function DashboardPage() {
+  const [activeView, setActiveView] = useState<DashboardView>('packages');
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isCreatePackageModalOpen, setIsCreatePackageModalOpen] = useState(false);
   const [isViewPackageModalOpen, setIsViewPackageModalOpen] = useState(false);
   const [isEditPackageModalOpen, setIsEditPackageModalOpen] = useState(false);
@@ -84,13 +112,33 @@ export default function DashboardPage() {
 
   const fetchPackages = async () => {
     try {
+      setLoading(true);
+      
+      // First, try to seed packages if database is empty
+      try {
+        const seedResponse = await fetch('/api/packages/seed', { method: 'POST' });
+        const seedData = await seedResponse.json();
+        console.log('Seed response:', seedData);
+      } catch (seedError) {
+        console.log('Seed attempt completed or failed:', seedError);
+      }
+
+      // Wait a bit for database to update
+      await new Promise(resolve => setTimeout(resolve, 500));
+
       const response = await fetch('/api/packages');
       const data = await response.json();
-      if (data.success) {
+      console.log('Fetched packages:', data);
+      if (data.success && data.data) {
         setPackages(data.data);
+        console.log(`Loaded ${data.data.length} packages`);
+      } else {
+        console.warn('No packages data in response:', data);
+        setPackages([]);
       }
     } catch (error) {
       console.error('Error fetching packages:', error);
+      setPackages([]);
     } finally {
       setLoading(false);
     }
@@ -276,7 +324,6 @@ export default function DashboardPage() {
             new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Place", bold: true })] })] }),
             new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Duration", bold: true })] })] }),
             new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Location", bold: true })] })] }),
-            new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Capacity", bold: true })] })] }),
             new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Price", bold: true })] })] }),
             new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Rating", bold: true })] })] }),
             new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Bookings", bold: true })] })] }),
@@ -292,8 +339,7 @@ export default function DashboardPage() {
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.place === 'bhutan' ? 'Bhutan' : 'Nepal' })] })] }),
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.duration || 'N/A' })] })] }),
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.location || 'N/A' })] })] }),
-              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.capacity || 'N/A' })] })] }),
-              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `₹${pkg.price}` })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `AED ${pkg.price?.toLocaleString() || '0'}` })] })] }),
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: (pkg.rating || 0).toString() })] })] }),
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: (pkg.bookings || 0).toString() })] })] }),
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: new Date(pkg.createdAt).toLocaleDateString() })] })] }),
@@ -682,14 +728,8 @@ export default function DashboardPage() {
           }),
           new TableRow({
             children: [
-              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Capacity" })] })] }),
-              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.capacity || 'N/A' })] })] }),
-            ],
-          }),
-          new TableRow({
-            children: [
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Price" })] })] }),
-              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `₹${pkg.price}` })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `AED ${pkg.price?.toLocaleString() || '0'}` })] })] }),
             ],
           }),
           new TableRow({
@@ -945,27 +985,151 @@ export default function DashboardPage() {
     );
   }
 
+  const sidebarItems = [
+    {
+      id: 'packages' as DashboardView,
+      label: 'Packages',
+      icon: Package,
+      description: 'Manage tour packages'
+    },
+    {
+      id: 'testimonials' as DashboardView,
+      label: 'Testimonials',
+      icon: MessageSquare,
+      description: 'Manage customer reviews'
+    },
+    {
+      id: 'blogs' as DashboardView,
+      label: 'Blogs',
+      icon: FileText,
+      description: 'Manage blog posts'
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-              <p className="text-gray-600 mt-1">Manage your tour packages</p>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Button size="sm" onClick={openCreatePackageModal}>
-                <Plus className="h-4 w-4 mr-2" />
-                New Package
+    <div className="min-h-screen bg-gray-50 flex">
+      {/* Sidebar */}
+      <aside className={cn(
+        "bg-white border-r transition-all duration-300 ease-in-out fixed lg:static inset-y-0 left-0 z-50",
+        sidebarOpen ? "w-64" : "w-0 lg:w-0",
+        "overflow-hidden lg:overflow-visible"
+      )}>
+        <div className="h-full flex flex-col">
+          {/* Sidebar Header */}
+          <div className="p-6 border-b">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <LayoutDashboard className="h-6 w-6 text-primary" />
+                <h2 className="text-xl font-bold text-gray-900">Dashboard</h2>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSidebarOpen(false)}
+                className="lg:hidden"
+              >
+                <X className="h-4 w-4" />
               </Button>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div className="container mx-auto px-6 py-8">
+          {/* Navigation Items */}
+          <nav className="flex-1 p-4 space-y-2">
+            {sidebarItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveView(item.id)}
+                  className={cn(
+                    "w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-left",
+                    activeView === item.id
+                      ? "bg-primary text-white"
+                      : "text-gray-700 hover:bg-gray-100"
+                  )}
+                >
+                  <Icon className="h-5 w-5" />
+                  <div className="flex-1">
+                    <div className="font-medium">{item.label}</div>
+                    <div className={cn(
+                      "text-xs",
+                      activeView === item.id ? "text-white/80" : "text-gray-500"
+                    )}>
+                      {item.description}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </nav>
+        </div>
+      </aside>
+
+      {/* Sidebar Overlay for Mobile */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col min-w-0 lg:ml-0">
+        {/* Header */}
+        <div className="bg-white border-b">
+          <div className="px-6 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                {!sidebarOpen && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setSidebarOpen(true)}
+                  >
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                )}
+                <div>
+                  <h1 className="text-3xl font-bold text-gray-900">
+                    {activeView === 'packages' && 'Packages'}
+                    {activeView === 'testimonials' && 'Testimonials'}
+                    {activeView === 'blogs' && 'Blogs'}
+                  </h1>
+                  <p className="text-gray-600 mt-1">
+                    {activeView === 'packages' && 'Manage your tour packages'}
+                    {activeView === 'testimonials' && 'Manage customer testimonials and reviews'}
+                    {activeView === 'blogs' && 'Manage blog posts and articles'}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-4">
+                {activeView === 'packages' && (
+                  <Button size="sm" onClick={openCreatePackageModal}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    New Package
+                  </Button>
+                )}
+                {activeView === 'testimonials' && (
+                  <Button size="sm">
+                    <Plus className="h-4 w-4 mr-2" />
+                    New Testimonial
+                  </Button>
+                )}
+                {activeView === 'blogs' && (
+                  <Button size="sm">
+                    <Plus className="h-4 w-4 mr-2" />
+                    New Blog
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Content Area */}
+        <div className="flex-1 overflow-auto">
+          {activeView === 'packages' && (
+            <div className="container mx-auto px-6 py-8">
         {/* Packages Table */}
         <Card>
           <CardHeader>
@@ -1109,7 +1273,6 @@ export default function DashboardPage() {
                     <th className="text-left p-3">Place</th>
                     <th className="text-left p-3">Duration</th>
                     <th className="text-left p-3">Location</th>
-                    <th className="text-left p-3">Capacity</th>
                     <th className="text-left p-3">Price</th>
                     <th className="text-left p-3">Rating</th>
                     <th className="text-left p-3">Actions</th>
@@ -1167,8 +1330,7 @@ export default function DashboardPage() {
                         </td>
                         <td className="p-3">{pkg.duration || "N/A"}</td>
                         <td className="p-3">{pkg.location || "N/A"}</td>
-                        <td className="p-3">{pkg.capacity || "N/A"}</td>
-                        <td className="p-3 font-medium">₹{pkg.price}</td>
+                        <td className="p-3 font-medium">AED {pkg.price?.toLocaleString() || "0"}</td>
                         <td className="p-3">
                           <div className="flex items-center">
                             <Star className="h-4 w-4 text-yellow-500 fill-current mr-1" />
@@ -1226,7 +1388,7 @@ export default function DashboardPage() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={10} className="p-8 text-center text-gray-500">
+                      <td colSpan={9} className="p-8 text-center text-gray-500">
                         <div className="flex flex-col items-center space-y-2">
                           <Package className="h-12 w-12 text-gray-300" />
                           {packages.length === 0 ? (
@@ -1263,6 +1425,53 @@ export default function DashboardPage() {
             </div>
           </CardContent>
         </Card>
+      </div>
+          )}
+
+          {activeView === 'testimonials' && (
+            <div className="container mx-auto px-6 py-8">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Testimonials</CardTitle>
+                  <CardDescription>Manage customer testimonials and reviews</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-12">
+                    <MessageSquare className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Testimonials Management</h3>
+                    <p className="text-gray-600 mb-6">Testimonials management feature coming soon</p>
+                    <Button>
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Testimonial
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {activeView === 'blogs' && (
+            <div className="container mx-auto px-6 py-8">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Blogs</CardTitle>
+                  <CardDescription>Manage blog posts and articles</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-12">
+                    <FileText className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Blog Management</h3>
+                    <p className="text-gray-600 mb-6">Blog management feature coming soon</p>
+                    <Button>
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Blog Post
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Create Package Modal */}

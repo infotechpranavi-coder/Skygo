@@ -505,6 +505,13 @@ const RegularPackagesPage = () => {
 
   const fetchPackages = async () => {
     try {
+      // First, try to seed packages if database is empty
+      try {
+        await fetch('/api/packages/seed', { method: 'POST' });
+      } catch (seedError) {
+        console.log('Seed attempt completed or failed:', seedError);
+      }
+
       const baseUrl = '/api/packages';
       const searchParam = filters.searchTerm ? `?search=${encodeURIComponent(filters.searchTerm)}` : '';
       const url = `${baseUrl}${searchParam}`;
@@ -512,32 +519,22 @@ const RegularPackagesPage = () => {
       const response = await fetch(url);
       const result = await response.json();
       
-      // Always start with default packages
-      const defaultPackages = getDefaultRegularPackages();
-      const defaultPackageIds = defaultPackages.map(p => p._id);
-      
       if (result.success && result.data) {
-        // Filter for regular packages (packageCategory is not Premium or Luxury, or is Regular)
+        // Filter STRICTLY for regular packages (packageCategory must be 'Regular' or 'regular')
         let regularPackages = result.data.filter((pkg: Package) =>
-          !pkg.packageCategory || 
-          pkg.packageCategory.toLowerCase() === 'regular' ||
-          (pkg.packageCategory.toLowerCase() !== 'premium' && 
-           pkg.packageCategory.toLowerCase() !== 'luxury')
+          pkg.packageCategory && (
+            pkg.packageCategory === 'Regular' || 
+            pkg.packageCategory === 'regular'
+          )
         );
-
-        // Remove any packages from API that match default package IDs (to avoid duplicates)
-        regularPackages = regularPackages.filter(pkg => !defaultPackageIds.includes(pkg._id));
         
-        // Merge default packages with API packages (default packages first)
-        setPackages([...defaultPackages, ...regularPackages]);
+        setPackages(regularPackages);
       } else {
-        // If API doesn't return success, use default packages
-        setPackages(defaultPackages);
+        setPackages([]);
       }
     } catch (error) {
       console.error('Error fetching packages:', error);
-      // On error, show default regular packages
-      setPackages(getDefaultRegularPackages());
+      setPackages([]);
     } finally {
       setLoading(false);
     }

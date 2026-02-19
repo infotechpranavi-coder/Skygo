@@ -93,6 +93,9 @@ const Navbar = () => {
         { name: 'Regular Packages', href: '/packages/regular' },
         { name: 'Premium Packages', href: '/packages/premium' },
         { name: 'Luxury Packages', href: '/packages/luxury' },
+        { name: 'Adventure Activities', href: '/packages/adventure' },
+        { name: 'OMAN Tour', href: '/packages/oman' },
+        { name: 'Attraction and Activity', href: '/packages/attractions' },
       ]
     },
     { name: 'Travel Blog ', href: '/blogs' },
@@ -488,7 +491,7 @@ const Navbar = () => {
                         <ChevronDown className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" className="w-48">
+                    <DropdownMenuContent align="start" className="w-48 z-[130]">
                       {item.submenu.map((subItem) => (
                         <DropdownMenuItem key={subItem.name} asChild>
                           <Link 
