@@ -208,6 +208,7 @@ const AboutPage = () => {
                     width={600}
                     height={600}
                     className="w-full h-[400px] md:h-[500px] object-cover"
+                    unoptimized
                   />
                 </div>
               </div>

@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import Navbar from "./Navbar"
+import NavbarTravel from "./NavbarTravel"
 import Footer from "./Footer"
 import FloatingButtons from "./FloatingButtons"
 
@@ -19,7 +19,7 @@ export default function ConditionalLayout({
 
   return (
     <>
-      <Navbar />
+      <NavbarTravel />
       <main className="min-h-screen bg-white">
         {children}
       </main>

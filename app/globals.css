@@ -115,6 +115,24 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
   body {
     @apply bg-white text-foreground;
   }
@@ -151,6 +169,34 @@ All colors MUST be HSL.
   .hover-lift:hover {
     transform: translateY(-4px);
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Card micro-interactions */
+  .card-hover {
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+  }
+
+  .card-hover img {
+    transition: transform 0.7s ease-out;
+  }
+
+  .card-hover:hover img {
+    transform: scale(1.02);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card-hover,
+    .card-hover:hover,
+    .card-hover img,
+    .card-hover:hover img {
+      transform: none !important;
+      transition: none !important;
+    }
   }
 }
 

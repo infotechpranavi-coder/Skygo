@@ -42,6 +42,16 @@ const nextConfig = {
         hostname: 'tse4.mm.bing.net',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'www.tusktravel.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'livingnomads.com',
+        pathname: '/**',
+      },
     ],
   },
 }
