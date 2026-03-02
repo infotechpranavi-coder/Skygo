@@ -16,54 +16,7 @@ const renderBoldText = (text: string) => {
   });
 };
 
-interface PackageData {
-  _id: string;
-  title: string;
-  subtitle: string;
-  about: string;
-  services: string;
-  tourDetails: string;
-  price: number;
-  duration: string;
-  location: string;
-  capacity: string;
-  packageType: 'domestic' | 'international';
-  place: string;
-  images: Array<{
-    public_id: string;
-    url: string;
-    alt: string;
-  }>;
-  itinerary: Array<{
-    day: number;
-    title: string;
-    description: string;
-  }>;
-  transportation: Array<{
-    type: string;
-    vehicle: string;
-    description: string;
-  }>;
-  accommodation: Array<{
-    city: string;
-    hotel: string;
-    rooms: string;
-    roomType: string;
-    nights: string;
-  }>;
-  inclusions?: string[];
-  exclusions?: string[];
-  reviews?: Array<{
-    name: string;
-    rating: number;
-    comment: string;
-    date: string;
-  }>;
-  bookings: number;
-  rating: number;
-  createdAt: string;
-  updatedAt: string;
-}
+import { PackageData } from "@/lib/types";
 
 interface PackageDetailModalProps {
   isOpen: boolean;

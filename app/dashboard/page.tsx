@@ -31,67 +31,7 @@ import { Input } from "../../components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 import { cn } from "../../lib/utils";
 
-interface PackageData {
-  _id: string;
-  title: string;
-  subtitle: string;
-  ideaFor?: string;
-  about: string;
-  services: string;
-  tourDetails: string;
-  abstract?: string;
-  tourOverview?: string;
-  keyHighlights?: string[];
-  hotelOptions?: string[];
-  bestTimeToVisit?: {
-    yearRound?: string;
-    winter?: string;
-    summer?: string;
-  };
-  whyChooseThisTrip?: string[];
-  whyPremiumDubaiTours?: string[];
-  price: number;
-  duration: string;
-  location: string;
-  capacity: string;
-  packageType: 'domestic' | 'international';
-  place: string;
-  packageCategory: string;
-  images: Array<{
-    public_id: string;
-    url: string;
-    alt: string;
-  }>;
-  itinerary: Array<{
-    day: number;
-    title: string;
-    description: string;
-  }>;
-  transportation: Array<{
-    type: string;
-    vehicle: string;
-    description: string;
-  }>;
-  accommodation: Array<{
-    city: string;
-    hotel: string;
-    rooms: string;
-    roomType: string;
-    nights: string;
-  }>;
-  inclusions?: string[] | Array<{
-    category: string;
-    items: string[];
-  }>;
-  exclusions?: string[] | Array<{
-    category: string;
-    items: string[];
-  }>;
-  bookings: number;
-  rating: number;
-  createdAt: string;
-  updatedAt: string;
-}
+import { PackageData } from "@/lib/types";
 
 type DashboardView = 'packages' | 'testimonials' | 'blogs';
 
@@ -113,7 +53,7 @@ export default function DashboardPage() {
   const fetchPackages = async () => {
     try {
       setLoading(true);
-      
+
       // First, try to seed packages if database is empty
       try {
         const seedResponse = await fetch('/api/packages/seed', { method: 'POST' });
@@ -729,7 +669,7 @@ export default function DashboardPage() {
           new TableRow({
             children: [
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Price" })] })] }),
-              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `AED ${pkg.price?.toLocaleString() || '0'}` })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `R ${pkg.price?.toLocaleString() || '0'}` })] })] }),
             ],
           }),
           new TableRow({
@@ -1130,302 +1070,302 @@ export default function DashboardPage() {
         <div className="flex-1 overflow-auto">
           {activeView === 'packages' && (
             <div className="container mx-auto px-6 py-8">
-        {/* Packages Table */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle>Your Packages</CardTitle>
-                <CardDescription>Manage and track all your tour packages</CardDescription>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Button variant="outline" size="sm" onClick={handleExportToWord}>
-                  <Download className="h-4 w-4 mr-2" />
-                  Export Word
-                </Button>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {/* Filters Section */}
-            <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                {/* Search */}
-                <div className="lg:col-span-2">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                    <Input
-                      placeholder="Search packages..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10"
-                    />
+              {/* Packages Table */}
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle>Your Packages</CardTitle>
+                      <CardDescription>Manage and track all your tour packages</CardDescription>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Button variant="outline" size="sm" onClick={handleExportToWord}>
+                        <Download className="h-4 w-4 mr-2" />
+                        Export Word
+                      </Button>
+                    </div>
                   </div>
-                </div>
+                </CardHeader>
+                <CardContent>
+                  {/* Filters Section */}
+                  <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                      {/* Search */}
+                      <div className="lg:col-span-2">
+                        <div className="relative">
+                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                          <Input
+                            placeholder="Search packages..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="pl-10"
+                          />
+                        </div>
+                      </div>
 
-                {/* Package Type Filter */}
-                <Select value={packageTypeFilter} onValueChange={setPackageTypeFilter}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Package Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
-                    <SelectItem value="domestic">Domestic</SelectItem>
-                    <SelectItem value="international">International</SelectItem>
-                  </SelectContent>
-                </Select>
+                      {/* Package Type Filter */}
+                      <Select value={packageTypeFilter} onValueChange={setPackageTypeFilter}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Package Type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Types</SelectItem>
+                          <SelectItem value="domestic">Domestic</SelectItem>
+                          <SelectItem value="international">International</SelectItem>
+                        </SelectContent>
+                      </Select>
 
-                {/* Category Filter */}
-                <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Categories</SelectItem>
-                    <SelectItem value="Cultural">Cultural</SelectItem>
-                    <SelectItem value="Adventure">Adventure</SelectItem>
-                    <SelectItem value="Wildlife">Wildlife</SelectItem>
-                    <SelectItem value="Trekking">Trekking</SelectItem>
-                    <SelectItem value="Spiritual">Spiritual</SelectItem>
-                    <SelectItem value="Beach">Beach</SelectItem>
-                  </SelectContent>
-                </Select>
+                      {/* Category Filter */}
+                      <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Categories</SelectItem>
+                          <SelectItem value="Cultural">Cultural</SelectItem>
+                          <SelectItem value="Adventure">Adventure</SelectItem>
+                          <SelectItem value="Wildlife">Wildlife</SelectItem>
+                          <SelectItem value="Trekking">Trekking</SelectItem>
+                          <SelectItem value="Spiritual">Spiritual</SelectItem>
+                          <SelectItem value="Beach">Beach</SelectItem>
+                        </SelectContent>
+                      </Select>
 
-                {/* Place Filter */}
-                <Select value={placeFilter} onValueChange={setPlaceFilter}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Place" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Places</SelectItem>
-                    {packageTypeFilter === 'domestic' ? (
-                      <>
-                        {/* Domestic Places */}
-                        <SelectItem value="darjeeling">Darjeeling</SelectItem>
-                        <SelectItem value="sikkim">Sikkim</SelectItem>
-                        <SelectItem value="meghalaya">Meghalaya</SelectItem>
-                        <SelectItem value="arunachal">Arunachal</SelectItem>
-                        <SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
-                        <SelectItem value="kashmir">Kashmir</SelectItem>
-                        <SelectItem value="leh-ladakh">Leh Ladakh</SelectItem>
-                      </>
-                    ) : packageTypeFilter === 'international' ? (
-                      <>
-                        {/* International Places */}
-                        <SelectItem value="vietnam">Vietnam</SelectItem>
-                        <SelectItem value="sri-lanka">Sri Lanka</SelectItem>
-                        <SelectItem value="bali">Bali</SelectItem>
-                        <SelectItem value="malaysia">Malaysia</SelectItem>
-                        <SelectItem value="singapore">Singapore</SelectItem>
-                      </>
-                    ) : (
-                      <>
-                        {/* All Places when no type filter is selected */}
-                        {/* Domestic Places */}
-                        <SelectItem value="darjeeling">Darjeeling</SelectItem>
-                        <SelectItem value="sikkim">Sikkim</SelectItem>
-                        <SelectItem value="meghalaya">Meghalaya</SelectItem>
-                        <SelectItem value="arunachal">Arunachal</SelectItem>
-                        <SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
-                        <SelectItem value="kashmir">Kashmir</SelectItem>
-                        <SelectItem value="leh-ladakh">Leh Ladakh</SelectItem>
-                        {/* International Places */}
-                        <SelectItem value="vietnam">Vietnam</SelectItem>
-                        <SelectItem value="sri-lanka">Sri Lanka</SelectItem>
-                        <SelectItem value="bali">Bali</SelectItem>
-                        <SelectItem value="malaysia">Malaysia</SelectItem>
-                        <SelectItem value="singapore">Singapore</SelectItem>
-                        {/* Legacy Places */}
-                        <SelectItem value="bhutan">Bhutan</SelectItem>
-                        <SelectItem value="nepal">Nepal</SelectItem>
-                      </>
-                    )}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Clear Filters Button */}
-              {(searchTerm || packageTypeFilter !== "all" || placeFilter !== "all" || categoryFilter !== "all") && (
-                <div className="mt-4">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      setSearchTerm("");
-                      setPackageTypeFilter("all");
-                      setPlaceFilter("all");
-                      setCategoryFilter("all");
-                    }}
-                  >
-                    Clear Filters
-                  </Button>
-                </div>
-              )}
-            </div>
-
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left p-3">Package Title</th>
-                    <th className="text-left p-3">Type</th>
-                    <th className="text-left p-3">Category</th>
-                    <th className="text-left p-3">Place</th>
-                    <th className="text-left p-3">Duration</th>
-                    <th className="text-left p-3">Location</th>
-                    <th className="text-left p-3">Price</th>
-                    <th className="text-left p-3">Rating</th>
-                    <th className="text-left p-3">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredPackages.length > 0 ? (
-                    filteredPackages.map((pkg) => (
-                      <tr key={pkg._id} className="border-b">
-                        <td className="p-3">
-                          <div className="flex items-center space-x-3">
-                            {pkg.images && pkg.images.length > 0 ? (
-                              <div className="w-12 h-12 rounded-lg overflow-hidden border-2 border-gray-200">
-                                <img
-                                  src={pkg.images[0].url}
-                                  alt={pkg.title}
-                                  className="w-full h-full object-cover"
-                                />
-                              </div>
-                            ) : (
-                              <div className="w-12 h-12 rounded-lg border-2 border-gray-200 flex items-center justify-center bg-gray-100">
-                                <Package className="h-6 w-6 text-gray-400" />
-                              </div>
-                            )}
-                            <span className="font-medium">{pkg.title}</span>
-                          </div>
-                        </td>
-                        <td className="p-3">
-                          <Badge variant={pkg.packageType === 'domestic' ? 'default' : 'secondary'}>
-                            {pkg.packageType === 'domestic' ? 'Domestic' : 'International'}
-                          </Badge>
-                        </td>
-                        <td className="p-3">
-                          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                            {pkg.packageCategory || 'Cultural'}
-                          </Badge>
-                        </td>
-                        <td className="p-3">
-                          <Badge variant="outline">
-                            {pkg.place === 'darjeeling' ? 'Darjeeling' :
-                              pkg.place === 'sikkim' ? 'Sikkim' :
-                                pkg.place === 'meghalaya' ? 'Meghalaya' :
-                                  pkg.place === 'arunachal' ? 'Arunachal' :
-                                    pkg.place === 'himachal-pradesh' ? 'Himachal Pradesh' :
-                                      pkg.place === 'kashmir' ? 'Kashmir' :
-                                        pkg.place === 'leh-ladakh' ? 'Leh Ladakh' :
-                                          pkg.place === 'vietnam' ? 'Vietnam' :
-                                            pkg.place === 'sri-lanka' ? 'Sri Lanka' :
-                                              pkg.place === 'bali' ? 'Bali' :
-                                                pkg.place === 'malaysia' ? 'Malaysia' :
-                                                  pkg.place === 'singapore' ? 'Singapore' :
-                                                    pkg.place === 'bhutan' ? 'Bhutan' :
-                                                      pkg.place === 'nepal' ? 'Nepal' : pkg.place}
-                          </Badge>
-                        </td>
-                        <td className="p-3">{pkg.duration || "N/A"}</td>
-                        <td className="p-3">{pkg.location || "N/A"}</td>
-                        <td className="p-3 font-medium">AED {pkg.price?.toLocaleString() || "0"}</td>
-                        <td className="p-3">
-                          <div className="flex items-center">
-                            <Star className="h-4 w-4 text-yellow-500 fill-current mr-1" />
-                            {pkg.rating || 0}
-                          </div>
-                        </td>
-                        <td className="p-3">
-                          <div className="flex items-center space-x-2">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleViewPackage(pkg)}
-                              title="View Package"
-                            >
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleEditPackage(pkg)}
-                              title="Edit Package"
-                            >
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleDuplicatePackage(pkg)}
-                              title="Duplicate Package"
-                              className="text-blue-500 hover:text-blue-700 hover:bg-blue-50"
-                            >
-                              <Copy className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleExportSinglePackageToWord(pkg)}
-                              title="Export Package to Word"
-                              className="text-green-500 hover:text-green-700 hover:bg-green-50"
-                            >
-                              <Download className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleDeletePackage(pkg)}
-                              title="Delete Package"
-                              className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={9} className="p-8 text-center text-gray-500">
-                        <div className="flex flex-col items-center space-y-2">
-                          <Package className="h-12 w-12 text-gray-300" />
-                          {packages.length === 0 ? (
+                      {/* Place Filter */}
+                      <Select value={placeFilter} onValueChange={setPlaceFilter}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Place" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Places</SelectItem>
+                          {packageTypeFilter === 'domestic' ? (
                             <>
-                              <p>No packages created yet</p>
-                              <Button onClick={openCreatePackageModal} size="sm">
-                                <Plus className="h-4 w-4 mr-2" />
-                                Create Your First Package
-                              </Button>
+                              {/* Domestic Places */}
+                              <SelectItem value="darjeeling">Darjeeling</SelectItem>
+                              <SelectItem value="sikkim">Sikkim</SelectItem>
+                              <SelectItem value="meghalaya">Meghalaya</SelectItem>
+                              <SelectItem value="arunachal">Arunachal</SelectItem>
+                              <SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
+                              <SelectItem value="kashmir">Kashmir</SelectItem>
+                              <SelectItem value="leh-ladakh">Leh Ladakh</SelectItem>
+                            </>
+                          ) : packageTypeFilter === 'international' ? (
+                            <>
+                              {/* International Places */}
+                              <SelectItem value="vietnam">Vietnam</SelectItem>
+                              <SelectItem value="sri-lanka">Sri Lanka</SelectItem>
+                              <SelectItem value="bali">Bali</SelectItem>
+                              <SelectItem value="malaysia">Malaysia</SelectItem>
+                              <SelectItem value="singapore">Singapore</SelectItem>
                             </>
                           ) : (
                             <>
-                              <p>No packages found matching your filters</p>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  setSearchTerm("");
-                                  setPackageTypeFilter("all");
-                                  setPlaceFilter("all");
-                                  setCategoryFilter("all");
-                                }}
-                              >
-                                Clear Filters
-                              </Button>
+                              {/* All Places when no type filter is selected */}
+                              {/* Domestic Places */}
+                              <SelectItem value="darjeeling">Darjeeling</SelectItem>
+                              <SelectItem value="sikkim">Sikkim</SelectItem>
+                              <SelectItem value="meghalaya">Meghalaya</SelectItem>
+                              <SelectItem value="arunachal">Arunachal</SelectItem>
+                              <SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
+                              <SelectItem value="kashmir">Kashmir</SelectItem>
+                              <SelectItem value="leh-ladakh">Leh Ladakh</SelectItem>
+                              {/* International Places */}
+                              <SelectItem value="vietnam">Vietnam</SelectItem>
+                              <SelectItem value="sri-lanka">Sri Lanka</SelectItem>
+                              <SelectItem value="bali">Bali</SelectItem>
+                              <SelectItem value="malaysia">Malaysia</SelectItem>
+                              <SelectItem value="singapore">Singapore</SelectItem>
+                              {/* Legacy Places */}
+                              <SelectItem value="bhutan">Bhutan</SelectItem>
+                              <SelectItem value="nepal">Nepal</SelectItem>
                             </>
                           )}
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Clear Filters Button */}
+                    {(searchTerm || packageTypeFilter !== "all" || placeFilter !== "all" || categoryFilter !== "all") && (
+                      <div className="mt-4">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setSearchTerm("");
+                            setPackageTypeFilter("all");
+                            setPlaceFilter("all");
+                            setCategoryFilter("all");
+                          }}
+                        >
+                          Clear Filters
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b">
+                          <th className="text-left p-3">Package Title</th>
+                          <th className="text-left p-3">Type</th>
+                          <th className="text-left p-3">Category</th>
+                          <th className="text-left p-3">Place</th>
+                          <th className="text-left p-3">Duration</th>
+                          <th className="text-left p-3">Location</th>
+                          <th className="text-left p-3">Price</th>
+                          <th className="text-left p-3">Rating</th>
+                          <th className="text-left p-3">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredPackages.length > 0 ? (
+                          filteredPackages.map((pkg) => (
+                            <tr key={pkg._id} className="border-b">
+                              <td className="p-3">
+                                <div className="flex items-center space-x-3">
+                                  {pkg.images && pkg.images.length > 0 ? (
+                                    <div className="w-12 h-12 rounded-lg overflow-hidden border-2 border-gray-200">
+                                      <img
+                                        src={pkg.images[0].url}
+                                        alt={pkg.title}
+                                        className="w-full h-full object-cover"
+                                      />
+                                    </div>
+                                  ) : (
+                                    <div className="w-12 h-12 rounded-lg border-2 border-gray-200 flex items-center justify-center bg-gray-100">
+                                      <Package className="h-6 w-6 text-gray-400" />
+                                    </div>
+                                  )}
+                                  <span className="font-medium">{pkg.title}</span>
+                                </div>
+                              </td>
+                              <td className="p-3">
+                                <Badge variant={pkg.packageType === 'domestic' ? 'default' : 'secondary'}>
+                                  {pkg.packageType === 'domestic' ? 'Domestic' : 'International'}
+                                </Badge>
+                              </td>
+                              <td className="p-3">
+                                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                                  {pkg.packageCategory || 'Cultural'}
+                                </Badge>
+                              </td>
+                              <td className="p-3">
+                                <Badge variant="outline">
+                                  {pkg.place === 'darjeeling' ? 'Darjeeling' :
+                                    pkg.place === 'sikkim' ? 'Sikkim' :
+                                      pkg.place === 'meghalaya' ? 'Meghalaya' :
+                                        pkg.place === 'arunachal' ? 'Arunachal' :
+                                          pkg.place === 'himachal-pradesh' ? 'Himachal Pradesh' :
+                                            pkg.place === 'kashmir' ? 'Kashmir' :
+                                              pkg.place === 'leh-ladakh' ? 'Leh Ladakh' :
+                                                pkg.place === 'vietnam' ? 'Vietnam' :
+                                                  pkg.place === 'sri-lanka' ? 'Sri Lanka' :
+                                                    pkg.place === 'bali' ? 'Bali' :
+                                                      pkg.place === 'malaysia' ? 'Malaysia' :
+                                                        pkg.place === 'singapore' ? 'Singapore' :
+                                                          pkg.place === 'bhutan' ? 'Bhutan' :
+                                                            pkg.place === 'nepal' ? 'Nepal' : pkg.place}
+                                </Badge>
+                              </td>
+                              <td className="p-3">{pkg.duration || "N/A"}</td>
+                              <td className="p-3">{pkg.location || "N/A"}</td>
+                              <td className="p-3 font-medium">R {pkg.price?.toLocaleString() || "0"}</td>
+                              <td className="p-3">
+                                <div className="flex items-center">
+                                  <Star className="h-4 w-4 text-yellow-500 fill-current mr-1" />
+                                  {pkg.rating || 0}
+                                </div>
+                              </td>
+                              <td className="p-3">
+                                <div className="flex items-center space-x-2">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleViewPackage(pkg)}
+                                    title="View Package"
+                                  >
+                                    <Eye className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleEditPackage(pkg)}
+                                    title="Edit Package"
+                                  >
+                                    <Edit className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleDuplicatePackage(pkg)}
+                                    title="Duplicate Package"
+                                    className="text-blue-500 hover:text-blue-700 hover:bg-blue-50"
+                                  >
+                                    <Copy className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleExportSinglePackageToWord(pkg)}
+                                    title="Export Package to Word"
+                                    className="text-green-500 hover:text-green-700 hover:bg-green-50"
+                                  >
+                                    <Download className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleDeletePackage(pkg)}
+                                    title="Delete Package"
+                                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={9} className="p-8 text-center text-gray-500">
+                              <div className="flex flex-col items-center space-y-2">
+                                <Package className="h-12 w-12 text-gray-300" />
+                                {packages.length === 0 ? (
+                                  <>
+                                    <p>No packages created yet</p>
+                                    <Button onClick={openCreatePackageModal} size="sm">
+                                      <Plus className="h-4 w-4 mr-2" />
+                                      Create Your First Package
+                                    </Button>
+                                  </>
+                                ) : (
+                                  <>
+                                    <p>No packages found matching your filters</p>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      onClick={() => {
+                                        setSearchTerm("");
+                                        setPackageTypeFilter("all");
+                                        setPlaceFilter("all");
+                                        setCategoryFilter("all");
+                                      }}
+                                    >
+                                      Clear Filters
+                                    </Button>
+                                  </>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
-          </CardContent>
-        </Card>
-      </div>
           )}
 
           {activeView === 'testimonials' && (
