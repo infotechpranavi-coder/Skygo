@@ -31,7 +31,7 @@ const Header = () => {
 
   // WhatsApp contact function
   const handleWhatsAppClick = () => {
-    const phoneNumber = "971504015632"; // WhatsApp number with country code
+    const phoneNumber = "27214087600"; // WhatsApp number with country code
     const message = "Hi! I'm interested in your tour packages. Can you please provide more information?";
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -66,21 +66,21 @@ const Header = () => {
                 <div className="flex flex-col items-center space-y-0.5">
                   <div className="flex items-center space-x-1">
                     <Phone className="h-3 w-3" />
-                    <span>+971 50 401 5632</span>
+                    <span>+27 21 408 7600</span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <Phone className="h-3 w-3" />
-                    <span>+971 50 214 2541</span>
+                    <span>+27 82 000 0000</span>
                   </div>
                 </div>
                 <div className="flex items-center space-x-1">
                   <Mail className="h-3 w-3" />
-                  <span className="truncate">info@premiumdubaitours.com</span>
+                  <span className="truncate">info@skygo.co.za</span>
                 </div>
               </div>
               <div className="flex justify-center">
                 <a
-                  href="https://wa.me/971504015632"
+                  href="https://wa.me/27214087600"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center space-x-1 hover:text-green-400 transition-colors duration-200 text-xs"
@@ -99,14 +99,14 @@ const Header = () => {
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
                   <Phone className="h-4 w-4" />
-                  <span>+971 50 401 5632, +971 50 214 2541</span>
+                  <span>+27 21 408 7600, +27 82 000 0000</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Mail className="h-4 w-4" />
-                  <span>info@premiumdubaitours.com</span>
+                  <span>info@skygo.co.za</span>
                 </div>
                 <a
-                  href="https://wa.me/971504015632"
+                  href="https://wa.me/27214087600"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center space-x-2 hover:text-green-400 transition-colors duration-200"
@@ -125,9 +125,9 @@ const Header = () => {
         {/* Main navigation */}
         <nav className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            <Link href="/" className="flex items-center space-x-2">
-              <span className="flex items-center justify-center bg-white rounded-full shadow w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24">
-                <img src="/pdt_logo_whitebg.jpeg" alt="Premium Dubai Tours" className="h-10 w-10 md:h-12 md:w-12 lg:h-16 lg:w-16 object-contain" />
+            <Link href="/" className="flex items-center">
+              <span className="flex items-center justify-center bg-white rounded-full shadow w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40">
+                <img src="/Untitled_design__2_-removebg-preview.png" alt="Sky Go" className="h-16 w-16 md:h-24 md:w-24 lg:h-32 lg:w-32 object-contain" />
               </span>
             </Link>
 
@@ -166,7 +166,7 @@ const Header = () => {
                             >
                               <div className="text-sm font-medium leading-none text-foreground">Domestic</div>
                               <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                                Explore amazing destinations within India
+                                Explore amazing destinations within South Africa
                               </p>
                             </Link>
                           </NavigationMenuLink>

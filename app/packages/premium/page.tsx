@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -135,7 +135,7 @@ const PremiumPackagesPage = () => {
       _id: 'dubai-private-classic-discovery',
       title: 'Dubai Private Classic Discovery',
       subtitle: '4 Nights / 5 Days Premium Private Tour Package',
-      about: 'The Dubai Signature Escape – 4 Nights / 5 Days is a carefully curated premium Dubai tour designed for travelers who value privacy, comfort, flexibility, and refined experiences. This journey blends Dubai\'s iconic landmarks with exclusive private services, allowing guests to experience the city at a relaxed, unhurried pace.',
+      about: 'The Dubai Signature Escape â€“ 4 Nights / 5 Days is a carefully curated premium Dubai tour designed for travelers who value privacy, comfort, flexibility, and refined experiences. This journey blends Dubai\'s iconic landmarks with exclusive private services, allowing guests to experience the city at a relaxed, unhurried pace.',
       services: [],
       tourDetails: 'This 4 Nights / 5 Days Premium Dubai Tour is designed as a complete introduction to Dubai, combining modern landmarks, cultural attractions, leisure experiences, and signature luxury elements. The itinerary follows a logical flow, avoiding rushed days and overcrowded schedules.',
       itinerary: [
@@ -165,7 +165,7 @@ const PremiumPackagesPage = () => {
       _id: 'dubai-elite-grand-explorer',
       title: 'Dubai Elite Grand Explorer',
       subtitle: '6 Nights / 7 Days Premium Private Dubai & UAE Tour',
-      about: 'The Dubai Elite Grand Explorer – 6 Nights / 7 Days Premium Tour is a comprehensive private travel experience designed for travelers who want to explore Dubai beyond the basics while also discovering neighboring Emirates in comfort and privacy.',
+      about: 'The Dubai Elite Grand Explorer â€“ 6 Nights / 7 Days Premium Tour is a comprehensive private travel experience designed for travelers who want to explore Dubai beyond the basics while also discovering neighboring Emirates in comfort and privacy.',
       services: [],
       tourDetails: '',
       itinerary: [],
@@ -189,7 +189,7 @@ const PremiumPackagesPage = () => {
       _id: 'dubai-grand-signature-journey',
       title: 'Dubai Grand Signature Journey',
       subtitle: '5 Nights / 6 Days Premium Private Dubai Tour',
-      about: 'The Dubai Grand Signature Journey – 5 Nights / 6 Days is a refined private Dubai travel experience designed for travelers who want more time, more depth, and more flexibility while exploring the UAE.',
+      about: 'The Dubai Grand Signature Journey â€“ 5 Nights / 6 Days is a refined private Dubai travel experience designed for travelers who want more time, more depth, and more flexibility while exploring the UAE.',
       services: [],
       tourDetails: '',
       itinerary: [],
@@ -387,7 +387,7 @@ const PremiumPackagesPage = () => {
                 <Sparkles className="h-4 w-4 mr-2" />
                 Premium Dubai Tours
               </Badge>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 text-gray-900 leading-tight font-playfair tracking-tight">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 text-[#1e1f44] leading-tight font-playfair tracking-tight">
                 Discover Dubai with a <span className="bg-gradient-to-r from-amber-500 to-amber-600 bg-clip-text text-transparent">Local Tour Operating Company</span>
               </h2>
             </div>
@@ -398,7 +398,7 @@ const PremiumPackagesPage = () => {
                   <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
                     <Crown className="h-8 w-8 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4 font-cormorant tracking-wide">Refined Experiences</h3>
+                  <h3 className="text-2xl font-bold text-[#1e1f44] mb-4 font-cormorant tracking-wide">Refined Experiences</h3>
                   <p className="text-gray-700 leading-relaxed text-lg font-poppins font-light">
                     Discover Dubai with a local tour operating company, Premium Dubai Tours. We are a Dubai-based travel agency committed to delivering refined, comfortable, and trustworthy travel experiences.
                   </p>
@@ -410,7 +410,7 @@ const PremiumPackagesPage = () => {
                   <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
                     <Star className="h-8 w-8 text-white fill-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4 font-cormorant tracking-wide">Beyond Standard</h3>
+                  <h3 className="text-2xl font-bold text-[#1e1f44] mb-4 font-cormorant tracking-wide">Beyond Standard</h3>
                   <p className="text-gray-700 leading-relaxed text-lg font-poppins font-light">
                     Our premium tours go beyond standard sightseeing, focusing on personalized attention, transparent pricing, and reliable service designed for travelers who value quality and peace of mind.
                   </p>
@@ -431,7 +431,7 @@ const PremiumPackagesPage = () => {
                     <div className="w-24 h-24 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
                       <Search className="h-12 w-12 text-gray-400" />
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">No premium packages found</h3>
+                    <h3 className="text-xl font-semibold text-[#1e1f44] mb-2">No premium packages found</h3>
                     <p className="text-gray-600 mb-6">Try adjusting your search criteria</p>
                     <Button onClick={() => {
                       setFilters({
@@ -453,7 +453,7 @@ const PremiumPackagesPage = () => {
                 ) : (
                   <>
                     <div className="flex justify-between items-center mb-8">
-                      <h2 className="text-2xl font-bold text-gray-900 font-playfair tracking-tight">
+                      <h2 className="text-2xl font-bold text-[#1e1f44] font-playfair tracking-tight">
                         Premium Packages
                       </h2>
                       <div className="text-sm text-gray-600">
@@ -483,7 +483,7 @@ const PremiumPackagesPage = () => {
                                 <Crown className="h-12 w-12 text-amber-600" />
                               </div>
                             )}
-                            <Badge className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-gray-900 font-semibold shadow-lg">
+                            <Badge className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-[#1e1f44] font-semibold shadow-lg">
                               {pkg.price > 0 ? formatPrice(pkg.price) : 'Custom Pricing'}
                             </Badge>
                             <Badge className="absolute top-4 left-4 bg-amber-500 text-white shadow-lg">
@@ -556,7 +556,7 @@ const PremiumPackagesPage = () => {
                     <Badge className="mb-6 bg-amber-500/10 text-amber-600 border-amber-500/20 px-4 py-1">
                       What We Offer
                     </Badge>
-                    <h3 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900 leading-tight font-playfair tracking-tight">
+                    <h3 className="text-3xl md:text-4xl font-bold mb-6 text-[#1e1f44] leading-tight font-playfair tracking-tight">
                       What Are Premium Dubai Tours?
                     </h3>
                     <p className="text-lg text-gray-700 leading-relaxed font-poppins font-light tracking-wide">
@@ -572,7 +572,7 @@ const PremiumPackagesPage = () => {
                     <Clock className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold text-gray-900 mb-2 font-cormorant tracking-wide">Time Well Spent</h4>
+                    <h4 className="text-xl font-bold text-[#1e1f44] mb-2 font-cormorant tracking-wide">Time Well Spent</h4>
                     <p className="text-gray-600 font-poppins font-light">Every moment is carefully planned to maximize your enjoyment</p>
                   </div>
                 </div>
@@ -582,7 +582,7 @@ const PremiumPackagesPage = () => {
                     <Heart className="h-6 w-6 text-white fill-white" />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold text-gray-900 mb-2 font-cormorant tracking-wide">Comfort First</h4>
+                    <h4 className="text-xl font-bold text-[#1e1f44] mb-2 font-cormorant tracking-wide">Comfort First</h4>
                     <p className="text-gray-600 font-poppins font-light">Your comfort and satisfaction are our top priorities</p>
                   </div>
                 </div>
@@ -592,7 +592,7 @@ const PremiumPackagesPage = () => {
                     <Camera className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold text-gray-900 mb-2 font-cormorant tracking-wide">Authentic Insights</h4>
+                    <h4 className="text-xl font-bold text-[#1e1f44] mb-2 font-cormorant tracking-wide">Authentic Insights</h4>
                     <p className="text-gray-600 font-poppins font-light">Experience Dubai through the eyes of locals</p>
                   </div>
                 </div>
@@ -611,7 +611,7 @@ const PremiumPackagesPage = () => {
               <Badge className="mb-6 bg-amber-500/10 text-amber-600 border-amber-500/20 px-4 py-1">
                 Perfect For You
               </Badge>
-              <h3 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 font-playfair tracking-tight">
+              <h3 className="text-4xl md:text-5xl font-bold mb-6 text-[#1e1f44] font-playfair tracking-tight">
                 Who Should Choose Premium Dubai Tours?
               </h3>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto font-poppins font-light tracking-wide">
@@ -649,7 +649,7 @@ const PremiumPackagesPage = () => {
                         <item.icon className="h-8 w-8 text-white" />
                       </div>
                       <div className="flex-1">
-                        <h4 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-amber-600 transition-colors font-cormorant tracking-wide">
+                        <h4 className="text-xl font-bold text-[#1e1f44] mb-3 group-hover:text-amber-600 transition-colors font-cormorant tracking-wide">
                           {item.title}
                         </h4>
                         <p className="text-gray-600 leading-relaxed text-lg font-poppins font-light">
@@ -665,7 +665,7 @@ const PremiumPackagesPage = () => {
             <div className="text-center">
               <Card className="inline-block border-2 border-amber-500/20 bg-gradient-to-r from-amber-50 to-white p-8 shadow-xl">
                 <CardContent className="p-0">
-                  <p className="text-xl font-semibold text-gray-900 italic font-cormorant tracking-wide">
+                  <p className="text-xl font-semibold text-[#1e1f44] italic font-cormorant tracking-wide">
                     "If you prefer structure without rigidity and quality without unnecessary extras, Premium Dubai Tours are designed for you."
                   </p>
                 </CardContent>
@@ -683,7 +683,7 @@ const PremiumPackagesPage = () => {
               <Badge className="mb-6 bg-amber-500/10 text-amber-600 border-amber-500/20 px-4 py-1">
                 Our Difference
               </Badge>
-              <h3 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 font-playfair tracking-tight">
+              <h3 className="text-4xl md:text-5xl font-bold mb-6 text-[#1e1f44] font-playfair tracking-tight">
                 What Makes Premium Tours Different?
               </h3>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto font-poppins font-light tracking-wide">
@@ -703,7 +703,7 @@ const PremiumPackagesPage = () => {
                     <div className="w-20 h-20 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform">
                       <item.icon className="h-10 w-10 text-white" />
                     </div>
-                    <h4 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-amber-600 transition-colors font-cormorant tracking-wide">
+                    <h4 className="text-lg font-bold text-[#1e1f44] mb-3 group-hover:text-amber-600 transition-colors font-cormorant tracking-wide">
                       {item.title}
                     </h4>
                     <p className="text-gray-600 text-sm leading-relaxed font-poppins font-light">
@@ -719,7 +719,7 @@ const PremiumPackagesPage = () => {
               <Card className="relative border-2 border-amber-500/30 bg-gradient-to-r from-amber-500/10 to-amber-600/10 backdrop-blur-sm">
                 <CardContent className="p-10 text-center">
                   <Crown className="h-12 w-12 text-amber-600 mx-auto mb-4" />
-                  <p className="text-2xl font-bold text-gray-900 font-cormorant tracking-wide">
+                  <p className="text-2xl font-bold text-[#1e1f44] font-cormorant tracking-wide">
                     We don't aim to be the cheapest; we aim to be the most reliable and thoughtful choice.
                   </p>
                 </CardContent>
@@ -734,7 +734,7 @@ const PremiumPackagesPage = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 font-playfair tracking-tight">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#1e1f44] mb-4 font-playfair tracking-tight">
                 Why Choose Premium Packages?
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto font-poppins font-light tracking-wide">
@@ -746,7 +746,7 @@ const PremiumPackagesPage = () => {
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-500/10 rounded-full mb-4">
                   <Crown className="h-8 w-8 text-amber-500" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3 font-cormorant tracking-wide">
+                <h3 className="text-xl font-semibold text-[#1e1f44] mb-3 font-cormorant tracking-wide">
                   Premium Service
                 </h3>
                 <p className="text-gray-600 font-poppins font-light">
@@ -757,7 +757,7 @@ const PremiumPackagesPage = () => {
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-500/10 rounded-full mb-4">
                   <Camera className="h-8 w-8 text-amber-500" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3 font-cormorant tracking-wide">
+                <h3 className="text-xl font-semibold text-[#1e1f44] mb-3 font-cormorant tracking-wide">
                   Exclusive Access
                 </h3>
                 <p className="text-gray-600 font-poppins font-light">
@@ -768,7 +768,7 @@ const PremiumPackagesPage = () => {
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-500/10 rounded-full mb-4">
                   <Heart className="h-8 w-8 text-amber-500" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3 font-cormorant tracking-wide">
+                <h3 className="text-xl font-semibold text-[#1e1f44] mb-3 font-cormorant tracking-wide">
                   Personalized Attention
                 </h3>
                 <p className="text-gray-600 font-poppins font-light">
@@ -789,7 +789,7 @@ const PremiumPackagesPage = () => {
               <Badge className="mb-6 bg-gradient-to-r from-amber-500 to-amber-600 text-white border-none px-6 py-2 text-sm font-semibold shadow-lg">
                 Complete Package
               </Badge>
-              <h3 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 font-playfair tracking-tight">
+              <h3 className="text-4xl md:text-5xl font-bold mb-6 text-[#1e1f44] font-playfair tracking-tight">
                 What's Included in Premium Dubai Tours?
               </h3>
               <p className="text-xl text-gray-600 font-poppins font-light tracking-wide">
@@ -844,7 +844,7 @@ const PremiumPackagesPage = () => {
                     <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl flex items-center justify-center mr-6 shadow-lg group-hover:scale-110 transition-transform">
                       <Sparkles className="h-8 w-8 text-white" />
                     </div>
-                    <h3 className="text-2xl md:text-3xl font-bold text-gray-900 font-playfair tracking-tight">
+                    <h3 className="text-2xl md:text-3xl font-bold text-[#1e1f44] font-playfair tracking-tight">
                       Customization and Personalized Service
                     </h3>
                   </div>
@@ -860,7 +860,7 @@ const PremiumPackagesPage = () => {
                     <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl flex items-center justify-center mr-6 shadow-lg group-hover:scale-110 transition-transform">
                       <Shield className="h-8 w-8 text-white" />
                     </div>
-                    <h3 className="text-2xl md:text-3xl font-bold text-gray-900 font-playfair tracking-tight">
+                    <h3 className="text-2xl md:text-3xl font-bold text-[#1e1f44] font-playfair tracking-tight">
                       Assurance of Quality and Professional Booking
                     </h3>
                   </div>
@@ -868,7 +868,7 @@ const PremiumPackagesPage = () => {
                     Premium Dubai Tours' booking process is straightforward, secure, and supported by a dedicated team ready to assist before, during, and after your trip.
                   </p>
                   <div className="mt-6 p-4 bg-amber-500/10 rounded-xl border border-amber-500/20">
-                    <p className="text-lg text-gray-900 font-semibold font-cormorant tracking-wide">
+                    <p className="text-lg text-[#1e1f44] font-semibold font-cormorant tracking-wide">
                       When you book with us, you're choosing a partner who respects your time and travel experience.
                     </p>
                   </div>
@@ -953,7 +953,7 @@ const PremiumPackagesPage = () => {
                 {/* Introduction Section */}
                 <Card className="border-2 border-amber-500/20 bg-gradient-to-br from-amber-50/50 to-white">
                   <CardContent className="p-6">
-                    <h3 className="text-2xl font-playfair tracking-tight mb-4 text-gray-900">
+                    <h3 className="text-2xl font-playfair tracking-tight mb-4 text-[#1e1f44]">
                       Introduction: A Refined Way to Experience Dubai
                     </h3>
                     <p className="text-gray-700 leading-relaxed font-poppins font-light mb-4">
@@ -968,7 +968,7 @@ const PremiumPackagesPage = () => {
                 {/* What Are Premium Packages */}
                 <Card className="border-2 border-amber-500/20">
                   <CardContent className="p-6">
-                    <h3 className="text-2xl font-playfair tracking-tight mb-4 text-gray-900 flex items-center">
+                    <h3 className="text-2xl font-playfair tracking-tight mb-4 text-[#1e1f44] flex items-center">
                       <Sparkles className="h-6 w-6 mr-2 text-amber-500" />
                       What Are Premium Dubai Tour Packages?
                     </h3>
@@ -979,19 +979,19 @@ const PremiumPackagesPage = () => {
                       Each itinerary is designed with flexibility in mind. While we provide a professionally planned route covering Dubai's iconic landmarks, cultural attractions, and luxury experiences, every day can be customized to match your pace, interests, and priorities.
                     </p>
                     <div className="bg-amber-50/50 rounded-lg p-4 border border-amber-500/20">
-                      <h4 className="font-cormorant text-lg font-semibold mb-3 text-gray-900">To offer maximum choice, our premium packages are available in three accommodation options:</h4>
+                      <h4 className="font-cormorant text-lg font-semibold mb-3 text-[#1e1f44]">To offer maximum choice, our premium packages are available in three accommodation options:</h4>
                       <ul className="space-y-2 font-poppins font-light text-gray-700">
                         <li className="flex items-start">
                           <CheckCircle2 className="h-5 w-5 mr-2 text-amber-500 mt-0.5 flex-shrink-0" />
-                          <span><strong>Without hotel accommodation</strong> – ideal for residents or travelers with pre-booked hotels</span>
+                          <span><strong>Without hotel accommodation</strong> â€“ ideal for residents or travelers with pre-booked hotels</span>
                         </li>
                         <li className="flex items-start">
                           <CheckCircle2 className="h-5 w-5 mr-2 text-amber-500 mt-0.5 flex-shrink-0" />
-                          <span><strong>With 4-star hotel accommodation</strong> – comfort-focused, centrally located properties</span>
+                          <span><strong>With 4-star hotel accommodation</strong> â€“ comfort-focused, centrally located properties</span>
                         </li>
                         <li className="flex items-start">
                           <CheckCircle2 className="h-5 w-5 mr-2 text-amber-500 mt-0.5 flex-shrink-0" />
-                          <span><strong>With 5-star hotel accommodation</strong> – refined luxury and premium hospitality</span>
+                          <span><strong>With 5-star hotel accommodation</strong> â€“ refined luxury and premium hospitality</span>
                         </li>
                       </ul>
                       <p className="mt-4 text-gray-700 font-poppins font-light">
@@ -1004,7 +1004,7 @@ const PremiumPackagesPage = () => {
                 {/* Who Should Choose */}
                 <Card className="border-2 border-amber-500/20 bg-gradient-to-br from-white to-amber-50/30">
                   <CardContent className="p-6">
-                    <h3 className="text-2xl font-playfair tracking-tight mb-4 text-gray-900 flex items-center">
+                    <h3 className="text-2xl font-playfair tracking-tight mb-4 text-[#1e1f44] flex items-center">
                       <Users className="h-6 w-6 mr-2 text-amber-500" />
                       Who Should Choose Premium Packages?
                     </h3>
@@ -1012,7 +1012,7 @@ const PremiumPackagesPage = () => {
                       Our Premium Dubai Tour Packages are best suited for travelers who want a calm, controlled, and personalized travel experience.
                     </p>
                     <div className="bg-white rounded-lg p-4 border border-amber-500/20">
-                      <h4 className="font-cormorant text-lg font-semibold mb-3 text-gray-900">These tours are ideal for:</h4>
+                      <h4 className="font-cormorant text-lg font-semibold mb-3 text-[#1e1f44]">These tours are ideal for:</h4>
                       <ul className="space-y-2 font-poppins font-light text-gray-700">
                         <li className="flex items-start">
                           <CheckCircle2 className="h-5 w-5 mr-2 text-amber-500 mt-0.5 flex-shrink-0" />
@@ -1045,7 +1045,7 @@ const PremiumPackagesPage = () => {
                 {/* Durations */}
                 <Card className="border-2 border-amber-500/20">
                   <CardContent className="p-6">
-                    <h3 className="text-2xl font-playfair tracking-tight mb-4 text-gray-900 flex items-center">
+                    <h3 className="text-2xl font-playfair tracking-tight mb-4 text-[#1e1f44] flex items-center">
                       <Calendar className="h-6 w-6 mr-2 text-amber-500" />
                       Premium Package Durations Available
                     </h3>
@@ -1060,7 +1060,7 @@ const PremiumPackagesPage = () => {
                         { duration: '6 Nights / 7 Days', desc: 'A comprehensive UAE journey including Dubai, Abu Dhabi, and Sharjah' }
                       ].map((item, idx) => (
                         <div key={idx} className="bg-gradient-to-br from-amber-50 to-white p-4 rounded-lg border border-amber-500/20">
-                          <h4 className="font-cormorant font-semibold text-lg text-gray-900 mb-2">{item.duration}</h4>
+                          <h4 className="font-cormorant font-semibold text-lg text-[#1e1f44] mb-2">{item.duration}</h4>
                           <p className="font-poppins font-light text-gray-700">{item.desc}</p>
                         </div>
                       ))}
@@ -1074,7 +1074,7 @@ const PremiumPackagesPage = () => {
                 {/* Experiences */}
                 <Card className="border-2 border-amber-500/20 bg-gradient-to-br from-white to-amber-50/30">
                   <CardContent className="p-6">
-                    <h3 className="text-2xl font-playfair tracking-tight mb-4 text-gray-900 flex items-center">
+                    <h3 className="text-2xl font-playfair tracking-tight mb-4 text-[#1e1f44] flex items-center">
                       <Sparkles className="h-6 w-6 mr-2 text-amber-500" />
                       Experiences That Define Our Premium Packages
                     </h3>
@@ -1109,7 +1109,7 @@ const PremiumPackagesPage = () => {
                 {/* Customization */}
                 <Card className="border-2 border-amber-500/20">
                   <CardContent className="p-6">
-                    <h3 className="text-2xl font-playfair tracking-tight mb-4 text-gray-900 flex items-center">
+                    <h3 className="text-2xl font-playfair tracking-tight mb-4 text-[#1e1f44] flex items-center">
                       <Sparkles className="h-6 w-6 mr-2 text-amber-500" />
                       Customization & Flexibility
                     </h3>
@@ -1117,7 +1117,7 @@ const PremiumPackagesPage = () => {
                       One of the defining features of our Premium Dubai Tour Packages is complete flexibility.
                     </p>
                     <div className="bg-amber-50/50 rounded-lg p-4 border border-amber-500/20">
-                      <h4 className="font-cormorant text-lg font-semibold mb-3 text-gray-900">You can:</h4>
+                      <h4 className="font-cormorant text-lg font-semibold mb-3 text-[#1e1f44]">You can:</h4>
                       <ul className="space-y-2 font-poppins font-light text-gray-700">
                         <li className="flex items-start">
                           <CheckCircle2 className="h-5 w-5 mr-2 text-amber-500 mt-0.5 flex-shrink-0" />
@@ -1150,7 +1150,7 @@ const PremiumPackagesPage = () => {
                 {/* Best Time to Visit */}
                 <Card className="border-2 border-amber-500/20 bg-gradient-to-br from-white to-amber-50/30">
                   <CardContent className="p-6">
-                    <h3 className="text-2xl font-playfair tracking-tight mb-4 text-gray-900 flex items-center">
+                    <h3 className="text-2xl font-playfair tracking-tight mb-4 text-[#1e1f44] flex items-center">
                       <Calendar className="h-6 w-6 mr-2 text-amber-500" />
                       Best Time to Visit Dubai for Premium Travel
                     </h3>
@@ -1159,11 +1159,11 @@ const PremiumPackagesPage = () => {
                     </p>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="bg-white p-4 rounded-lg border border-amber-500/20">
-                        <h4 className="font-cormorant font-semibold text-lg text-gray-900 mb-2">October to April</h4>
+                        <h4 className="font-cormorant font-semibold text-lg text-[#1e1f44] mb-2">October to April</h4>
                         <p className="font-poppins font-light text-gray-700">Offers pleasant weather, ideal for outdoor sightseeing and evening activities.</p>
                       </div>
                       <div className="bg-white p-4 rounded-lg border border-amber-500/20">
-                        <h4 className="font-cormorant font-semibold text-lg text-gray-900 mb-2">May to September</h4>
+                        <h4 className="font-cormorant font-semibold text-lg text-[#1e1f44] mb-2">May to September</h4>
                         <p className="font-poppins font-light text-gray-700">Provides more competitive pricing, with tours designed around indoor attractions and evening experiences to avoid peak heat.</p>
                       </div>
                     </div>
@@ -1176,7 +1176,7 @@ const PremiumPackagesPage = () => {
                 {/* Why Choose */}
                 <Card className="border-2 border-amber-500/20">
                   <CardContent className="p-6">
-                    <h3 className="text-2xl font-playfair tracking-tight mb-4 text-gray-900 flex items-center">
+                    <h3 className="text-2xl font-playfair tracking-tight mb-4 text-[#1e1f44] flex items-center">
                       <Shield className="h-6 w-6 mr-2 text-amber-500" />
                       Why Choose Premium Dubai Tours for Premium Packages?
                     </h3>
@@ -1184,7 +1184,7 @@ const PremiumPackagesPage = () => {
                       We focus on service reliability rather than exaggerated promises.
                     </p>
                     <div className="bg-amber-50/50 rounded-lg p-4 border border-amber-500/20">
-                      <h4 className="font-cormorant text-lg font-semibold mb-3 text-gray-900">Here is what sets us apart:</h4>
+                      <h4 className="font-cormorant text-lg font-semibold mb-3 text-[#1e1f44]">Here is what sets us apart:</h4>
                       <ul className="space-y-2 font-poppins font-light text-gray-700">
                         <li className="flex items-start">
                           <CheckCircle2 className="h-5 w-5 mr-2 text-amber-500 mt-0.5 flex-shrink-0" />
@@ -1244,3 +1244,4 @@ const PremiumPackagesPage = () => {
 };
 
 export default PremiumPackagesPage;
+

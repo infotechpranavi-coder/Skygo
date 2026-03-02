@@ -36,30 +36,30 @@ export interface Testimonial {
 export const destinations: Destination[] = [
   {
     id: '1',
-    title: 'Dubai Desert Safari',
-    subtitle: 'Adventure in the dunes',
-    image: '/b5.jpg',
+    title: 'Cape Town Waterfront',
+    subtitle: 'Beauty at the foot of Table Mountain',
+    image: 'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     link: '/packages'
   },
   {
     id: '2',
-    title: 'Abu Dhabi Grand Mosque',
-    subtitle: 'Cultural heritage tour',
-    image: 'https://tse3.mm.bing.net/th/id/OIP.JriaLo7J598DpnCChNGfxAHaE8?rs=1&pid=ImgDetMain&o=7&rm=3',
+    title: 'Kruger National Park',
+    subtitle: 'Ultimate wildlife safari experience',
+    image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     link: '/packages'
   },
   {
     id: '3',
-    title: 'Burj Khalifa Experience',
-    subtitle: 'World\'s tallest building',
-    image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    title: 'Johannesburg City',
+    subtitle: 'The vibrant heart of South Africa',
+    image: 'https://images.unsplash.com/photo-1549417229-aa67d3263c09?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     link: '/packages'
   },
   {
     id: '4',
-    title: 'Dubai Marina Cruise',
-    subtitle: 'Luxury yacht experience',
-    image: 'https://tse3.mm.bing.net/th/id/OIP.Eme8v44yWu1JMtzrMLmzjgHaEK?rs=1&pid=ImgDetMain&o=7&rm=3',
+    title: 'Garden Route Scenic Drive',
+    subtitle: 'Majestic coastal landscapes',
+    image: 'https://images.unsplash.com/photo-1549417229-aa67d3263c09?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     link: '/packages'
   }
 ];
@@ -67,26 +67,26 @@ export const destinations: Destination[] = [
 export const upcomingTrips: Trip[] = [
   {
     id: '1',
-    title: 'Desert Safari Adventure',
-    location: 'Dubai Desert',
-    price: 'from $199',
-    image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    title: 'Kruger Safari Adventure',
+    location: 'Mpumalanga',
+    price: 'from R2,999',
+    image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     link: '/packages'
   },
   {
     id: '2',
-    title: 'City Tour & Burj Khalifa',
-    location: 'Dubai',
-    price: 'from $299',
-    image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    title: 'Table Mountain Experience',
+    location: 'Cape Town',
+    price: 'from R1,299',
+    image: 'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     link: '/packages'
   },
   {
     id: '3',
-    title: 'Abu Dhabi Day Trip',
-    location: 'Abu Dhabi',
-    price: 'from $249',
-    image: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    title: 'Durban Beach Holiday',
+    location: 'KwaZulu-Natal',
+    price: 'from R1,999',
+    image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     link: '/packages'
   }
 ];
@@ -94,29 +94,47 @@ export const upcomingTrips: Trip[] = [
 export const popularPackages: Package[] = [
   {
     id: '1',
-    title: 'Premium Desert Safari',
-    subtitle: 'Dune bashing, camel ride & BBQ dinner',
-    duration: 'Half Day',
-    price: 'AED 2,500',
-    image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    title: 'Kruger Big Five Safari',
+    subtitle: '4 Days / 3 Nights Wild Adventure',
+    duration: '4 Days',
+    price: 'R15,999',
+    image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     link: '/packages'
   },
   {
     id: '2',
-    title: 'Dubai City Highlights',
-    subtitle: 'Burj Khalifa, Dubai Mall & Marina',
-    duration: '1 Day',
-    price: 'AED 5,500',
-    image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    title: 'Cape Winelands Escape',
+    subtitle: 'Vineyards and scenic valley views',
+    duration: '3 Days',
+    price: 'R8,499',
+    image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     link: '/packages'
   },
   {
     id: '3',
-    title: 'Abu Dhabi Cultural Tour',
-    subtitle: 'Sheikh Zayed Mosque & Louvre',
-    duration: '1 Day',
-    price: 'AED 4,500',
-    image: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    title: 'Drakensberg Mountain Quest',
+    subtitle: 'Hike the peaks of South Africa',
+    duration: '5 Days',
+    price: 'R12,899',
+    image: 'https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    link: '/packages'
+  },
+  {
+    id: '4',
+    title: 'Garden Route Wonders',
+    subtitle: 'Pristine beaches and forest tracks',
+    duration: '6 Days',
+    price: 'R18,999',
+    image: 'https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    link: '/packages'
+  },
+  {
+    id: '5',
+    title: 'Cape Town City Lights',
+    subtitle: 'Urban culture and coastal beauty',
+    duration: '5 Days',
+    price: 'R11,499',
+    image: 'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     link: '/packages'
   }
 ];
@@ -124,41 +142,55 @@ export const popularPackages: Package[] = [
 export const testimonials: Testimonial[] = [
   {
     id: '1',
-    name: 'Anupam Kumar',
-    role: 'Adventure Traveler',
-    quote: 'Our Dubai adventure with Premium Dubai Tours was absolutely incredible! The team was professional, knowledgeable, and made our trip unforgettable.',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop'
+    name: 'Olivia Mitchell',
+    role: 'Student',
+    quote: 'Our family trip to Kruger was absolutely magical. Sky Go handled everything from the private transfers to the lodge bookings perfectly. Truly a world-class experience!',
+    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop'
   },
   {
     id: '2',
-    name: 'Himanshu Sharma',
-    role: 'Cultural Explorer',
-    quote: 'The Dubai city tour was amazing! Our guide was so knowledgeable about the history and culture. Premium Dubai Tours really knows how to create authentic experiences.',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop'
+    name: 'James Wilson',
+    role: 'Photographer',
+    quote: 'The Garden Route drive was the highlight of my photography career. The attention to detail and the pacing of the tour allowed me to capture some incredible shots. Highly recommended!',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop'
   },
   {
     id: '3',
-    name: 'Rushabh Nandeshwar',
-    role: 'Family Traveler',
-    quote: 'We had the most wonderful family trip to Dubai! The team took care of everything - from hotel bookings to tours. The kids loved every moment.',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop'
+    name: 'Sophia Chen',
+    role: 'Architect',
+    quote: 'As an architect, I was blown away by the Zeitz MOCAA and the Waterfront redevelopment. The tour was enlightening and very well coordinated. Sky Go knows their stuff!',
+    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop'
   },
   {
     id: '4',
-    name: 'Deesha Patil',
-    role: 'Wildlife Enthusiast',
-    quote: 'The desert safari experience was incredible! The dune bashing, camel rides, and traditional entertainment were amazing. Will definitely book again!',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop'
+    name: 'Marcus Thorne',
+    role: 'Journalist',
+    quote: 'Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.',
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop'
+  },
+  {
+    id: '5',
+    name: 'Elena Rodriguez',
+    role: 'Marketing Lead',
+    quote: 'Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt.',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop'
+  },
+  {
+    id: '6',
+    name: 'David Park',
+    role: 'Software Engineer',
+    quote: 'Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing.',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop'
   }
 ];
 
 export const exploreInclusions = [
-  'Travel Insurance',
-  'Return Flight',
-  'Accommodation',
-  'Vehicle Rentals',
-  'Hotel Booking',
-  'Air Tickets',
-  'Visa Services',
-  'Vehicle Rentals'
+  'Guided Safaris',
+  'Private Transfers',
+  'Luxury Lodging',
+  'Regional Flights',
+  'Table Mountain Entry',
+  'Wine Tasting',
+  'Wildlife Expert',
+  'Coastal Cruises'
 ];

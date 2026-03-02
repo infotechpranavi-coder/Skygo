@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -138,36 +138,34 @@ const DestinationsPage = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative text-white py-16 md:py-20 lg:py-24 overflow-hidden">
+      <section className="relative text-white py-28 md:py-40 overflow-hidden">
         {/* Background Image */}
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
-          style={{
-            backgroundImage: `url('/thumbnail_2_6_15_6_33_261.webp')`
-          }}
-        >
-          {/* Overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/40"></div>
-        </div>
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url('/thumbnail_2_6_15_6_33_261.webp')` }}
+        />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70" />
+        {/* Radial vignette */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.5)_100%)]" />
+        {/* Bottom fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white to-transparent" />
 
-        {/* Content */}
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-6 leading-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-              Dubai Tour Packages
+            <p className="text-[#bd9245] font-bold uppercase tracking-[0.3em] text-sm mb-6">Explore Dubai</p>
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-[1000] mb-6 leading-none tracking-tighter uppercase">
+              Destinations
             </h1>
-            <p className="text-base md:text-lg lg:text-xl mb-10 opacity-90 leading-relaxed" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+            <p className="text-xl md:text-2xl mb-10 text-white/80 max-w-2xl mx-auto font-medium">
               Discover amazing Dubai destinations through our curated travel packages
             </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Badge variant="secondary" className="text-sm md:text-base px-4 py-2">
-                <MapPin className="h-4 w-4 mr-2" />
-                {packages.length} Packages Available
-              </Badge>
-              <Badge variant="secondary" className="text-sm md:text-base px-4 py-2">
-                <Globe className="h-4 w-4 mr-2" />
-                {categories.length} Categories
-              </Badge>
+            <div className="flex flex-wrap justify-center gap-6 text-white/60 text-sm font-bold uppercase tracking-widest">
+              <span>{packages.length} Packages Available</span>
+              <span className="text-white/30">·</span>
+              <span>{categories.length} Categories</span>
+              <span className="text-white/30">·</span>
+              <span>Expert Guided</span>
             </div>
           </div>
         </div>
@@ -194,7 +192,7 @@ const DestinationsPage = () => {
       <section className="py-12 bg-gray-100">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
+            <h2 className="text-3xl font-bold text-center text-[#1e1f44] mb-8">
               Explore by Category
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -205,19 +203,19 @@ const DestinationsPage = () => {
                   <Card
                     key={index}
                     className={`text-center hover:shadow-lg transition-all cursor-pointer ${selectedCategory === category.name
-                        ? 'ring-2 ring-primary bg-primary/5'
-                        : 'hover:bg-gray-50'
+                      ? 'ring-2 ring-primary bg-primary/5'
+                      : 'hover:bg-gray-50'
                       }`}
                     onClick={() => setSelectedCategory(selectedCategory === category.name ? "" : category.name)}
                   >
                     <CardContent className="p-4">
                       <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full mb-3 ${selectedCategory === category.name
-                          ? 'bg-primary text-white'
-                          : `${category.color} text-white`
+                        ? 'bg-primary text-white'
+                        : `${category.color} text-white`
                         }`}>
                         <IconComponent className="h-6 w-6" />
                       </div>
-                      <h3 className={`text-sm font-semibold mb-1 ${selectedCategory === category.name ? 'text-primary' : 'text-gray-900'
+                      <h3 className={`text-sm font-semibold mb-1 ${selectedCategory === category.name ? 'text-primary' : 'text-[#1e1f44]'
                         }`}>
                         {category.name}
                       </h3>
@@ -256,7 +254,7 @@ const DestinationsPage = () => {
                 <div className="w-24 h-24 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
                   <Search className="h-12 w-12 text-gray-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">No packages found</h3>
+                <h3 className="text-xl font-semibold text-[#1e1f44] mb-2">No packages found</h3>
                 <p className="text-gray-600 mb-6">Try adjusting your search criteria</p>
                 <Button onClick={() => {
                   setSearchTerm("");
@@ -276,7 +274,7 @@ const DestinationsPage = () => {
                           <IconComponent className="h-6 w-6" />
                         </div>
                         <div>
-                          <h2 className="text-3xl font-bold text-gray-900">{categoryName} Packages</h2>
+                          <h2 className="text-3xl font-bold text-[#1e1f44]">{categoryName} Packages</h2>
                           <p className="text-gray-600">{categoryPackages.length} package{categoryPackages.length !== 1 ? 's' : ''} available</p>
                         </div>
                       </div>
@@ -300,7 +298,7 @@ const DestinationsPage = () => {
                                 </div>
                               )}
                               <div className="absolute top-4 right-4 space-y-2">
-                                <Badge className="bg-white text-gray-900 block">
+                                <Badge className="bg-white text-[#1e1f44] block">
                                   {formatPrice(pkg.price)}
                                 </Badge>
                                 <Badge variant="outline" className="bg-primary/10 text-primary border-primary block">
@@ -396,3 +394,4 @@ const DestinationsPage = () => {
 };
 
 export default DestinationsPage;
+

@@ -45,7 +45,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
   const [hotelOptions, setHotelOptions] = useState<string[]>([""]);
   const [keyHighlights, setKeyHighlights] = useState<string[]>([""]);
   const [whyChooseThisTrip, setWhyChooseThisTrip] = useState<string[]>([""]);
-  const [whyPremiumDubaiTours, setWhyPremiumDubaiTours] = useState<string[]>([""]);
+  const [whySkygoSouthAfricaTours, setWhySkygoSouthAfricaTours] = useState<string[]>([""]);
   const [itinerary, setItinerary] = useState<ItineraryDay[]>([
     { id: "1", day: 1, title: "", description: "" }
   ]);
@@ -119,19 +119,19 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
     setWhyChooseThisTrip(prev => prev.map((item, i) => i === index ? value : item));
   };
 
-  // Why Premium Dubai Tours handlers
-  const addWhyPremiumDubaiTours = () => {
-    setWhyPremiumDubaiTours(prev => [...prev, ""]);
+  // Why Skygo South Africa Tours handlers
+  const addWhySkygoSouthAfricaTours = () => {
+    setWhySkygoSouthAfricaTours(prev => [...prev, ""]);
   };
 
-  const removeWhyPremiumDubaiTours = (index: number) => {
-    if (whyPremiumDubaiTours.length > 1) {
-      setWhyPremiumDubaiTours(prev => prev.filter((_, i) => i !== index));
+  const removeWhySkygoSouthAfricaTours = (index: number) => {
+    if (whySkygoSouthAfricaTours.length > 1) {
+      setWhySkygoSouthAfricaTours(prev => prev.filter((_, i) => i !== index));
     }
   };
 
-  const updateWhyPremiumDubaiTours = (index: number, value: string) => {
-    setWhyPremiumDubaiTours(prev => prev.map((item, i) => i === index ? value : item));
+  const updateWhySkygoSouthAfricaTours = (index: number, value: string) => {
+    setWhySkygoSouthAfricaTours(prev => prev.map((item, i) => i === index ? value : item));
   };
 
   // Itinerary handlers
@@ -249,6 +249,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
       ideaFor: "",
       abstract: "",
       tourOverview: "",
+      packageCategory: "Regular",
       bestTimeToVisit: {
         yearRound: "",
         winter: "",
@@ -258,7 +259,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
     setHotelOptions([""]);
     setKeyHighlights([""]);
     setWhyChooseThisTrip([""]);
-    setWhyPremiumDubaiTours([""]);
+    setWhySkygoSouthAfricaTours([""]);
     setItinerary([{ id: "1", day: 1, title: "", description: "" }]);
     setInclusions([{ id: "1", category: "", items: [""] }]);
     setExclusions([{ id: "1", category: "", items: [""] }]);
@@ -286,7 +287,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
         hotelOptions: hotelOptions.filter(item => item.trim() !== ""),
         bestTimeToVisit: formData.bestTimeToVisit,
         whyChooseThisTrip: whyChooseThisTrip.filter(item => item.trim() !== ""),
-        whyPremiumDubaiTours: whyPremiumDubaiTours.filter(item => item.trim() !== ""),
+        whyPremiumDubaiTours: whySkygoSouthAfricaTours.filter(item => item.trim() !== ""),
         itinerary: itinerary.map(day => ({
           day: day.day,
           title: day.title,
@@ -309,10 +310,10 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
         tourDetails: formData.tourOverview || formData.abstract || "",
         price: 0,
         duration: "",
-        location: "Dubai, UAE",
+        location: "Cape Town, South Africa",
         capacity: "",
-        packageType: "international",
-        place: "dubai",
+        packageType: "domestic",
+        place: "cape-town",
         packageCategory: formData.packageCategory || "Regular",
         images: [],
         transportation: [],
@@ -401,8 +402,8 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
           {/* Package Category */}
           <div className="space-y-2">
             <label className="text-sm font-medium">Package Category *</label>
-            <Select 
-              value={formData.packageCategory} 
+            <Select
+              value={formData.packageCategory}
               onValueChange={(value) => setFormData({ ...formData, packageCategory: value })}
             >
               <SelectTrigger>
@@ -566,7 +567,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
 
           {/* Best Time to Visit */}
           <div className="space-y-4">
-            <label className="text-sm font-medium">Best Time to Visit Dubai</label>
+            <label className="text-sm font-medium">Best Time to Visit South Africa</label>
             <div className="space-y-3">
               <div>
                 <label className="text-xs text-gray-600">Year Round</label>
@@ -640,15 +641,15 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
             </div>
           </div>
 
-          {/* Why Premium Dubai Tours */}
+          {/* Why Skygo South Africa Tours */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">Why Premium Dubai Tours for This Journey?</label>
+              <label className="text-sm font-medium">Why Sky Go for This Journey?</label>
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={addWhyPremiumDubaiTours}
+                onClick={addWhySkygoSouthAfricaTours}
                 className="flex items-center gap-2"
               >
                 <Plus className="h-4 w-4" />
@@ -656,19 +657,19 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
               </Button>
             </div>
             <div className="space-y-2">
-              {whyPremiumDubaiTours.map((point, index) => (
+              {whySkygoSouthAfricaTours.map((point, index) => (
                 <div key={index} className="flex items-center gap-2">
                   <Input
                     placeholder={`Point ${index + 1}`}
                     value={point}
-                    onChange={(e) => updateWhyPremiumDubaiTours(index, e.target.value)}
+                    onChange={(e) => updateWhySkygoSouthAfricaTours(index, e.target.value)}
                   />
-                  {whyPremiumDubaiTours.length > 1 && (
+                  {whySkygoSouthAfricaTours.length > 1 && (
                     <Button
                       type="button"
                       variant="ghost"
                       size="sm"
-                      onClick={() => removeWhyPremiumDubaiTours(index)}
+                      onClick={() => removeWhySkygoSouthAfricaTours(index)}
                       className="text-red-500 hover:text-red-700"
                     >
                       <X className="h-4 w-4" />

@@ -1,14 +1,15 @@
-'use client'
+﻿'use client'
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MapPin, Phone, Mail, Clock, Send, MessageCircle, Users, Globe } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
-const ContactPage = () => {
+const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -19,6 +20,21 @@ const ContactPage = () => {
     packageName: "",
     packageDuration: ""
   });
+
+  const searchParams = useSearchParams();
+  const prepopulatePackageName = searchParams?.get('packageName');
+  const prepopulatePackageType = searchParams?.get('packageType');
+
+  useEffect(() => {
+    if (prepopulatePackageName || prepopulatePackageType) {
+      setFormData(prev => ({
+        ...prev,
+        packageName: prepopulatePackageName || prev.packageName,
+        packageType: prepopulatePackageType || prev.packageType,
+        subject: prepopulatePackageName ? `Inquiry for ${prepopulatePackageName}` : prev.subject
+      }));
+    }
+  }, [prepopulatePackageName, prepopulatePackageType]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -40,20 +56,20 @@ const ContactPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Create WhatsApp message with form data
-    const whatsappMessage = `Hello! I'm interested in booking a trip with Premium Dubai Tours.
+    const whatsappMessage = `Hello! I'm interested in booking a trip with Skygo South Africa.
 
 *Contact Information:*
-• Name: ${formData.name}
-• Email: ${formData.email}
-• Phone: ${formData.phone || 'Not provided'}
+â€¢ Name: ${formData.name}
+â€¢ Email: ${formData.email}
+â€¢ Phone: ${formData.phone || 'Not provided'}
 
 *Package Details:*
-• Package Type: ${formData.packageType || 'Not specified'}
-• Package Name: ${formData.packageName || 'Not specified'}
-• Package Duration: ${formData.packageDuration || 'Not specified'}
-• Subject: ${formData.subject}
+â€¢ Package Type: ${formData.packageType || 'Not specified'}
+â€¢ Package Name: ${formData.packageName || 'Not specified'}
+â€¢ Package Duration: ${formData.packageDuration || 'Not specified'}
+â€¢ Subject: ${formData.subject}
 
 *Message:*
 ${formData.message}
@@ -62,13 +78,13 @@ Please get back to me with more information about available packages and pricing
 
     // Encode the message for URL
     const encodedMessage = encodeURIComponent(whatsappMessage);
-    
+
     // Create WhatsApp URL
-    const whatsappUrl = `https://wa.me/971504015632?text=${encodedMessage}`;
-    
+    const whatsappUrl = `https://wa.me/27214087600?text=${encodedMessage}`;
+
     // Open WhatsApp in new tab
     window.open(whatsappUrl, '_blank');
-    
+
     // Reset form
     setFormData({
       name: "",
@@ -87,19 +103,19 @@ Please get back to me with more information about available packages and pricing
     {
       icon: MapPin,
       title: "Address Location",
-      details: ["Dubai Marina, Building 15", "Dubai - 12345, UAE"],
-      description: "Located in the heart of Dubai"
+      details: ["19 Dock Rd, V&A Waterfront", "Cape Town, 8001, South Africa"],
+      description: "Located in the heart of Cape Town"
     },
     {
       icon: Phone,
       title: "Phone Numbers",
-      details: ["+971 50 401 5632", "+971 50 214 2541"],
+      details: ["+27 21 408 7600", "+27 21 408 7601"],
       description: "Available 24/7 for emergency support"
     },
     {
       icon: Mail,
       title: "Email Address",
-      details: ["info@premiumdubaitours.com"],
+      details: ["info@skygo.co.za"],
       description: "We respond within 24 hours"
     },
     {
@@ -112,61 +128,64 @@ Please get back to me with more information about available packages and pricing
 
   const teamMembers = [
     {
-      name: "Ahmed Al Maktoum",
+      name: "Thabo Mbeki",
       role: "General Manager",
-      email: "info@premiumdubaitours.com",
-      phone: "+971 50 401 5632"
+      email: "info@skygo.co.za",
+      phone: "+27 21 408 7600"
     },
     {
       name: "Customer Support",
       role: "Tour Operations",
-      email: "info@premiumdubaitours.com",
-      phone: "+971 50 214 2541"
+      email: "info@skygo.co.za",
+      phone: "+27 21 408 7601"
     },
     {
-      name: "Premium Dubai Tours",
+      name: "Skygo South Africa",
       role: "Customer Relations",
-      email: "info@premiumdubaitours.com",
-      phone: "+971 50 401 5632"
+      email: "info@skygo.co.za",
+      phone: "+27 21 408 7600"
     }
   ];
 
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative text-white py-16 md:py-20 lg:py-24 overflow-hidden">
+      <section className="relative text-white py-28 md:py-40 overflow-hidden">
         {/* Background Image */}
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
-          style={{
-            backgroundImage: `url('/360_F_573305992_F4MJgvIVzPZbMywNb3zcBNTw8jkjNbKo.webp')`
-          }}
-        >
-          {/* Overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/40"></div>
-        </div>
-        
-        {/* Content */}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url('/360_F_573305992_F4MJgvIVzPZbMywNb3zcBNTw8jkjNbKo.webp')` }}
+        />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70" />
+        {/* Radial vignette */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.5)_100%)]" />
+        {/* Bottom fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white to-transparent" />
+
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-10">
+            <p className="text-[#bd9245] font-bold uppercase tracking-[0.3em] text-sm mb-6">Get In Touch</p>
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-[1000] mb-6 leading-none tracking-tighter uppercase">
               Contact Us
             </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl mb-12 opacity-90">
+            <p className="text-xl md:text-2xl mb-10 text-white/80 max-w-2xl mx-auto font-medium">
               Get in touch with us for any questions, custom packages, or travel assistance
             </p>
-            <div className="flex flex-wrap justify-center gap-6">
-              <div className="flex items-center space-x-3">
-                <MessageCircle className="h-6 w-6" />
-                <span className="text-lg">24/7 Support</span>
+            <div className="flex flex-wrap justify-center gap-6 text-white/60 text-sm font-bold uppercase tracking-widest">
+              <div className="flex items-center space-x-2">
+                <MessageCircle className="h-4 w-4" />
+                <span>24/7 Support</span>
               </div>
-              <div className="flex items-center space-x-3">
-                <Users className="h-6 w-6" />
-                <span className="text-lg">Expert Team</span>
+              <span className="text-white/30">·</span>
+              <div className="flex items-center space-x-2">
+                <Users className="h-4 w-4" />
+                <span>Expert Team</span>
               </div>
-              <div className="flex items-center space-x-3">
-                <Globe className="h-6 w-6" />
-                <span className="text-lg">Global Reach</span>
+              <span className="text-white/30">·</span>
+              <div className="flex items-center space-x-2">
+                <Globe className="h-4 w-4" />
+                <span>Global Reach</span>
               </div>
             </div>
           </div>
@@ -180,7 +199,7 @@ Please get back to me with more information about available packages and pricing
             <div className="grid lg:grid-cols-2 gap-12">
               {/* Contact Form */}
               <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                <h2 className="text-3xl font-bold text-[#1e1f44] mb-6">
                   Send us a Message via WhatsApp
                 </h2>
                 <Card>
@@ -228,7 +247,7 @@ Please get back to me with more information about available packages and pricing
                             type="tel"
                             value={formData.phone}
                             onChange={handleInputChange}
-                            placeholder="+971 50 401 5632"
+                            placeholder="+27 21 408 7600"
                           />
                         </div>
                         <div>
@@ -260,7 +279,7 @@ Please get back to me with more information about available packages and pricing
                             type="text"
                             value={formData.packageName}
                             onChange={handleInputChange}
-                            placeholder="e.g., Nepal Adventure Tour"
+                            placeholder="e.g., Kruger Safari Adventure"
                           />
                         </div>
                         <div>
@@ -335,21 +354,21 @@ Please get back to me with more information about available packages and pricing
               <div className="space-y-8">
                 {/* Google Maps */}
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                  <h2 className="text-3xl font-bold text-[#1e1f44] mb-6">
                     Find Us
                   </h2>
                   <Card>
                     <CardContent className="p-0">
                       <div className="aspect-video">
                         <iframe
-                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3610.1755227303955!2d55.1366222!3d25.076385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f6b5c5c5c5c5d%3A0x5c5c5c5c5c5c5c5c!2sDubai%20Marina!5e0!3m2!1sen!2sae!4v1699123456789!5m2!1sen!2sae"
+                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3311.0253456789!2d18.4166667!3d33.9!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1dcc5d123456789%3A0x123456789abcdef!2sV%26A%20Waterfront!5e0!3m2!1sen!2sza!4v1699123456789!5m2!1sen!2sza"
                           width="100%"
                           height="100%"
                           style={{ border: 0 }}
                           allowFullScreen
                           loading="lazy"
                           referrerPolicy="no-referrer-when-downgrade"
-                          title="Premium Dubai Tours Location - Dubai Marina, Dubai, UAE"
+                          title="Skygo South Africa Location - V&A Waterfront, Cape Town, South Africa"
                         ></iframe>
                       </div>
                     </CardContent>
@@ -357,22 +376,22 @@ Please get back to me with more information about available packages and pricing
                   <div className="mt-4 text-center">
                     <p className="text-sm text-gray-600">
                       <MapPin className="h-4 w-4 inline mr-1" />
-                      Dubai Marina, Building 15, Dubai - 12345, UAE
+                      19 Dock Rd, V&A Waterfront, Cape Town, 8001, South Africa
                     </p>
-                    <a 
-                      href="https://www.google.com/maps/place/Dubai+Marina/@25.076385,55.1366222,15z/data=!3m1!4b1!4m6!3m5!1s0x3e5f6b5c5c5c5c5d:0x5c5c5c5c5c5c5c5c!8m2!3d25.076385!4d55.1366222!16s%2Fm%2F0jwpq3v"
+                    <a
+                      href="https://www.google.com/maps/place/V%26A+Waterfront/@-33.9036,18.4201,15z"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-primary hover:text-primary/80 text-sm font-medium mt-2 inline-block"
                     >
-                      Open in Google Maps →
+                      Open in Google Maps â†’
                     </a>
                   </div>
                 </div>
 
                 {/* Team Members */}
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                  <h2 className="text-3xl font-bold text-[#1e1f44] mb-6">
                     Our Team
                   </h2>
                   <div className="space-y-4">
@@ -384,7 +403,7 @@ Please get back to me with more information about available packages and pricing
                               <Users className="h-6 w-6 text-primary" />
                             </div>
                             <div className="flex-1">
-                              <h3 className="font-semibold text-gray-900">{member.name}</h3>
+                              <h3 className="font-semibold text-[#1e1f44]">{member.name}</h3>
                               <p className="text-sm text-gray-600">{member.role}</p>
                               <div className="flex items-center space-x-4 mt-1">
                                 <a href={`mailto:${member.email}`} className="text-xs text-primary hover:underline">
@@ -412,7 +431,7 @@ Please get back to me with more information about available packages and pricing
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#1e1f44] mb-4">
                 Get in Touch
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -426,7 +445,7 @@ Please get back to me with more information about available packages and pricing
                     <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
                       <info.icon className="h-8 w-8 text-primary" />
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                    <h3 className="text-xl font-semibold text-[#1e1f44] mb-3">
                       {info.title}
                     </h3>
                     <div className="space-y-1 mb-3">
@@ -447,14 +466,14 @@ Please get back to me with more information about available packages and pricing
         </div>
       </section>
 
-      
+
 
       {/* FAQ Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#1e1f44] mb-4">
                 Frequently Asked Questions
               </h2>
               <p className="text-xl text-gray-600">
@@ -518,13 +537,13 @@ Please get back to me with more information about available packages and pricing
               Let's create the perfect travel experience for you
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="tel:+971504015632">
+              <a href="tel:+27214087600">
                 <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-gray-100">
                   <Phone className="h-5 w-5 mr-2" />
                   Call Us Now
                 </Button>
               </a>
-              <a href="mailto:info@premiumdubaitours.com">
+              <a href="mailto:info@skygo.co.za">
                 <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
                   <MessageCircle className="h-5 w-5 mr-2" />
                   Send Email
@@ -538,4 +557,13 @@ Please get back to me with more information about available packages and pricing
   );
 };
 
+const ContactPage = () => {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mr-2"></div></div>}>
+      <ContactForm />
+    </Suspense>
+  );
+};
+
 export default ContactPage;
+

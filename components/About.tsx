@@ -11,8 +11,8 @@ const About = () => {
     },
     {
       icon: Map,
-      title: "Dubai Destinations",
-      description: "Explore the best of Dubai and Abu Dhabi with our curated tours"
+      title: "South African Destinations",
+      description: "Explore the best of South Africa and its regions with our curated tours"
     },
     {
       icon: Users,
@@ -33,18 +33,18 @@ const About = () => {
           {/* Left content */}
           <div className="space-y-8">
             <div className="space-y-4">
-              <h2 className="text-4xl font-bold text-blue-600">About Premium Dubai Tours</h2>
+              <h2 className="text-4xl font-bold text-blue-600">About Sky Go</h2>
               <p className="text-lg text-blue-500 leading-relaxed font-medium">
                 "Travel with Heart, Explore with Us"
               </p>
               <p className="text-lg text-blue-600 leading-relaxed">
-                Premium Dubai Tours turns your holidays into memorable journeys across Dubai and the UAE. Every trip is personal, seamless, and unforgettable.
+                Sky Go turns your holidays into memorable journeys across South Africa. Every trip is personal, seamless, and unforgettable.
               </p>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Whether you're seeking luxury experiences at Burj Al Arab, adventure in the Dubai desert, cultural immersion at traditional souks, or relaxation at world-class beaches, our expert team is here to guide you every step of the way through Dubai and the UAE.
+                Whether you're seeking luxury experiences at Table Mountain, adventure in the Kruger safari, cultural immersion at traditional markets, or relaxation at world-class beaches, our expert team is here to guide you every step of the way through South Africa.
               </p>
             </div>
-            
+
             <div className="flex flex-col sm:flex-row gap-4">
               <Button size="lg" className="bg-primary hover:bg-primary/90">
                 View Packages

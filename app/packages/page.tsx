@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -6,10 +6,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Clock, Users, Star, Search, Filter, Calendar } from "lucide-react";
+import { MapPin, Clock, Users, Star, Search, Filter, Calendar, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 interface Package {
   _id: string;
@@ -174,9 +175,9 @@ const PackagesPage = () => {
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-AE', {
+    return new Intl.NumberFormat('en-ZA', {
       style: 'currency',
-      currency: 'AED',
+      currency: 'ZAR',
       maximumFractionDigits: 0,
     }).format(price);
   };
@@ -195,24 +196,38 @@ const PackagesPage = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary to-primary/80 text-white py-12 md:py-16">
-        <div className="container mx-auto px-4">
+      <section className="relative text-white py-28 md:py-40 overflow-hidden">
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')"
+          }}
+        />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70" />
+        {/* Radial vignette */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.5)_100%)]" />
+        {/* Bottom fade into page background */}
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#faf8f3] to-transparent" />
+
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-8">
+            <p className="text-amber-500 font-bold uppercase tracking-[0.3em] text-sm mb-6">
+              Curated Experiences
+            </p>
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-[1000] mb-6 leading-none tracking-tighter uppercase">
               Tour Packages
             </h1>
-            <p className="text-2xl md:text-3xl mb-10 opacity-90">
+            <p className="text-xl md:text-2xl mb-10 text-white/80 max-w-2xl mx-auto font-medium">
               Discover amazing destinations with our carefully crafted tour packages
             </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Badge variant="secondary" className="text-lg px-4 py-2">
-                <MapPin className="h-4 w-4 mr-2" />
-                {packages.length} Packages Available
-              </Badge>
-              <Badge variant="secondary" className="text-lg px-4 py-2">
-                <Star className="h-4 w-4 mr-2" />
-                Best Price Guarantee
-              </Badge>
+            <div className="flex flex-wrap justify-center gap-6 text-white/60 text-sm font-bold uppercase tracking-widest">
+              <span>{packages.length} Packages Available</span>
+              <span className="text-white/30">·</span>
+              <span>Best Price Guarantee</span>
+              <span className="text-white/30">·</span>
+              <span>Expert Guided</span>
             </div>
           </div>
         </div>
@@ -256,10 +271,10 @@ const PackagesPage = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Prices</SelectItem>
-                  <SelectItem value="under-50k">Under AED 50,000</SelectItem>
-                  <SelectItem value="50k-100k">AED 50,000 - AED 1,00,000</SelectItem>
-                  <SelectItem value="100k-200k">AED 1,00,000 - AED 2,00,000</SelectItem>
-                  <SelectItem value="over-200k">Over AED 2,00,000</SelectItem>
+                  <SelectItem value="under-50k">Under ZAR 50,000</SelectItem>
+                  <SelectItem value="50k-100k">ZAR 50,000 - ZAR 1,00,000</SelectItem>
+                  <SelectItem value="100k-200k">ZAR 1,00,000 - ZAR 2,00,000</SelectItem>
+                  <SelectItem value="over-200k">Over ZAR 2,00,000</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -295,117 +310,111 @@ const PackagesPage = () => {
       </section>
 
       {/* Packages Grid */}
-      <section className="py-12">
+      <section className="py-16 bg-[#faf8f3]">
         <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            {filteredPackages.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="w-24 h-24 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
-                  <Search className="h-12 w-12 text-gray-400" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">No packages found</h3>
-                <p className="text-gray-600 mb-6">Try adjusting your search criteria</p>
-                <Button onClick={() => {
+          {filteredPackages.length === 0 ? (
+            <div className="text-center py-20">
+              <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                <Search className="h-12 w-12 text-gray-300" />
+              </div>
+              <h3 className="text-2xl font-black text-[#1e1f44] mb-2 uppercase tracking-tighter">No packages found</h3>
+              <p className="text-gray-400 mb-8 font-medium">Try adjusting your search or filters</p>
+              <Button
+                onClick={() => {
                   setSearchTerm("");
                   setPriceFilter("all");
                   setDurationFilter("all");
                   setLocationFilter("all");
                   setCategoryFilter("all");
-                }}>
-                  Clear Filters
-                </Button>
-              </div>
-            ) : (
-              <>
-                <div className="flex justify-between items-center mb-8">
-                  <h2 className="text-2xl font-bold text-gray-900">
-                    {filteredPackages.length} Package{filteredPackages.length !== 1 ? 's' : ''} Found
-                  </h2>
-                  <div className="flex items-center space-x-2 text-sm text-gray-600">
-                    <Filter className="h-4 w-4" />
-                    <span>Filtered results</span>
-                  </div>
+                }}
+                className="bg-[#bd9245] hover:bg-[#a07835] text-white font-bold px-8 py-3 rounded-full"
+              >
+                Clear All Filters
+              </Button>
+            </div>
+          ) : (
+            <>
+              <div className="flex justify-between items-center mb-12">
+                <h2 className="text-4xl md:text-5xl font-[1000] text-[#1e1f44] uppercase tracking-tighter leading-none">
+                  {filteredPackages.length} Package{filteredPackages.length !== 1 ? 's' : ''}<br />
+                  <span className="text-[#bd9245]">Found</span>
+                </h2>
+                <div className="flex items-center gap-2 text-sm text-gray-400 font-bold uppercase tracking-widest">
+                  <Filter className="h-4 w-4" />
+                  <span>Filtered results</span>
                 </div>
+              </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {filteredPackages.map((pkg) => (
-                    <Card key={pkg._id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                      <div className="relative">
-                        {pkg.images && pkg.images.length > 0 ? (
-                          <div className="aspect-video relative">
-                            <Image
-                              src={pkg.images[0].url}
-                              alt={pkg.images[0].alt || pkg.title}
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                        ) : (
-                          <div className="aspect-video bg-gray-200 flex items-center justify-center">
-                            <MapPin className="h-12 w-12 text-gray-400" />
-                          </div>
-                        )}
-                        <div className="absolute top-4 right-4 space-y-2">
-                          <Badge className="bg-white text-gray-900 block">
-                            {formatPrice(pkg.price)}
-                          </Badge>
-                          <Badge variant="outline" className="bg-primary/10 text-primary border-primary block">
-                            {pkg.packageCategory || 'Cultural'}
-                          </Badge>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {filteredPackages.map((pkg, index) => (
+                  <motion.div
+                    key={pkg._id}
+                    className="group bg-white rounded-[32px] overflow-hidden shadow-[0_10px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_70px_rgba(0,0,0,0.1)] transition-all duration-700 cursor-pointer flex flex-col"
+                    onClick={() => router.push(`/packages/${pkg._id}`)}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: (index % 3) * 0.1 }}
+                  >
+                    {/* Image Section */}
+                    <div className="relative w-full h-[220px] flex-shrink-0 overflow-hidden">
+                      {pkg.images && pkg.images.length > 0 ? (
+                        <Image
+                          src={pkg.images[0].url}
+                          alt={pkg.images[0].alt || pkg.title}
+                          fill
+                          className="object-cover transform group-hover:scale-105 transition-transform duration-1000"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                          <MapPin className="h-10 w-10 text-gray-300" />
                         </div>
+                      )}
+                      {/* Subtle gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                    </div>
+
+                    {/* Info Section */}
+                    <div className="p-6 flex flex-col flex-grow">
+                      <div className="flex-grow">
+                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2">
+                          {pkg.duration} &nbsp;·&nbsp; {pkg.location}
+                        </p>
+                        <h3 className="text-xl font-black text-[#1e1f44] leading-tight mb-2 uppercase tracking-tighter group-hover:text-gray-900 transition-colors duration-300">
+                          {pkg.title}
+                        </h3>
+                        <div className="flex items-center gap-1 mb-3">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`w-3 h-3 ${i < Math.round(pkg.rating || 5) ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'}`}
+                            />
+                          ))}
+                          <span className="text-[10px] font-bold text-gray-300 ml-1">{pkg.bookings || 0} Bookings</span>
+                        </div>
+                        <p className="text-gray-400 text-sm leading-relaxed line-clamp-2">
+                          {pkg.subtitle || pkg.about}
+                        </p>
                       </div>
 
-                      <CardHeader>
-                        <CardTitle className="text-xl">{pkg.title}</CardTitle>
-                        <p className="text-gray-600">{pkg.subtitle}</p>
-                      </CardHeader>
-
-                      <CardContent>
-                        <div className="space-y-3">
-                          <div className="flex items-center text-sm text-gray-600">
-                            <MapPin className="h-4 w-4 mr-2" />
-                            {pkg.location}
-                          </div>
-                          <div className="flex items-center text-sm text-gray-600">
-                            <Clock className="h-4 w-4 mr-2" />
-                            {pkg.duration}
-                          </div>
-                          <div className="flex items-center text-sm text-gray-600">
-                            <Users className="h-4 w-4 mr-2" />
-                            {pkg.capacity}
-                          </div>
-                          <div className="flex items-center text-sm text-gray-600">
-                            <Star className="h-4 w-4 mr-2" />
-                            {pkg.rating}/5 ({pkg.bookings} bookings)
-                          </div>
+                      <div className="flex items-center justify-between mt-6 pt-5 border-t border-gray-100">
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-2xl font-black text-[#1e1f44] tracking-tighter">{formatPrice(pkg.price)}</span>
+                          <span className="text-xs font-bold text-gray-300">/ person</span>
                         </div>
-
-                        <p className="text-gray-600 text-sm mt-4 line-clamp-3">
-                          {pkg.about}
-                        </p>
-
-                        <div className="mt-6 flex space-x-2">
-                          <Link href={`/packages/${pkg._id}`} className="flex-1">
-                            <Button className="w-full">
-                              View Details
-                            </Button>
-                          </Link>
-                          <Link href="/contact" className="flex-1">
-                            <Button variant="outline" className="w-full">
-                              <Calendar className="h-4 w-4 mr-2" />
-                              Book Now
-                            </Button>
-                          </Link>
+                        <div className="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-white transition-all duration-500 group-hover:rotate-[360deg] shadow-md">
+                          <ArrowRight className="w-5 h-5" />
                         </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </section>
+
 
       {/* CTA Section */}
       <section className="py-16 bg-primary text-white">
@@ -433,3 +442,4 @@ const PackagesPage = () => {
 };
 
 export default PackagesPage;
+

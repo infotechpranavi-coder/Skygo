@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -154,7 +154,7 @@ const InternationalPackagesPage = () => {
             {
               _id: 'sample-bhutan',
               title: 'Best of BHUTAN',
-              subtitle: 'Phuentsholing → Thimphu → Punakha → Paro → Tiger\'s Nest Hike',
+              subtitle: 'Phuentsholing â†’ Thimphu â†’ Punakha â†’ Paro â†’ Tiger\'s Nest Hike',
               about: 'Experience the mystical kingdom of Bhutan with its stunning monasteries, breathtaking landscapes, and rich cultural heritage.',
               services: ['Accommodation', 'Meals', 'Transportation', 'Guide'],
               tourDetails: '6N/7D tour covering major attractions',
@@ -366,7 +366,7 @@ const InternationalPackagesPage = () => {
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
+            <h2 className="text-3xl font-bold text-center text-[#1e1f44] mb-8">
               Popular International Destinations
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -390,7 +390,7 @@ const InternationalPackagesPage = () => {
                     </div>
                     <h3 className={`text-lg font-semibold mb-2 ${selectedDestination === country.name.toLowerCase()
                       ? 'text-primary'
-                      : 'text-gray-900'
+                      : 'text-[#1e1f44]'
                       }`}>
                       {country.name}
                     </h3>
@@ -420,125 +420,125 @@ const InternationalPackagesPage = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div>
-                {filteredPackages.length === 0 ? (
-                  <div className="text-center py-12">
-                    <div className="w-24 h-24 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
-                      <Search className="h-12 w-12 text-gray-400" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">No international packages found</h3>
-                    <p className="text-gray-600 mb-6">Try adjusting your search criteria</p>
-                    <Button onClick={() => {
-                      setFilters({
-                        searchTerm: "",
-                        priceRange: [0, 50000],
-                        durationRange: [1, 30],
-                        location: "international",
-                        departureCity: [],
-                        tourType: [],
-                        departBetween: {
-                          startDate: "",
-                          endDate: ""
-                        }
-                      });
-                      setSelectedDestination("");
-                    }}>
-                      Clear Filters
-                    </Button>
+              {filteredPackages.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="w-24 h-24 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
+                    <Search className="h-12 w-12 text-gray-400" />
                   </div>
-                ) : (
-                  <>
-                    <div className="flex justify-between items-center mb-8">
-                      <h2 className="text-2xl font-bold text-gray-900">
-                        {selectedDestination
-                          ? `${selectedDestination.charAt(0).toUpperCase() + selectedDestination.slice(1)} Packages`
-                          : 'International Packages'
-                        }
-                      </h2>
-                      <div className="text-sm text-gray-600">
-                        {filteredPackages.length} package{filteredPackages.length !== 1 ? 's' : ''} found
-                      </div>
+                  <h3 className="text-xl font-semibold text-[#1e1f44] mb-2">No international packages found</h3>
+                  <p className="text-gray-600 mb-6">Try adjusting your search criteria</p>
+                  <Button onClick={() => {
+                    setFilters({
+                      searchTerm: "",
+                      priceRange: [0, 50000],
+                      durationRange: [1, 30],
+                      location: "international",
+                      departureCity: [],
+                      tourType: [],
+                      departBetween: {
+                        startDate: "",
+                        endDate: ""
+                      }
+                    });
+                    setSelectedDestination("");
+                  }}>
+                    Clear Filters
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <div className="flex justify-between items-center mb-8">
+                    <h2 className="text-2xl font-bold text-[#1e1f44]">
+                      {selectedDestination
+                        ? `${selectedDestination.charAt(0).toUpperCase() + selectedDestination.slice(1)} Packages`
+                        : 'International Packages'
+                      }
+                    </h2>
+                    <div className="text-sm text-gray-600">
+                      {filteredPackages.length} package{filteredPackages.length !== 1 ? 's' : ''} found
                     </div>
+                  </div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                      {filteredPackages.map((pkg) => (
-                        <Card key={pkg._id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                          <div className="relative">
-                            {pkg.images && pkg.images.length > 0 ? (
-                              <div className="aspect-video relative">
-                                <Image
-                                  src={pkg.images[0].url}
-                                  alt={pkg.images[0].alt || pkg.title}
-                                  fill
-                                  className="object-cover"
-                                />
-                              </div>
-                            ) : (
-                              <div className="aspect-video bg-gray-200 flex items-center justify-center">
-                                <Globe className="h-12 w-12 text-gray-400" />
-                              </div>
-                            )}
-                            <Badge className="absolute top-4 right-4 bg-white text-gray-900">
-                              {formatPrice(pkg.price)}
-                            </Badge>
-                            <Badge className="absolute top-4 left-4 bg-primary text-white">
-                              {pkg.place === 'bhutan' ? 'Bhutan' :
-                                pkg.place === 'nepal' ? 'Nepal' :
-                                  pkg.place === 'dubai' ? 'Dubai' :
-                                    pkg.place === 'vietnam' ? 'Vietnam' :
-                                      pkg.place === 'sri-lanka' ? 'Sri Lanka' :
-                                        pkg.place === 'bali' ? 'Bali' :
-                                          pkg.place === 'malaysia' ? 'Malaysia' :
-                                            pkg.place === 'singapore' ? 'Singapore' : pkg.place}
-                            </Badge>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {filteredPackages.map((pkg) => (
+                      <Card key={pkg._id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                        <div className="relative">
+                          {pkg.images && pkg.images.length > 0 ? (
+                            <div className="aspect-video relative">
+                              <Image
+                                src={pkg.images[0].url}
+                                alt={pkg.images[0].alt || pkg.title}
+                                fill
+                                className="object-cover"
+                              />
+                            </div>
+                          ) : (
+                            <div className="aspect-video bg-gray-200 flex items-center justify-center">
+                              <Globe className="h-12 w-12 text-gray-400" />
+                            </div>
+                          )}
+                          <Badge className="absolute top-4 right-4 bg-white text-[#1e1f44]">
+                            {formatPrice(pkg.price)}
+                          </Badge>
+                          <Badge className="absolute top-4 left-4 bg-primary text-white">
+                            {pkg.place === 'bhutan' ? 'Bhutan' :
+                              pkg.place === 'nepal' ? 'Nepal' :
+                                pkg.place === 'dubai' ? 'Dubai' :
+                                  pkg.place === 'vietnam' ? 'Vietnam' :
+                                    pkg.place === 'sri-lanka' ? 'Sri Lanka' :
+                                      pkg.place === 'bali' ? 'Bali' :
+                                        pkg.place === 'malaysia' ? 'Malaysia' :
+                                          pkg.place === 'singapore' ? 'Singapore' : pkg.place}
+                          </Badge>
+                        </div>
+
+                        <CardHeader>
+                          <CardTitle className="text-xl">{pkg.title}</CardTitle>
+                          <p className="text-gray-600">{pkg.subtitle}</p>
+                        </CardHeader>
+
+                        <CardContent>
+                          <div className="space-y-3">
+                            <div className="flex items-center text-sm text-gray-600">
+                              <MapPin className="h-4 w-4 mr-2" />
+                              {pkg.location}
+                            </div>
+                            <div className="flex items-center text-sm text-gray-600">
+                              <Clock className="h-4 w-4 mr-2" />
+                              {pkg.duration}
+                            </div>
+                            <div className="flex items-center text-sm text-gray-600">
+                              <Users className="h-4 w-4 mr-2" />
+                              {pkg.capacity}
+                            </div>
+                            <div className="flex items-center text-sm text-gray-600">
+                              <Star className="h-4 w-4 mr-2" />
+                              {pkg.rating}/5
+                            </div>
                           </div>
 
-                          <CardHeader>
-                            <CardTitle className="text-xl">{pkg.title}</CardTitle>
-                            <p className="text-gray-600">{pkg.subtitle}</p>
-                          </CardHeader>
+                          <p className="text-gray-600 text-sm mt-4 line-clamp-3">
+                            {pkg.about}
+                          </p>
 
-                          <CardContent>
-                            <div className="space-y-3">
-                              <div className="flex items-center text-sm text-gray-600">
-                                <MapPin className="h-4 w-4 mr-2" />
-                                {pkg.location}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Clock className="h-4 w-4 mr-2" />
-                                {pkg.duration}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Users className="h-4 w-4 mr-2" />
-                                {pkg.capacity}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Star className="h-4 w-4 mr-2" />
-                                {pkg.rating}/5
-                              </div>
-                            </div>
-
-                            <p className="text-gray-600 text-sm mt-4 line-clamp-3">
-                              {pkg.about}
-                            </p>
-
-                            <div className="mt-6 flex space-x-2">
-                              <Link href={`/packages/${pkg._id}`} className="flex-1">
-                                <Button className="w-full">
-                                  View Details
-                                </Button>
-                              </Link>
-                              <Link href="/contact" className="flex-1">
-                                <Button variant="outline" className="w-full">
-                                  Book Now
-                                </Button>
-                              </Link>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  </>
-                )}
+                          <div className="mt-6 flex space-x-2">
+                            <Link href={`/packages/${pkg._id}`} className="flex-1">
+                              <Button className="w-full">
+                                View Details
+                              </Button>
+                            </Link>
+                            <Link href="/contact" className="flex-1">
+                              <Button variant="outline" className="w-full">
+                                Book Now
+                              </Button>
+                            </Link>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -549,7 +549,7 @@ const InternationalPackagesPage = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#1e1f44] mb-4">
                 Why Choose International Travel?
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -561,7 +561,7 @@ const InternationalPackagesPage = () => {
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
                   <Globe className="h-8 w-8 text-primary" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                <h3 className="text-xl font-semibold text-[#1e1f44] mb-3">
                   Cultural Diversity
                 </h3>
                 <p className="text-gray-600">
@@ -572,7 +572,7 @@ const InternationalPackagesPage = () => {
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
                   <Plane className="h-8 w-8 text-primary" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                <h3 className="text-xl font-semibold text-[#1e1f44] mb-3">
                   Easy Travel
                 </h3>
                 <p className="text-gray-600">
@@ -583,7 +583,7 @@ const InternationalPackagesPage = () => {
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
                   <Camera className="h-8 w-8 text-primary" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                <h3 className="text-xl font-semibold text-[#1e1f44] mb-3">
                   Unique Experiences
                 </h3>
                 <p className="text-gray-600">
@@ -621,3 +621,4 @@ const InternationalPackagesPage = () => {
 };
 
 export default InternationalPackagesPage;
+

@@ -4,34 +4,34 @@ import { Badge } from "@/components/ui/badge";
 const Destinations = () => {
   const destinations = [
     {
-      name: "Dubai City",
-      type: "Dubai",
-      image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      name: "Table Mountain",
+      type: "Cape Town",
+      image: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
-      name: "Dubai Marina",
-      type: "Dubai",
-      image: "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      name: "Kruger Safari",
+      type: "Mpumalanga",
+      image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
-      name: "Palm Jumeirah",
-      type: "Dubai",
-      image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      name: "V&A Waterfront",
+      type: "Cape Town",
+      image: "https://images.unsplash.com/photo-1579549303534-738944517e47?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
-      name: "Burj Khalifa",
-      type: "Dubai",
-      image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      name: "Garden Route",
+      type: "Western Cape",
+      image: "https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
-      name: "Dubai Desert",
-      type: "Dubai",
-      image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      name: "Drakensberg",
+      type: "KwaZulu-Natal",
+      image: "https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
-      name: "Abu Dhabi",
-      type: "Dubai",
-      image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      name: "Sun City",
+      type: "North West",
+      image: "https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
   ];
 
@@ -39,8 +39,8 @@ const Destinations = () => {
     <section id="destinations" className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4">Dubai Destinations</h2>
-          <p className="text-xl text-muted-foreground">Discover amazing places in Dubai</p>
+          <h2 className="text-4xl font-bold mb-4">South African Destinations</h2>
+          <p className="text-xl text-muted-foreground">Discover amazing places across South Africa</p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

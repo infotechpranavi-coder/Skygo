@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -247,7 +247,7 @@ const OmanTourPage = () => {
                     <div className="w-24 h-24 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
                       <Search className="h-12 w-12 text-gray-400" />
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">No OMAN tours found</h3>
+                    <h3 className="text-xl font-semibold text-[#1e1f44] mb-2">No OMAN tours found</h3>
                     <p className="text-gray-600 mb-6">Try adjusting your search criteria or check back later</p>
                     <Button onClick={() => {
                       setFilters({
@@ -269,7 +269,7 @@ const OmanTourPage = () => {
                 ) : (
                   <>
                     <div className="flex justify-between items-center mb-8">
-                      <h2 className="text-2xl font-bold text-gray-900">
+                      <h2 className="text-2xl font-bold text-[#1e1f44]">
                         OMAN Tour Packages
                       </h2>
                       <div className="text-sm text-gray-600">
@@ -295,7 +295,7 @@ const OmanTourPage = () => {
                                 <Globe className="h-12 w-12 text-gray-400" />
                               </div>
                             )}
-                            <Badge className="absolute top-4 right-4 bg-white text-gray-900 font-bold">
+                            <Badge className="absolute top-4 right-4 bg-white text-[#1e1f44] font-bold">
                               {formatPrice(pkg.price)}
                             </Badge>
                             <Badge className="absolute top-4 left-4 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-bold">
@@ -447,3 +447,4 @@ const OmanTourPage = () => {
 };
 
 export default OmanTourPage;
+

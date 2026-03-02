@@ -8,37 +8,37 @@ const ImageCarousel = () => {
 
   const images = [
     {
-      url: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
-      title: "Best of DUBAI",
+      url: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
+      title: "Best of CAPE TOWN",
       description:
-        "Burj Khalifa → Dubai Mall → Palm Jumeirah → Dubai Marina → Desert Safari\n\n4N/5D\nGroup Tour @ ₹45,000/person\nPrivate Tour @ ₹55,000/person",
+        "Table Mountain → V&A Waterfront → Cape Point → Penguin Colony\n\n4N/5D\nGroup Tour @ R 12,500/person\nPrivate Tour @ R 15,500/person",
       link: "/packages/domestic",
     },
     {
-      url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
-      title: "Dubai Desert Safari",
+      url: "https://images.unsplash.com/photo-1516426122078-c23e76319801?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
+      title: "Kruger Wildlife Safari",
       description:
-        "Dune Bashing → Camel Ride → Belly Dance → BBQ Dinner\n\nHalf Day Tour Package\n\n₹2,500/person",
+        "Big Five Game Drive → Luxury Bush Camp → Sunset Safari → BBQ Dinner\n\n3N/4D Tour Package\n\nR 18,900/person",
       link: "/packages/domestic",
     },
     {
-      url: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
-      title: "Dubai & Abu Dhabi",
+      url: "https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
+      title: "Garden Route Explorer",
       description:
-        "Sheikh Zayed Mosque → Louvre Abu Dhabi → Burj Khalifa\n\n5 Nights / 6 Days Tour Package\n\n₹65,000/person",
+        "Knysna Heads → Cango Caves → Whale Watching → Scenic Coast\n\n5 Nights / 6 Days Tour Package\n\nR 14,500/person",
       link: "/packages/domestic",
     },
     {
-      url: "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
-      title: "Dubai City Tour",
+      url: "https://images.unsplash.com/photo-1545129139-1beb780cf337?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
+      title: "Johannesburg Culture",
       description:
-        "1 Day\n\nBurj Khalifa, Dubai Mall, Palm Jumeirah\n\n₹5,500/person",
+        "Apartheid Museum → Soweto Tour → Constitution Hill\n\n4D/3N Tour Package\n\nR 9,800/person",
       link: "/packages/domestic",
     },
     {
-      url: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
-      title: "Dubai Luxury Package",
-      description: "Burj Al Arab → Theme Parks → Shopping & Dining\n\n7N/8D\n\n₹85,000/person",
+      url: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
+      title: "Sun City & Pilanesberg",
+      description: "Valley of Waves → Game Drive → Luxury Resort\n\n4N/5D Package\n\nR 17,500/person",
       link: "/packages/domestic",
     },
   ];
@@ -106,8 +106,8 @@ const ImageCarousel = () => {
                       {line.trim() !== "" && (
                         <div
                           className={`text-xs sm:text-sm md:text-base lg:text-lg ${line.includes("@") || line.includes("₹")
-                              ? "font-semibold text-yellow-400"
-                              : "text-white"
+                            ? "font-semibold text-yellow-400"
+                            : "text-white"
                             }`}
                         >
                           {line}

@@ -147,7 +147,7 @@ const PackageDetailModal = ({ isOpen, onClose, packageData }: PackageDetailModal
                   <Star className="h-5 w-5 text-yellow-500" />
                   <div>
                     <p className="text-sm font-medium">Price</p>
-                    <p className="text-lg font-bold">₹{packageData.price}</p>
+                    <p className="text-lg font-bold">R {packageData.price}</p>
                   </div>
                 </div>
               </CardContent>
@@ -200,11 +200,11 @@ const PackageDetailModal = ({ isOpen, onClose, packageData }: PackageDetailModal
                 <ul className="text-gray-700 space-y-3">
                   <li className="flex items-start">
                     <span className="text-primary mr-2 mt-1">•</span>
-                    <span>Welcome to Premium Dubai Tours - Your Gateway to Unforgettable Dubai Adventures! We specialize in creating unique travel experiences that combine luxury, culture, and comfort. With extensive experience in the travel industry, we have been helping travelers discover the wonders of Dubai and the UAE.</span>
+                    <span>Welcome to Sky Go - Your Gateway to Unforgettable South African Adventures! We specialize in creating unique travel experiences that combine luxury, culture, and comfort. With extensive experience in the travel industry, we have been helping travelers discover the wonders of South Africa.</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-primary mr-2 mt-1">•</span>
-                    <span>At Premium Dubai Tours, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing Dubai in a way that enriches your life. Let us take you on a journey you'll never forget.</span>
+                    <span>At Sky Go, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing South Africa in a way that enriches your life. Let us take you on a journey you'll never forget.</span>
                   </li>
                 </ul>
               </CardContent>

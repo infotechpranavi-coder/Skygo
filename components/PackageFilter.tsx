@@ -54,11 +54,11 @@ const PackageFilter = ({ onFilterChange, packageType, availableCities = [] }: Pa
   });
 
   const priceRanges = [
-    { label: "Under AED 500", min: 0, max: 500 },
-    { label: "AED 500 - AED 1,000", min: 500, max: 1000 },
-    { label: "AED 1,000 - AED 2,000", min: 1000, max: 2000 },
-    { label: "AED 2,000 - AED 5,000", min: 2000, max: 5000 },
-    { label: "Over AED 5,000", min: 5000, max: 20000 }
+    { label: "Under ZAR 5,000", min: 0, max: 5000 },
+    { label: "ZAR 5,000 - ZAR 10,000", min: 5000, max: 10000 },
+    { label: "ZAR 10,000 - ZAR 20,000", min: 10000, max: 20000 },
+    { label: "ZAR 20,000 - ZAR 50,000", min: 20000, max: 50000 },
+    { label: "Over ZAR 50,000", min: 50000, max: 200000 }
   ];
 
   const durationRanges = [
@@ -97,7 +97,7 @@ const PackageFilter = ({ onFilterChange, packageType, availableCities = [] }: Pa
     if (currentFilters.departureCity.length > 0) active.push(`Cities: ${currentFilters.departureCity.length}`);
     if (currentFilters.tourType.length > 0) active.push(`Types: ${currentFilters.tourType.length}`);
     if (currentFilters.priceRange[0] > 0 || currentFilters.priceRange[1] < 100000) {
-      active.push(`Price: ₹${currentFilters.priceRange[0].toLocaleString()} - ₹${currentFilters.priceRange[1].toLocaleString()}`);
+      active.push(`Price: ZAR ${currentFilters.priceRange[0].toLocaleString()} - ZAR ${currentFilters.priceRange[1].toLocaleString()}`);
     }
     if (currentFilters.durationRange[0] > 1 || currentFilters.durationRange[1] < 30) {
       active.push(`Duration: ${currentFilters.durationRange[0]} - ${currentFilters.durationRange[1]} days`);
@@ -276,8 +276,8 @@ const PackageFilter = ({ onFilterChange, packageType, availableCities = [] }: Pa
             </div>
             <div className="space-y-2">
               <div className="flex justify-between text-sm text-gray-600">
-                <span>₹{filters.priceRange[0].toLocaleString()}</span>
-                <span>₹{filters.priceRange[1].toLocaleString()}</span>
+                <span>ZAR {filters.priceRange[0].toLocaleString()}</span>
+                <span>ZAR {filters.priceRange[1].toLocaleString()}</span>
               </div>
               <Slider
                 value={filters.priceRange}

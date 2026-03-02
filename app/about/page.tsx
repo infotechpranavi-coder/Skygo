@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -30,7 +30,7 @@ const AboutPage = () => {
     {
       icon: Sparkles,
       title: "Personalized Tours",
-      description: "Customized Dubai tours tailored to your preferences and needs",
+      description: "Customized South African Tours tailored to your preferences and needs",
       image: "https://tse3.mm.bing.net/th/id/OIP.mVmw5OWyuDbYW0aV-NMQZAHaF0?pid=ImgDet&w=184&h=144&c=7&dpr=1.3&o=7&rm=3"
     },
     {
@@ -91,40 +91,43 @@ const AboutPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* Hero Section */}
-      <section className="relative text-white py-24 md:py-32 overflow-hidden">
-        <div 
+      <section className="relative text-white py-28 md:py-40 overflow-hidden">
+        {/* Background Image */}
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: "url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')"
           }}
-        ></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.5)_100%)]"></div>
+        />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70" />
+        {/* Radial vignette */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.5)_100%)]" />
+        {/* Bottom fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#faf8f3] to-transparent" />
+
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-5xl mx-auto text-center">
-            <Badge className="mb-6 bg-white/20 backdrop-blur-md text-white border-white/30 hover:bg-white/30">
-              <Award className="h-4 w-4 mr-2" />
-              Premium Tour Operator
-            </Badge>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight tracking-tight">
-              About Premium Dubai Tours
+            <p className="text-[#bd9245] font-bold uppercase tracking-[0.3em] text-sm mb-6">Our Journey</p>
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-[1000] mb-6 leading-none tracking-tighter uppercase">
+              About Us
             </h1>
-            <p className="text-lg md:text-xl lg:text-2xl mb-10 opacity-95 leading-relaxed max-w-3xl mx-auto">
-              A premium-focused Dubai travel brand dedicated to delivering well-crafted travel experiences defined by comfort, clarity, and service quality
+            <p className="text-xl md:text-2xl mb-10 text-white/80 max-w-3xl mx-auto font-medium leading-relaxed">
+              A premium-focused South African travel brand dedicated to delivering well-crafted travel experiences defined by comfort, clarity, and service quality
             </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Badge variant="secondary" className="text-sm md:text-base px-6 py-3 bg-white/20 backdrop-blur-md text-white border-white/30">
-                <MapPin className="h-4 w-4 mr-2" />
-                Based in Dubai, UAE
-              </Badge>
-              <Badge variant="secondary" className="text-sm md:text-base px-6 py-3 bg-white/20 backdrop-blur-md text-white border-white/30">
-                <Award className="h-4 w-4 mr-2" />
-                Licensed Tour Operator
-              </Badge>
+            <div className="flex flex-wrap justify-center gap-6 text-white/60 text-sm font-bold uppercase tracking-widest">
+              <div className="flex items-center space-x-2">
+                <MapPin className="h-4 w-4" />
+                <span>Based in Cape Town</span>
+              </div>
+              <span className="text-white/30">·</span>
+              <div className="flex items-center space-x-2">
+                <Award className="h-4 w-4" />
+                <span>Licensed Operator</span>
+              </div>
             </div>
           </div>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent"></div>
       </section>
 
       {/* About Section */}
@@ -152,18 +155,18 @@ const AboutPage = () => {
                     Our Story
                   </Badge>
                 </div>
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-                  About Premium Dubai Tours
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1e1f44] leading-tight">
+                  About Skygo South Africa
                 </h2>
                 <div className="space-y-5 text-gray-700 leading-relaxed text-lg">
                   <p>
-                    Premium Dubai Tours is a local tour operator based in Dubai, United Arab Emirates. We operate Regular Tours, Premium Tours, Luxury Tours, Adventure Activities, and Day Tours/Attractions and activities in all emirates, along with Oman tours from the United Arab Emirates.
+                    Skygo South Africa is a local tour operator based in Cape Town, South Africa. We operate Regular Tours, Premium Tours, Luxury Tours, Adventure Activities, and Day Tours/Attractions and activities in all regions, along with neighboring country tours from South Africa.
                   </p>
                   <p>
-                    We specialize in premium Dubai tours, luxury experiences, and customized travel services for travelers who value comfort, clarity, and professional service over rushed itineraries or unclear pricing. We are not a marketplace for budget deals; however, we also have some regular tours that are more budget-friendly for those customers.
+                    We specialize in premium South African tours, luxury experiences, and customized travel services for travelers who value comfort, clarity, and professional service over rushed itineraries or unclear pricing. We are not a marketplace for budget deals; however, we also have some regular tours that are more budget-friendly for those customers.
                   </p>
-                  <p className="font-semibold text-gray-900">
-                    We are a specialized Dubai tour company dedicated to delivering quality, transparency, and genuine comfort to our guests from around the world.
+                  <p className="font-semibold text-[#1e1f44]">
+                    We are a specialized South African tour company dedicated to delivering quality, transparency, and genuine comfort to our guests from around the world.
                   </p>
                 </div>
               </div>
@@ -182,7 +185,7 @@ const AboutPage = () => {
               <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
                 Our Core Values
               </Badge>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1e1f44] mb-6">
                 Our Philosophy: <span className="text-primary">Quality Over Confusion</span>
               </h2>
             </div>
@@ -190,12 +193,12 @@ const AboutPage = () => {
             <div className="grid lg:grid-cols-2 gap-12 mb-16 items-center">
               <div className="space-y-6 text-gray-700 leading-relaxed text-lg order-2 lg:order-1">
                 <p>
-                  The Dubai tourism market can be overwhelming. Travelers often encounter massive price differences: for instance, a desert safari can range from AED 25 to AED 550, and cruise dinners from AED 25 to AED 500. This often leaves visitors confused about what they are actually paying for.
+                  The South African tourism market can be overwhelming. Travelers often encounter massive price differences: for instance, a safari can range from ZAR 500 to ZAR 15,000, and cruise dinners from ZAR 300 to ZAR 5,000. This often leaves visitors confused about what they are actually paying for.
                 </p>
                 <p>
-                  We founded Premium Dubai Tours to address this gap and eliminate that uncertainty. We do not chase the lowest price; we pursue the highest value. Our goal is to clearly explain what guests receive, why prices vary, and how service levels affect the overall experience.
+                  We founded Skygo South Africa to address this gap and eliminate that uncertainty. We do not chase the lowest price; we pursue the highest value. Our goal is to clearly explain what guests receive, why prices vary, and how service levels affect the overall experience.
                 </p>
-                <p className="font-semibold text-gray-900">
+                <p className="font-semibold text-[#1e1f44]">
                   We believe pricing should reflect quality, not confusion. So, we provide a transparent, premium experience where the quality of the vehicle, the expertise of the guide, and the standard of the food and services are guaranteed.
                 </p>
               </div>
@@ -222,7 +225,7 @@ const AboutPage = () => {
                     <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-2xl mb-6 group-hover:scale-110 transition-transform">
                       <belief.icon className="h-10 w-10 text-primary" />
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-4">
+                    <h3 className="text-xl font-bold text-[#1e1f44] mb-4">
                       {belief.title}
                     </h3>
                     <p className="text-gray-600 leading-relaxed">
@@ -239,7 +242,7 @@ const AboutPage = () => {
               <div className="relative z-10">
                 <div className="text-center mb-10">
                   <TrendingUp className="h-12 w-12 text-primary mx-auto mb-4" />
-                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                  <h3 className="text-2xl md:text-3xl font-bold text-[#1e1f44] mb-2">
                     Sometimes, a modest price difference results in:
                   </h3>
                 </div>
@@ -271,7 +274,7 @@ const AboutPage = () => {
                 <Star className="h-3 w-3 mr-2" />
                 What Makes Us Different
               </Badge>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1e1f44] mb-6">
                 What Sets Us Apart
               </h2>
             </div>
@@ -294,7 +297,7 @@ const AboutPage = () => {
                     </div>
                   </div>
                   <CardContent className="p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">
+                    <h3 className="text-xl font-bold text-[#1e1f44] mb-3 group-hover:text-primary transition-colors">
                       {item.title}
                     </h3>
                     <p className="text-gray-600 leading-relaxed">
@@ -307,7 +310,7 @@ const AboutPage = () => {
             <div className="mt-12 text-center max-w-4xl mx-auto">
               <div className="bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10 rounded-2xl p-8 border border-primary/20">
                 <p className="text-lg md:text-xl text-gray-700 leading-relaxed font-medium">
-                  Whether travelers are seeking luxury Dubai tours, private experiences, or premium-managed sightseeing along with other top activities that the UAE offers, we focus on delivering travel services with care and consistency.
+                  Whether travelers are seeking luxury South African tours, private experiences, or premium-managed sightseeing along with other top activities that South Africa offers, we focus on delivering travel services with care and consistency.
                 </p>
               </div>
             </div>
@@ -326,11 +329,11 @@ const AboutPage = () => {
                 <Heart className="h-3 w-3 mr-2" />
                 Why Travel With Us
               </Badge>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1e1f44] mb-6">
                 Why Choose Us?
               </h2>
               <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                We specialize in customized Dubai tours that prioritize your time and comfort. Whether you are visiting for business or leisure, our team ensures a seamless experience from arrival to departure.
+                We specialize in customized South African tours that prioritize your time and comfort. Whether you are visiting for business or leisure, our team ensures a seamless experience from arrival to departure.
               </p>
             </div>
             <div className="grid md:grid-cols-3 gap-8 mb-12">
@@ -365,7 +368,7 @@ const AboutPage = () => {
             <div className="mt-12 text-center">
               <div className="bg-white rounded-2xl p-8 md:p-12 shadow-xl border border-gray-200 max-w-4xl mx-auto">
                 <p className="text-lg md:text-xl text-gray-700 mb-8 leading-relaxed font-medium">
-                  If you are looking for luxury Dubai tours delivered with professionalism and care, we invite you to explore the UAE with us.
+                  If you are looking for luxury South African tours delivered with professionalism and care, we invite you to explore South Africa with us.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link href="/packages">
@@ -399,7 +402,7 @@ const AboutPage = () => {
               Ready to Start Your Journey?
             </h2>
             <p className="text-lg md:text-xl mb-10 text-white/90 leading-relaxed">
-              Experience luxury Dubai tours delivered with professionalism and care
+              Experience luxury South African tours delivered with professionalism and care
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/contact">
@@ -421,3 +424,4 @@ const AboutPage = () => {
 };
 
 export default AboutPage;
+

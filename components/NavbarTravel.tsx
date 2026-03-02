@@ -8,8 +8,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useInquiryForm } from "../contexts/InquiryFormContext";
-import { useScrollspy } from "@/hooks/useScrollspy";
-
 const NavbarTravel = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -21,12 +19,6 @@ const NavbarTravel = () => {
   const router = useRouter();
   const { openForm } = useInquiryForm();
 
-  // Scrollspy for home page sections (only on home page)
-  const activeSection = useScrollspy({
-    sectionIds: pathname === '/' ? ['hero', 'explore', 'destinations', 'trips', 'packages', 'feedback'] : [],
-    offset: 150,
-  });
-
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 40);
@@ -37,25 +29,16 @@ const NavbarTravel = () => {
 
   const navigation = [
     { name: 'Home', href: '/' },
-    { name: 'Pages', href: '/packages' },
-    { name: 'Services', href: '/about' },
+    { name: 'About', href: '/about' },
     { name: 'Package', href: '/packages' },
+    { name: 'Tours', href: '/tours' },
+    { name: 'Tickets', href: '/tickets' },
+    { name: 'International', href: '/international' },
+    { name: 'Domestic', href: '/domestic' },
     { name: 'Blogs', href: '/blogs' },
   ];
 
   const isActive = (href: string) => {
-    // On home page, use scrollspy
-    if (pathname === '/') {
-      if (href === '/') return activeSection === 'hero' || activeSection === '';
-      // Map other routes to sections (if they exist)
-      const sectionMap: Record<string, string> = {
-        '/packages': 'packages',
-        '/about': 'explore',
-        '/blogs': 'feedback',
-      };
-      return activeSection === sectionMap[href];
-    }
-    // On other pages, use pathname matching
     if (href === '/') return pathname === '/';
     return pathname?.startsWith(href) || false;
   };
@@ -63,10 +46,10 @@ const NavbarTravel = () => {
   // Find active index
   const activeIndex = navigation.findIndex(item => isActive(item.href));
   const isContactActive = isActive('/contact');
-  // Use index 5 for Contact Us (after the 5 navigation items)
-  const contactIndex = 5;
-  const currentIndex = hoveredIndex !== null 
-    ? hoveredIndex 
+  // Use index 8 for Contact Us (after the 8 navigation items)
+  const contactIndex = 8;
+  const currentIndex = hoveredIndex !== null
+    ? hoveredIndex
     : (isContactActive ? contactIndex : (activeIndex >= 0 ? activeIndex : null));
 
   // Update pill position on hover/active change
@@ -74,14 +57,14 @@ const NavbarTravel = () => {
     // Small delay to ensure refs are set
     const timer = setTimeout(() => {
       let element: HTMLAnchorElement | null = null;
-      
+
       // Check if it's Contact Us (index 5) or a navigation item
       if (currentIndex === contactIndex) {
         element = contactRef.current;
       } else if (currentIndex !== null && navRefs.current[currentIndex]) {
         element = navRefs.current[currentIndex];
       }
-      
+
       if (element) {
         const parent = element.parentElement;
         if (parent) {
@@ -89,7 +72,7 @@ const NavbarTravel = () => {
           const elementRect = element.getBoundingClientRect();
           const left = elementRect.left - parentRect.left;
           const width = elementRect.width;
-          
+
           setPillStyle({
             width,
             left,
@@ -108,14 +91,14 @@ const NavbarTravel = () => {
   useEffect(() => {
     const handleResize = () => {
       let element: HTMLAnchorElement | null = null;
-      
+
       // Check if it's Contact Us (index 5) or a navigation item
       if (currentIndex === contactIndex) {
         element = contactRef.current;
       } else if (currentIndex !== null && navRefs.current[currentIndex]) {
         element = navRefs.current[currentIndex];
       }
-      
+
       if (element) {
         const parent = element.parentElement;
         if (parent) {
@@ -123,7 +106,7 @@ const NavbarTravel = () => {
           const elementRect = element.getBoundingClientRect();
           const left = elementRect.left - parentRect.left;
           const width = elementRect.width;
-          
+
           setPillStyle({
             width,
             left,
@@ -138,32 +121,28 @@ const NavbarTravel = () => {
   }, [currentIndex]);
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled 
-        ? 'bg-white/95 backdrop-blur-md shadow-lg' 
-        : 'bg-transparent'
-    }`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+      ? 'bg-white/95 backdrop-blur-md shadow-lg'
+      : 'bg-transparent'
+      }`}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 z-50">
-            <div className="relative w-12 h-12">
+          <Link href="/" className="flex items-center z-50">
+            <div className="relative w-24 h-24 md:w-32 md:h-32">
               <Image
-                src="/pdt_logo.png"
-                alt="Premium Dubai Tours"
+                src="/Untitled_design__2_-removebg-preview.png"
+                alt="Sky Go"
                 fill
                 className="object-contain"
                 priority
               />
             </div>
-            <span className={`font-bold text-lg ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
-              Premium Dubai Tours
-            </span>
           </Link>
 
           {/* Centered Navigation Pill */}
           <div className="hidden lg:flex items-center justify-center flex-1">
-            <div className="relative flex items-center gap-[18px] rounded-full px-[14px] py-[10px] bg-black/55 backdrop-blur-[10px] border border-black/20">
+            <div className="relative flex items-center gap-[10px] rounded-full px-[12px] py-[10px] bg-black/55 backdrop-blur-[10px] border border-black/20">
               {/* Sliding White Pill Indicator */}
               <div
                 className="absolute bg-white rounded-full transition-all duration-500 ease-out pointer-events-none"
@@ -176,7 +155,7 @@ const NavbarTravel = () => {
                   top: '50%'
                 }}
               />
-              
+
               {navigation.map((item, index) => {
                 const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
                   // If on home page and clicking Home, scroll to top
@@ -197,11 +176,10 @@ const NavbarTravel = () => {
                     aria-current={isActive(item.href) ? 'page' : undefined}
                     onMouseEnter={() => setHoveredIndex(index)}
                     onMouseLeave={() => setHoveredIndex(null)}
-                    className={`relative z-10 px-3 py-1 rounded-full text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black/55 ${
-                      isActive(item.href)
-                        ? 'text-gray-900 font-bold'
-                        : 'text-white/90 hover:text-gray-900'
-                    }`}
+                    className={`relative z-10 px-3 py-1 rounded-full text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black/55 ${isActive(item.href)
+                      ? 'text-gray-900 font-bold'
+                      : 'text-white/90 hover:text-gray-900'
+                      }`}
                   >
                     {item.name}
                   </Link>
@@ -214,11 +192,10 @@ const NavbarTravel = () => {
                 aria-current={isActive('/contact') ? 'page' : undefined}
                 onMouseEnter={() => setHoveredIndex(contactIndex)}
                 onMouseLeave={() => setHoveredIndex(null)}
-                className={`relative z-10 px-[14px] py-2 rounded-full font-bold text-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black/55 ${
-                  isActive('/contact')
-                    ? 'text-gray-900 font-bold'
-                    : 'text-white/90 hover:text-gray-900'
-                }`}
+                className={`relative z-10 px-[14px] py-2 rounded-full font-bold text-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black/55 ${isActive('/contact')
+                  ? 'text-gray-900 font-bold'
+                  : 'text-white/90 hover:text-gray-900'
+                  }`}
               >
                 Contact Us
               </Link>
@@ -236,7 +213,7 @@ const NavbarTravel = () => {
             </Button>
             <Button
               onClick={openForm}
-              className="bg-[#ccff00] hover:bg-[#b8e600] text-gray-900 font-bold px-6 py-2 rounded-full shadow-lg"
+              className="bg-[#bd9245] hover:bg-[#a07835] text-gray-900 font-bold px-6 py-2 rounded-full shadow-lg"
             >
               Book Now
             </Button>
@@ -261,11 +238,10 @@ const NavbarTravel = () => {
                 key={item.name}
                 href={item.href}
                 aria-current={isActive(item.href) ? 'page' : undefined}
-                className={`block px-4 py-2 rounded-lg transition-colors ${
-                  isActive(item.href)
-                    ? 'bg-primary text-white font-bold'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
+                className={`block px-4 py-2 rounded-lg transition-colors ${isActive(item.href)
+                  ? 'bg-primary text-white font-bold'
+                  : 'text-gray-700 hover:bg-gray-100'
+                  }`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.name}
@@ -283,7 +259,7 @@ const NavbarTravel = () => {
                 openForm();
                 setIsMenuOpen(false);
               }}
-              className="w-full bg-[#ccff00] hover:bg-[#b8e600] text-gray-900 font-bold mt-4"
+              className="w-full bg-[#bd9245] hover:bg-[#a07835] text-gray-900 font-bold mt-4"
             >
               Book Now
             </Button>

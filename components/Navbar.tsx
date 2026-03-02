@@ -86,11 +86,13 @@ const Navbar = () => {
   const navigation: NavigationItem[] = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
-    { 
-      name: 'Packages', 
-      href: '/packages/regular',
+    {
+      name: 'Packages',
+      href: '/packages',
       submenu: [
-        { name: 'Regular Packages', href: '/packages/regular' },
+        { name: 'Exclusive Tours', href: '/tours' },
+        { name: 'International Packages', href: '/international' },
+        { name: 'Domestic Packages', href: '/domestic' },
         { name: 'Premium Packages', href: '/packages/premium' },
         { name: 'Luxury Packages', href: '/packages/luxury' },
         { name: 'Adventure Activities', href: '/packages/adventure' },
@@ -172,11 +174,11 @@ const Navbar = () => {
   // Destination mapping for smart routing
   const getDestinationCategory = (searchTerm: string): 'international' | 'domestic' | 'general' => {
     const term = searchTerm.toLowerCase();
-    
+
     // International destinations
     const internationalDestinations = [
-      'nepal', 'bhutan', 'dubai', 'vietnam', 'sri lanka', 'srilanka', 'bali', 
-      'malaysia', 'singapore', 'thailand', 'indonesia', 'philippines', 'japan',
+      'vietnam', 'thailand', 'dubai', 'abu dhabi', 'sri lanka', 'srilanka', 'bali',
+      'malaysia', 'singapore', 'indonesia', 'philippines', 'japan',
       'china', 'south korea', 'taiwan', 'hong kong', 'macau', 'myanmar',
       'cambodia', 'laos', 'bangladesh', 'pakistan', 'afghanistan', 'iran',
       'turkey', 'egypt', 'morocco', 'south africa', 'kenya', 'tanzania',
@@ -187,12 +189,11 @@ const Navbar = () => {
       'wales', 'canada', 'usa', 'america', 'brazil', 'argentina', 'chile',
       'peru', 'colombia', 'mexico', 'cuba', 'jamaica', 'costa rica'
     ];
-    
+
     // Domestic destinations
     const domesticDestinations = [
-      'india', 'kashmir', 'leh', 'ladakh', 'himachal', 'manali', 'shimla',
-      'dharamshala', 'mcleodganj', 'uttarakhand', 'rishikesh', 'haridwar',
-      'dehradun', 'mussoorie', 'nainital', 'rajasthan', 'jaipur', 'udaipur',
+      'south africa', 'cape town', 'johannesburg', 'pretoria', 'durban', 'kruger',
+      'knysna', 'mossel bay', 'storms river', 'hermanus', 'stellenbosch', 'franschhoek',
       'jodhpur', 'jaisalmer', 'bikaner', 'mount abu', 'goa', 'kerala',
       'munnar', 'alleppey', 'kochi', 'trivandrum', 'karnataka', 'bangalore',
       'mysore', 'coorg', 'ooty', 'tamil nadu', 'chennai', 'madurai',
@@ -210,20 +211,20 @@ const Navbar = () => {
       'faridabad', 'himachal pradesh', 'uttar pradesh', 'lucknow', 'agra',
       'varanasi', 'allahabad', 'kanpur', 'jhansi', 'mathura', 'vrindavan'
     ];
-    
+
     // Check if search term matches any destination
     for (const dest of internationalDestinations) {
       if (term.includes(dest) || dest.includes(term)) {
         return 'international';
       }
     }
-    
+
     for (const dest of domesticDestinations) {
       if (term.includes(dest) || dest.includes(term)) {
         return 'domestic';
       }
     }
-    
+
     return 'general';
   };
 
@@ -231,7 +232,7 @@ const Navbar = () => {
     e.preventDefault();
     if (searchTerm.trim()) {
       const category = getDestinationCategory(searchTerm.trim());
-      
+
       // Force page refresh to ensure search works correctly
       if (category === 'international') {
         window.location.href = `/packages/international?search=${encodeURIComponent(searchTerm.trim())}`;
@@ -240,25 +241,24 @@ const Navbar = () => {
       } else {
         window.location.href = `/packages?search=${encodeURIComponent(searchTerm.trim())}`;
       }
-      
+
       setIsSearchOpen(false);
     }
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-AE', {
+    return new Intl.NumberFormat('en-ZA', {
       style: 'currency',
-      currency: 'AED',
+      currency: 'ZAR',
       maximumFractionDigits: 0,
     }).format(price);
   };
 
   return (
-    <nav className={`sticky top-0 z-[120] transition-all duration-300 ${
-      isInHeroSection 
-        ? 'bg-transparent shadow-none border-b-0' 
-        : 'bg-white shadow-lg border-b border-gray-300'
-    }`}>
+    <nav className={`sticky top-0 z-[120] transition-all duration-300 ${isInHeroSection
+      ? 'bg-transparent shadow-none border-b-0'
+      : 'bg-white shadow-lg border-b border-gray-300'
+      }`}>
       {/* Top Bar */}
       <div className="bg-black text-white py-1">
         {/* Desktop Layout */}
@@ -268,19 +268,19 @@ const Navbar = () => {
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
                   <Phone className="h-4 w-4" />
-                  <span>+971 50 401 5632, +971 50 214 2541</span>
+                  <span>+27 21 408 7600, +27 21 408 7601</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Mail className="h-4 w-4" />
-                  <span>info@premiumdubaitours.com</span>
+                  <span>info@skygo.co.za</span>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
+                <Button
+                  variant="ghost"
+                  size="sm"
                   className="text-white hover:bg-gray-800"
-                  onClick={() => window.open('https://wa.me/971504015632', '_blank')}
+                  onClick={() => window.open('https://wa.me/27214087600', '_blank')}
                 >
                   <MessageCircle className="h-4 w-4 mr-2" />
                   Live Chat
@@ -301,22 +301,22 @@ const Navbar = () => {
           {/* Row 1: Phone Numbers */}
           <div className="flex items-center justify-center space-x-2 text-sm">
             <Phone className="h-4 w-4" />
-            <span>+971 50 401 5632, +971 50 214 2541</span>
+            <span>+27 21 408 7600, +27 21 408 7601</span>
           </div>
-          
+
           {/* Row 2: Email */}
           <div className="flex items-center justify-center space-x-2 text-base mt-2">
             <Mail className="h-4 w-4" />
-            <span>info@premiumdubaitours.com</span>
+            <span>info@skygo.co.za</span>
           </div>
-          
+
           {/* Row 3: Live Chat & Login */}
-          <div className="flex items-center justify-center -space-x-2" style={{marginTop: '-6px'}}>
-            <Button 
-              variant="ghost" 
-              size="sm" 
+          <div className="flex items-center justify-center -space-x-2" style={{ marginTop: '-6px' }}>
+            <Button
+              variant="ghost"
+              size="sm"
               className="text-white hover:bg-gray-800 text-base px-4 py-2"
-              onClick={() => window.open('https://wa.me/971504015632', '_blank')}
+              onClick={() => window.open('https://wa.me/27214087600', '_blank')}
             >
               <MessageCircle className="h-5 w-5 mr-2" />
               Live Chat
@@ -335,23 +335,15 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center py-2">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-3">
-            <div className="relative w-20 h-20">
+          <Link href="/" className="flex items-center">
+            <div className="relative w-32 h-32 md:w-40 md:h-40">
               <Image
-                src="/pdt_logo.png"
-                alt="Premium Dubai Tours Logo"
+                src="/Untitled_design__2_-removebg-preview.png"
+                alt="Sky Go Logo"
                 fill
                 className="object-contain"
                 priority
               />
-            </div>
-            <div className="flex flex-col">
-              <h1 className={`text-lg sm:text-xl font-bold uppercase leading-tight ${isInHeroSection ? 'text-white' : 'text-black'}`} style={{ textShadow: isInHeroSection ? '2px 2px 4px rgba(0,0,0,0.5)' : 'none', fontWeight: 700 }}>
-                PREMIUM DUBAI TOURS
-              </h1>
-              <p className={`text-xs sm:text-sm font-normal uppercase tracking-wide ${isInHeroSection ? 'text-white' : 'text-black'}`} style={{ textShadow: isInHeroSection ? '2px 2px 4px rgba(0,0,0,0.5)' : 'none' }}>
-                Refined Dubai Travel Experiences 
-              </p>
             </div>
           </Link>
 
@@ -360,19 +352,17 @@ const Navbar = () => {
             <div ref={searchRef} className="relative w-full">
               <form onSubmit={handleSearchSubmit} className="relative">
                 <div className="relative">
-                  <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${
-                    isInHeroSection ? 'text-white' : 'text-gray-400'
-                  }`} />
+                  <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${isInHeroSection ? 'text-white' : 'text-gray-400'
+                    }`} />
                   <Input
                     type="text"
-                    placeholder="Search Dubai tours…"
+                    placeholder="Search South African tours…"
                     value={searchTerm}
                     onChange={handleSearchChange}
-                    className={`pl-10 pr-4 py-2 w-full ${
-                      isInHeroSection
-                        ? 'bg-transparent border-white/50 text-white placeholder-white/70 focus:border-white focus:ring-white'
-                        : 'bg-transparent border-gray-300 text-white placeholder-white/70 focus:border-primary focus:ring-primary'
-                    }`}
+                    className={`pl-10 pr-4 py-2 w-full ${isInHeroSection
+                      ? 'bg-transparent border-white/50 text-white placeholder-white/70 focus:border-white focus:ring-white'
+                      : 'bg-transparent border-gray-300 text-white placeholder-white/70 focus:border-primary focus:ring-primary'
+                      }`}
                   />
                   {isSearching && (
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -441,7 +431,7 @@ const Navbar = () => {
                           onClick={() => {
                             const category = getDestinationCategory(searchTerm);
                             setIsSearchOpen(false);
-                            
+
                             // Force page refresh to ensure search works correctly
                             if (category === 'international') {
                               window.location.href = `/packages/international?search=${encodeURIComponent(searchTerm)}`;
@@ -477,15 +467,14 @@ const Navbar = () => {
                     <DropdownMenuTrigger asChild>
                       <Button
                         variant="ghost"
-                        className={`flex items-center space-x-1 text-lg ${
-                          isInHeroSection
-                            ? isActive(item.href)
-                              ? 'text-white font-semibold'
-                              : 'text-white hover:text-gray-200'
-                            : isActive(item.href)
-                              ? 'text-black font-semibold'
-                              : 'text-gray-800 hover:text-black'
-                        }`}
+                        className={`flex items-center space-x-1 text-lg ${isInHeroSection
+                          ? isActive(item.href)
+                            ? 'text-white font-semibold'
+                            : 'text-white hover:text-gray-200'
+                          : isActive(item.href)
+                            ? 'text-black font-semibold'
+                            : 'text-gray-800 hover:text-black'
+                          }`}
                       >
                         <span>{item.name}</span>
                         <ChevronDown className="h-4 w-4" />
@@ -494,13 +483,12 @@ const Navbar = () => {
                     <DropdownMenuContent align="start" className="w-48 z-[130]">
                       {item.submenu.map((subItem) => (
                         <DropdownMenuItem key={subItem.name} asChild>
-                          <Link 
+                          <Link
                             href={subItem.href}
-                            className={`w-full ${
-                              isActive(subItem.href) 
-                                ? 'text-black font-semibold' 
-                                : 'text-gray-800'
-                            }`}
+                            className={`w-full ${isActive(subItem.href)
+                              ? 'text-black font-semibold'
+                              : 'text-gray-800'
+                              }`}
                           >
                             {subItem.name}
                           </Link>
@@ -511,15 +499,14 @@ const Navbar = () => {
                 ) : (
                   <Link
                     href={item.href}
-                    className={`font-medium text-lg transition-colors ${
-                      isInHeroSection
-                        ? isActive(item.href)
-                          ? 'text-white font-semibold'
-                          : 'text-white hover:text-gray-200'
-                        : isActive(item.href)
-                          ? 'text-black font-semibold'
-                          : 'text-gray-800 hover:text-black'
-                    }`}
+                    className={`font-medium text-lg transition-colors ${isInHeroSection
+                      ? isActive(item.href)
+                        ? 'text-white font-semibold'
+                        : 'text-white hover:text-gray-200'
+                      : isActive(item.href)
+                        ? 'text-black font-semibold'
+                        : 'text-gray-800 hover:text-black'
+                      }`}
                   >
                     {item.name}
                   </Link>
@@ -530,8 +517,8 @@ const Navbar = () => {
 
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center space-x-3 ml-8 flex-shrink-0">
-            <Button 
-              size="sm" 
+            <Button
+              size="sm"
               className="bg-black hover:bg-gray-800 text-white whitespace-nowrap"
               onClick={openForm}
             >
@@ -542,11 +529,10 @@ const Navbar = () => {
           {/* Mobile menu button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className={`lg:hidden p-2 rounded-md transition-colors ${
-              isInHeroSection 
-                ? 'text-white hover:text-gray-200 hover:bg-white/10' 
-                : 'text-gray-800 hover:text-black hover:bg-gray-100'
-            }`}
+            className={`lg:hidden p-2 rounded-md transition-colors ${isInHeroSection
+              ? 'text-white hover:text-gray-200 hover:bg-white/10'
+              : 'text-gray-800 hover:text-black hover:bg-gray-100'
+              }`}
           >
             {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
@@ -562,25 +548,22 @@ const Navbar = () => {
               <div className="relative">
                 <form onSubmit={handleSearchSubmit} className="relative">
                   <div className="relative">
-                    <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${
-                      isInHeroSection ? 'text-white' : 'text-gray-400'
-                    }`} />
+                    <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${isInHeroSection ? 'text-white' : 'text-gray-400'
+                      }`} />
                     <Input
                       type="text"
                       placeholder="Search packages..."
                       value={searchTerm}
                       onChange={handleSearchChange}
-                      className={`pl-10 pr-4 py-2 w-full ${
-                        isInHeroSection
-                          ? 'bg-transparent border-white/50 text-white placeholder-white/70 focus:border-white focus:ring-white'
-                          : 'bg-transparent border-gray-300 text-white placeholder-white/70 focus:border-primary focus:ring-primary'
-                      }`}
+                      className={`pl-10 pr-4 py-2 w-full ${isInHeroSection
+                        ? 'bg-transparent border-white/50 text-white placeholder-white/70 focus:border-white focus:ring-white'
+                        : 'bg-transparent border-gray-300 text-white placeholder-white/70 focus:border-primary focus:ring-primary'
+                        }`}
                     />
                     {isSearching && (
                       <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                        <div className={`animate-spin rounded-full h-4 w-4 border-b-2 ${
-                          isInHeroSection ? 'border-white' : 'border-black'
-                        }`}></div>
+                        <div className={`animate-spin rounded-full h-4 w-4 border-b-2 ${isInHeroSection ? 'border-white' : 'border-black'
+                          }`}></div>
                       </div>
                     )}
                   </div>
@@ -641,7 +624,7 @@ const Navbar = () => {
                               const category = getDestinationCategory(searchTerm);
                               setIsSearchOpen(false);
                               setIsMenuOpen(false);
-                              
+
                               // Force page refresh to ensure search works correctly
                               if (category === 'international') {
                                 window.location.href = `/packages/international?search=${encodeURIComponent(searchTerm)}`;
@@ -667,7 +650,7 @@ const Navbar = () => {
                 )}
               </div>
             </div>
-            
+
             <div className="space-y-4">
               {navigation.map((item: NavigationItem) => (
                 <div key={item.name}>
@@ -679,11 +662,10 @@ const Navbar = () => {
                           <Link
                             key={subItem.name}
                             href={subItem.href}
-                            className={`block py-2 text-lg transition-colors ${
-                              isActive(subItem.href) 
-                                ? 'text-black font-semibold' 
-                                : 'text-gray-800 hover:text-black'
-                            }`}
+                            className={`block py-2 text-lg transition-colors ${isActive(subItem.href)
+                              ? 'text-black font-semibold'
+                              : 'text-gray-800 hover:text-black'
+                              }`}
                             onClick={() => setIsMenuOpen(false)}
                           >
                             {subItem.name}
@@ -694,11 +676,10 @@ const Navbar = () => {
                   ) : (
                     <Link
                       href={item.href}
-                      className={`block py-2 font-medium text-lg transition-colors ${
-                        isActive(item.href) 
-                          ? 'text-black font-semibold' 
-                          : 'text-gray-800 hover:text-black'
-                      }`}
+                      className={`block py-2 font-medium text-lg transition-colors ${isActive(item.href)
+                        ? 'text-black font-semibold'
+                        : 'text-gray-800 hover:text-black'
+                        }`}
                       onClick={() => setIsMenuOpen(false)}
                     >
                       {item.name}
@@ -706,11 +687,11 @@ const Navbar = () => {
                   )}
                 </div>
               ))}
-              
+
               {/* Mobile CTA Buttons */}
               <div className="pt-4 border-t space-y-2">
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   className="w-full bg-black hover:bg-gray-800 text-white"
                   onClick={() => {
                     openForm();

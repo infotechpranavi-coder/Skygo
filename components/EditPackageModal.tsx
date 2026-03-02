@@ -180,7 +180,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
   const [keyHighlights, setKeyHighlights] = useState<string[]>([]);
   const [hotelOptions, setHotelOptions] = useState<string[]>([]);
   const [whyChooseThisTrip, setWhyChooseThisTrip] = useState<string[]>([]);
-  const [whyPremiumDubaiTours, setWhyPremiumDubaiTours] = useState<string[]>([]);
+  const [whySkygoSouthAfricaTours, setWhySkygoSouthAfricaTours] = useState<string[]>([]);
   const [itinerary, setItinerary] = useState<ItineraryDay[]>([]);
   const [transportation, setTransportation] = useState<TransportationItem[]>([]);
   const [accommodation, setAccommodation] = useState<AccommodationItem[]>([]);
@@ -235,17 +235,17 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
         packageType: packageData.packageType || "",
         place: packageData.place || "",
         packageCategory: mappedCategory,
-        bestTimeToVisit: packageData.bestTimeToVisit || {
-          yearRound: "",
-          winter: "",
-          summer: "",
+        bestTimeToVisit: {
+          yearRound: packageData.bestTimeToVisit?.yearRound || "",
+          winter: packageData.bestTimeToVisit?.winter || "",
+          summer: packageData.bestTimeToVisit?.summer || "",
         },
       });
 
       setKeyHighlights(packageData.keyHighlights || []);
       setHotelOptions(packageData.hotelOptions || []);
       setWhyChooseThisTrip(packageData.whyChooseThisTrip || []);
-      setWhyPremiumDubaiTours(packageData.whyPremiumDubaiTours || []);
+      setWhySkygoSouthAfricaTours(packageData.whyPremiumDubaiTours || []);
 
       setItinerary(
         packageData.itinerary?.map((day, index) => ({
@@ -538,16 +538,16 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
     setWhyChooseThisTrip(prev => prev.map((item, i) => i === index ? value : item));
   };
 
-  const addWhyPremiumDubaiTours = () => {
-    setWhyPremiumDubaiTours(prev => [...prev, ""]);
+  const addWhySkygoSouthAfricaTours = () => {
+    setWhySkygoSouthAfricaTours(prev => [...prev, ""]);
   };
 
-  const removeWhyPremiumDubaiTours = (index: number) => {
-    setWhyPremiumDubaiTours(prev => prev.filter((_, i) => i !== index));
+  const removeWhySkygoSouthAfricaTours = (index: number) => {
+    setWhySkygoSouthAfricaTours(prev => prev.filter((_, i) => i !== index));
   };
 
-  const updateWhyPremiumDubaiTours = (index: number, value: string) => {
-    setWhyPremiumDubaiTours(prev => prev.map((item, i) => i === index ? value : item));
+  const updateWhySkygoSouthAfricaTours = (index: number, value: string) => {
+    setWhySkygoSouthAfricaTours(prev => prev.map((item, i) => i === index ? value : item));
   };
 
   // Reviews functions
@@ -640,7 +640,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
         hotelOptions: hotelOptions.filter(h => h.trim() !== ""),
         bestTimeToVisit: formData.bestTimeToVisit,
         whyChooseThisTrip: whyChooseThisTrip.filter(w => w.trim() !== ""),
-        whyPremiumDubaiTours: whyPremiumDubaiTours.filter(w => w.trim() !== ""),
+        whyPremiumDubaiTours: whySkygoSouthAfricaTours.filter(w => w.trim() !== ""),
         itinerary: itinerary.map(day => ({
           day: day.day,
           title: day.title,
@@ -741,7 +741,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
     setKeyHighlights([]);
     setHotelOptions([]);
     setWhyChooseThisTrip([]);
-    setWhyPremiumDubaiTours([]);
+    setWhySkygoSouthAfricaTours([]);
     setItinerary([{ id: "1", day: 1, title: "", descriptions: [""] }]);
     setTransportation([{ id: "1", type: "", vehicle: "", description: "" }]);
     setAccommodation([{ id: "1", city: "", hotel: "", rooms: "", roomType: "", nights: "" }]);
@@ -952,21 +952,21 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
             </Button>
           </div>
 
-          {/* Why Premium Dubai Tours */}
+          {/* Why Skygo South Africa Tours */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">Why Premium Dubai Tours for This Journey?</label>
-            {whyPremiumDubaiTours.map((item, index) => (
+            <label className="text-sm font-medium">Why Sky Go for This Journey?</label>
+            {whySkygoSouthAfricaTours.map((item, index) => (
               <div key={index} className="flex gap-2 mb-2">
                 <Input
                   placeholder={`Reason ${index + 1}`}
                   value={item}
-                  onChange={(e) => updateWhyPremiumDubaiTours(index, e.target.value)}
+                  onChange={(e) => updateWhySkygoSouthAfricaTours(index, e.target.value)}
                 />
                 <Button
                   type="button"
                   variant="outline"
                   size="icon"
-                  onClick={() => removeWhyPremiumDubaiTours(index)}
+                  onClick={() => removeWhySkygoSouthAfricaTours(index)}
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -975,7 +975,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
             <Button
               type="button"
               variant="outline"
-              onClick={addWhyPremiumDubaiTours}
+              onClick={addWhySkygoSouthAfricaTours}
               className="w-full"
             >
               <Plus className="h-4 w-4 mr-2" />
@@ -999,8 +999,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium">Package Category *</label>
-              <Select 
-                value={formData.packageCategory || "Regular"} 
+              <Select
+                value={formData.packageCategory || "Regular"}
                 onValueChange={(value) => handleInputChange('packageCategory', value)}
               >
                 <SelectTrigger className="w-full">
@@ -1030,24 +1030,22 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
                   <SelectValue placeholder="Select place" />
                 </SelectTrigger>
                 <SelectContent>
-                  {/* Domestic Places */}
-                  <SelectItem value="darjeeling">Darjeeling</SelectItem>
-                  <SelectItem value="sikkim">Sikkim</SelectItem>
-                  <SelectItem value="meghalaya">Meghalaya</SelectItem>
-                  <SelectItem value="arunachal">Arunachal</SelectItem>
-                  <SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
-                  <SelectItem value="kashmir">Kashmir</SelectItem>
-                  <SelectItem value="leh-ladakh">Leh Ladakh</SelectItem>
-                  {/* International Places */}
+                  {/* South African Places */}
+                  <SelectItem value="cape-town">Cape Town</SelectItem>
+                  <SelectItem value="johannesburg">Johannesburg</SelectItem>
+                  <SelectItem value="kruger">Kruger</SelectItem>
+                  <SelectItem value="garden-route">Garden Route</SelectItem>
+                  <SelectItem value="durban">Durban</SelectItem>
+                  <SelectItem value="knysna">Knysna</SelectItem>
+                  <SelectItem value="stellenbosch">Stellenbosch</SelectItem>
+                  {/* Other Places */}
+                  <SelectItem value="dubai">Dubai</SelectItem>
+                  <SelectItem value="abu-dhabi">Abu Dhabi</SelectItem>
                   <SelectItem value="vietnam">Vietnam</SelectItem>
                   <SelectItem value="sri-lanka">Sri Lanka</SelectItem>
                   <SelectItem value="bali">Bali</SelectItem>
                   <SelectItem value="malaysia">Malaysia</SelectItem>
                   <SelectItem value="singapore">Singapore</SelectItem>
-                  <SelectItem value="dubai">Dubai</SelectItem>
-                  {/* Legacy Places */}
-                  <SelectItem value="bhutan">Bhutan</SelectItem>
-                  <SelectItem value="nepal">Nepal</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -1081,9 +1079,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
             </div>
           </div>
 
-          {/* About Section */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">About Premium Dubai Tours</label>
+            <label className="text-sm font-medium">About Sky Go</label>
             <Textarea
               placeholder="Write about your company and this package..."
               value={formData.about}

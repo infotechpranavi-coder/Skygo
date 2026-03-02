@@ -32,10 +32,10 @@ const InquiryFormPopup = ({ isOpen, onClose }: InquiryFormPopupProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
       // Create WhatsApp message with form data
-      const whatsappMessage = `🌴 *New Travel Inquiry - Premium Dubai Tours*
+      const whatsappMessage = `🌍 *New Travel Inquiry - Sky Go*
 
 👤 *Name:* ${formData.name}
 📧 *Email:* ${formData.email}
@@ -52,17 +52,17 @@ ${formData.message}
 *This inquiry was submitted through the website contact form.*`;
 
       // WhatsApp number (with country code)
-      const phoneNumber = "971504015632";
-      
+      const phoneNumber = "27214087600";
+
       // Create WhatsApp URL
       const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
-      
+
       // Open WhatsApp in new tab
       window.open(whatsappUrl, '_blank');
-      
+
       // Show success message
       alert("Thank you for your inquiry! WhatsApp is opening with your message. Please send it to complete your inquiry.");
-      
+
       // Reset form
       setFormData({
         name: "",
@@ -74,7 +74,7 @@ ${formData.message}
         budget: "",
         message: ""
       });
-      
+
       onClose();
     } catch (error) {
       console.error("Error sending to WhatsApp:", error);
@@ -121,7 +121,7 @@ ${formData.message}
                   placeholder="Enter your full name"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                   Email *
@@ -153,7 +153,7 @@ ${formData.message}
                   placeholder="Enter your phone number"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                   Destination *
@@ -166,14 +166,14 @@ ${formData.message}
                   className="w-full max-w-xs sm:max-w-none px-2 sm:px-4 py-1.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent transition-all text-xs sm:text-base"
                 >
                   <option value="">Select destination</option>
-                  <option value="bhutan">Bhutan</option>
-                  <option value="nepal">Nepal</option>
-                  <option value="bali">Bali</option>
-                  <option value="goa">Goa</option>
-                  <option value="sikkim">Sikkim</option>
-                  <option value="meghalaya">Meghalaya</option>
-                  <option value="darjeeling">Darjeeling</option>
-                  <option value="andaman">Andaman</option>
+                  <option value="cape-town">Cape Town</option>
+                  <option value="kruger">Kruger National Park</option>
+                  <option value="johannesburg">Johannesburg</option>
+                  <option value="garden-route">Garden Route</option>
+                  <option value="durban">Durban</option>
+                  <option value="drakensberg">Drakensberg</option>
+                  <option value="sun-city">Sun City</option>
+                  <option value="knysna">Knysna</option>
                   <option value="other">Other</option>
                 </select>
               </div>
@@ -193,7 +193,7 @@ ${formData.message}
                   className="w-full max-w-xs sm:max-w-none px-2 sm:px-4 py-1.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent transition-all text-xs sm:text-base"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                   Number of Travelers *
@@ -226,10 +226,10 @@ ${formData.message}
                 className="w-full max-w-xs sm:max-w-none px-2 sm:px-4 py-1.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent transition-all text-xs sm:text-base"
               >
                 <option value="">Select budget range</option>
-                <option value="under-20k">Under AED 20,000</option>
-                <option value="20k-50k">AED 20,000 - AED 50,000</option>
-                <option value="50k-1l">AED 50,000 - AED 1,00,000</option>
-                <option value="above-1l">Above AED 1,00,000</option>
+                <option value="under-10k">Under ZAR 10,000</option>
+                <option value="10k-30k">ZAR 10,000 - ZAR 30,000</option>
+                <option value="30k-70k">ZAR 30,000 - ZAR 70,000</option>
+                <option value="above-70k">Above ZAR 70,000</option>
               </select>
             </div>
 
@@ -265,7 +265,7 @@ ${formData.message}
                   </div>
                 )}
               </Button>
-              
+
               <Button
                 type="button"
                 onClick={onClose}
@@ -284,17 +284,17 @@ ${formData.message}
               <div className="flex flex-col items-center">
                 <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-secondary mb-1 sm:mb-2" />
                 <p className="text-xs sm:text-sm text-gray-600">Call us</p>
-                <p className="font-semibold text-secondary text-sm sm:text-base">+971 50 401 5632, +971 50 214 2541</p>
+                <p className="font-semibold text-secondary text-sm sm:text-base">+27 21 408 7600</p>
               </div>
               <div className="flex flex-col items-center">
                 <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-secondary mb-1 sm:mb-2" />
                 <p className="text-xs sm:text-sm text-gray-600">Email us</p>
-                <p className="font-semibold text-secondary text-sm sm:text-base">info@premiumdubaitours.com</p>
+                <p className="font-semibold text-secondary text-sm sm:text-base">info@skygo.co.za</p>
               </div>
               <div className="flex flex-col items-center">
                 <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-secondary mb-1 sm:mb-2" />
                 <p className="text-xs sm:text-sm text-gray-600">Visit us</p>
-                <p className="font-semibold text-secondary text-xs sm:text-sm">Nyati Estate, Mohammadwadi,Pune - 411060</p>
+                <p className="font-semibold text-secondary text-xs sm:text-sm">V&A Waterfront, Cape Town, 8001, South Africa</p>
               </div>
             </div>
           </div>

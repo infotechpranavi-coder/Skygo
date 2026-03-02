@@ -10,17 +10,17 @@ const FloatingButtons = () => {
       <Button
         size="icon"
         className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-green-500 hover:bg-green-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 touch-manipulation"
-        onClick={() => window.open('https://wa.me/971504015632', '_blank')}
+        onClick={() => window.open('https://wa.me/27214087600', '_blank')}
         aria-label="Chat on WhatsApp"
       >
         <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6" />
       </Button>
-      
+
       {/* Phone Button */}
       <Button
         size="icon"
         className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-primary hover:bg-primary/90 text-white shadow-lg hover:shadow-xl transition-all duration-300 touch-manipulation"
-        onClick={() => window.open('tel:+971504015632', '_self')}
+        onClick={() => window.open('tel:+27214087600', '_self')}
         aria-label="Call us"
       >
         <Phone className="h-5 w-5 sm:h-6 sm:w-6" />

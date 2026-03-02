@@ -19,8 +19,8 @@ const ExploreWithUs = () => {
   const { ref, isVisible } = useScrollReveal({ threshold: 0.1 });
 
   return (
-    <section 
-      id="explore" 
+    <section
+      id="explore"
       ref={ref}
       className="py-24 bg-white relative overflow-hidden"
     >
@@ -33,7 +33,7 @@ const ExploreWithUs = () => {
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <motion.div 
+        <motion.div
           className="grid lg:grid-cols-2 gap-12 items-center"
           initial={{ opacity: 0, y: 40 }}
           animate={isVisible ? { opacity: 1, y: 0 } : {}}
@@ -46,7 +46,7 @@ const ExploreWithUs = () => {
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           >
             {/* TIME TO TRAVEL heading */}
-            <p className="text-[#ccff00] font-bold text-sm uppercase tracking-wider mb-2">
+            <p className="text-[#bd9245] font-bold text-sm uppercase tracking-wider mb-2">
               TIME TO TRAVEL
             </p>
 
@@ -66,7 +66,7 @@ const ExploreWithUs = () => {
               <ul className="space-y-4">
                 {leftColumn.map((item, index) => (
                   <li key={index} className="flex items-center space-x-3">
-                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[#ccff00] flex items-center justify-center">
+                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[#bd9245] flex items-center justify-center">
                       <Check className="h-3 w-3 text-gray-900" strokeWidth={3} />
                     </div>
                     <span className="text-gray-900 text-base font-medium">{item}</span>
@@ -78,7 +78,7 @@ const ExploreWithUs = () => {
               <ul className="space-y-4">
                 {rightColumn.map((item, index) => (
                   <li key={index} className="flex items-center space-x-3">
-                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[#ccff00] flex items-center justify-center">
+                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[#bd9245] flex items-center justify-center">
                       <Check className="h-3 w-3 text-gray-900" strokeWidth={3} />
                     </div>
                     <span className="text-gray-900 text-base font-medium">{item}</span>
@@ -91,17 +91,17 @@ const ExploreWithUs = () => {
             <div className="flex items-center gap-6">
               <Button
                 onClick={openForm}
-                className="bg-[#ccff00] hover:bg-[#b8e600] text-gray-900 font-bold px-8 py-6 rounded-lg text-base"
+                className="bg-[#bd9245] hover:bg-[#a07835] text-gray-900 font-bold px-8 py-6 rounded-lg text-base"
               >
                 Book Now
               </Button>
-              
+
               {/* Phone Number */}
               <div className="flex flex-col">
                 <div className="flex items-center space-x-2">
-                  <Phone className="h-5 w-5 text-[#ccff00]" />
-                  <a href="tel:+971504015632" className="text-gray-900 text-lg font-semibold hover:text-[#ccff00] transition-colors">
-                    +971 50 401 5632
+                  <Phone className="h-5 w-5 text-[#bd9245]" />
+                  <a href="tel:+27214087600" className="text-gray-900 text-lg font-semibold hover:text-[#bd9245] transition-colors">
+                    +27 21 408 7600
                   </a>
                 </div>
                 <span className="text-xs text-gray-500 mt-1">CALL NOW</span>
@@ -110,7 +110,7 @@ const ExploreWithUs = () => {
           </motion.div>
 
           {/* Right Column - Polaroid Images with Badge */}
-          <motion.div 
+          <motion.div
             className="relative h-[600px]"
             initial={{ opacity: 0, x: 30 }}
             animate={isVisible ? { opacity: 1, x: 0 } : {}}
@@ -159,10 +159,10 @@ const ExploreWithUs = () => {
             </div>
 
             {/* Discount Badge - Jagged edge style - Positioned to overlap images */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 w-44 h-44 bg-[#ccff00] flex flex-col items-center justify-center shadow-2xl"
-                 style={{
-                   clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%, 15% 15%, 25% 5%, 35% 10%, 50% 0%, 65% 5%, 75% 10%, 85% 20%, 95% 30%, 100% 40%, 100% 60%, 95% 70%, 85% 80%, 75% 90%, 65% 95%, 50% 100%, 35% 95%, 25% 90%, 15% 85%, 5% 75%, 0% 65%, 0% 35%, 5% 25%)'
-                 }}>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 w-44 h-44 bg-[#bd9245] flex flex-col items-center justify-center shadow-2xl"
+              style={{
+                clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%, 15% 15%, 25% 5%, 35% 10%, 50% 0%, 65% 5%, 75% 10%, 85% 20%, 95% 30%, 100% 40%, 100% 60%, 95% 70%, 85% 80%, 75% 90%, 65% 95%, 50% 100%, 35% 95%, 25% 90%, 15% 85%, 5% 75%, 0% 65%, 0% 35%, 5% 25%)'
+              }}>
               <span className="text-[10px] font-bold text-white uppercase leading-tight">Get Up to</span>
               <span className="text-5xl font-black text-white leading-none my-1">50% Off</span>
               <span className="text-[10px] font-bold text-white uppercase leading-tight">DISCOUNT</span>

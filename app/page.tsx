@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import HeroExplore from "../components/HeroExplore";
 import ExploreWithUs from "../components/ExploreWithUs";
@@ -35,3 +35,4 @@ export default function Home() {
     </div>
   );
 }
+

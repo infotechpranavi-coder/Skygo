@@ -12,19 +12,19 @@ const ContactPage = () => {
     {
       icon: Phone,
       title: "Phone Numbers",
-      details: ["+971 50 401 5632", "+971 50 214 2541"],
+      details: ["+27 21 408 7600", "+27 21 408 7601"],
       description: "Call us anytime for immediate assistance"
     },
     {
       icon: Mail,
       title: "Email Address",
-      details: ["info@premiumdubaitours.com"],
+      details: ["info@skygo.co.za"],
       description: "Send us your queries and we'll respond within 24 hours"
     },
     {
       icon: MapPin,
       title: "Office Address",
-      details: ["Nyati Estate, Mohammadwadi", "Pune - 411060"],
+      details: ["19 Dock Rd, V&A Waterfront", "Cape Town, 8001, South Africa"],
       description: "Visit our office for personalized travel planning"
     },
     {
@@ -50,7 +50,7 @@ const ContactPage = () => {
         <div className="container mx-auto px-4 relative z-20">
           <div className="text-center space-y-6 fade-in">
             <h1 className="text-5xl lg:text-6xl font-bold text-white">
-              Contact <span className="text-secondary">Premium Dubai Tours</span>
+              Contact <span className="text-secondary">Sky Go</span>
             </h1>
             <p className="text-xl text-white/90 max-w-3xl mx-auto">
               We're here to help you plan your next adventure. Get in touch with us!
@@ -67,7 +67,7 @@ const ContactPage = () => {
               <div>
                 <h2 className="text-3xl font-bold text-secondary mb-4">Get In Touch</h2>
                 <p className="text-lg text-muted-foreground">
-                  Ready to embark on your next adventure? We're here to help you plan the perfect trip. 
+                  Ready to embark on your next adventure? We're here to help you plan the perfect trip.
                   Contact us today and let's make your travel dreams come true.
                 </p>
               </div>
@@ -129,7 +129,7 @@ const ContactPage = () => {
                         <Input id="lastName" placeholder="Enter your last name" />
                       </div>
                     </div>
-                    
+
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="email">Email Address*</Label>
@@ -165,8 +165,8 @@ const ContactPage = () => {
 
                     <div>
                       <Label htmlFor="message">Additional Requirements</Label>
-                      <Textarea 
-                        id="message" 
+                      <Textarea
+                        id="message"
                         placeholder="Tell us about your travel preferences, special requirements, or any questions you have..."
                         className="min-h-[120px]"
                       />
@@ -197,9 +197,9 @@ const ContactPage = () => {
           </div>
         </div>
       </section>
-      
+
       {/* Best Place Section */}
-      <BestPlaceSection 
+      <BestPlaceSection
         subtitle="Let's Connect"
         title="Plan your dream trip with"
         destination="Our Experts"

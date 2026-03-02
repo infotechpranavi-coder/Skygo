@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { Merriweather, Montserrat } from 'next/font/google'
 
 const merriweather = Merriweather({
@@ -26,3 +26,4 @@ export default function BlogsLayout({
     </div>
   )
 }
+

@@ -1,125 +1,162 @@
 'use client'
 
-import { ArrowRight, Clock } from "lucide-react";
+import { ArrowRight, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { popularPackages } from "@/data/homeData";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const PopularPackages = () => {
   const router = useRouter();
-  const { ref, isVisible } = useScrollReveal({ threshold: 0.1 });
 
   return (
-    <section 
-      id="packages" 
-      ref={ref}
+    <section
+      id="packages"
       className="py-24 bg-[#faf8f3]"
     >
       <div className="container mx-auto px-4">
-        <div className="grid lg:grid-cols-3 gap-12">
-          {/* Left Column - Large Cards */}
-          <div className="lg:col-span-2 space-y-6">
-            {popularPackages.map((pkg, index) => (
-              <motion.div
-                key={pkg.id}
-                className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer card-hover"
-                onClick={() => router.push(pkg.link)}
-                initial={{ opacity: 0, y: 40 }}
-                animate={isVisible ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
-              >
-                <div className="grid md:grid-cols-3 gap-6">
-                  {/* Image */}
-                  <div className="md:col-span-1 relative h-48 md:h-full">
-                    <img
-                      src={pkg.image}
-                      alt={pkg.title}
-                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                    />
-                  </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
 
-                  {/* Content */}
-                  <div className="md:col-span-2 p-6 flex flex-col justify-between">
-                    <div>
-                      <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-[#ccff00] transition-colors">
-                        {pkg.title}
-                      </h3>
-                      <p className="text-gray-600 mb-4">{pkg.subtitle}</p>
-                      <div className="flex items-center text-gray-500 text-sm mb-4">
-                        <Clock className="h-4 w-4 mr-2" />
-                        {pkg.duration}
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="text-sm text-gray-500">Starting from</span>
-                        <p className="text-2xl font-bold text-[#ccff00]">{pkg.price}</p>
-                      </div>
-                      <div className="w-12 h-12 rounded-full bg-[#ccff00] flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <ArrowRight className="h-6 w-6 text-gray-900" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+          {/* Left Column: Title + 2 Cards */}
+          <div className="space-y-8">
+            <div className="mb-12">
+              <h2 className="text-7xl md:text-8xl lg:text-9xl font-[1000] text-[#1e1f44] leading-[0.8] tracking-tighter uppercase">
+                POPULAR<br />PACKAGES
+              </h2>
+            </div>
+
+            {/* Card 1 */}
+            {popularPackages[0] && (
+              <PackageCard
+                pkg={popularPackages[0]}
+                index={0}
+                router={router}
+              />
+            )}
+
+            {/* Card 2 */}
+            {popularPackages[1] && (
+              <PackageCard
+                pkg={popularPackages[1]}
+                index={1}
+                router={router}
+              />
+            )}
           </div>
 
-          {/* Right Column - Stacked Cards + CTA */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Featured Card */}
-            <div className="bg-white rounded-2xl p-6 shadow-lg">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Why Choose Us?</h3>
-              <ul className="space-y-3 text-gray-600">
-                <li className="flex items-start">
-                  <span className="text-[#ccff00] mr-2">✓</span>
-                  <span>Expert local guides</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-[#ccff00] mr-2">✓</span>
-                  <span>Best price guarantee</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-[#ccff00] mr-2">✓</span>
-                  <span>24/7 customer support</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-[#ccff00] mr-2">✓</span>
-                  <span>Flexible cancellation</span>
-                </li>
-              </ul>
-            </div>
+          {/* Right Column: 3 Cards + View All Button (With Offset) */}
+          <div className="space-y-8 lg:pt-20">
+            {/* Card 3 */}
+            {popularPackages[2] && (
+              <PackageCard
+                pkg={popularPackages[2]}
+                index={2}
+                router={router}
+              />
+            )}
 
-            {/* CTA Card */}
-            <div className="bg-gray-900 rounded-2xl p-8 text-center">
-              <h3 className="text-2xl font-bold text-white mb-4">Need Help?</h3>
-              <p className="text-gray-300 mb-6">
-                Our travel experts are here to help you plan your perfect Dubai adventure.
-              </p>
+            {/* Card 4 */}
+            {popularPackages[3] && (
+              <PackageCard
+                pkg={popularPackages[3]}
+                index={3}
+                router={router}
+              />
+            )}
+
+            {/* Card 5 */}
+            {popularPackages[4] && (
+              <PackageCard
+                pkg={popularPackages[4]}
+                index={4}
+                router={router}
+              />
+            )}
+
+            {/* View All Button - Compact & Professional */}
+            <div className="pt-8 pl-4">
               <Button
-                onClick={() => router.push('/contact')}
-                className="w-full bg-[#ccff00] hover:bg-[#b8e600] text-gray-900 font-bold py-6 rounded-full"
+                variant="ghost"
+                className="group flex items-center gap-3 text-[#1e1f44] font-black text-xl uppercase tracking-tighter hover:bg-transparent hover:text-[#bd9245] transition-all duration-300"
+                onClick={() => router.push('/packages')}
               >
-                Contact Us
+                <span>View All Packages</span>
+                <div className="w-10 h-10 rounded-full border border-[#3d407f]/10 flex items-center justify-center group-hover:bg-[#bd9245] group-hover:border-[#bd9245] transition-all">
+                  <ArrowRight className="w-5 h-5" />
+                </div>
               </Button>
             </div>
-
-            {/* View All Button */}
-            <Button
-              variant="outline"
-              className="w-full border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white py-6 rounded-full"
-              onClick={() => router.push('/packages')}
-            >
-              View All Packages
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
           </div>
         </div>
       </div>
     </section>
   );
 };
+
+// Helper component for cleaner code
+const PackageCard = ({ pkg, index, router }: any) => (
+  <motion.div
+    className="group bg-white rounded-[40px] overflow-hidden p-3 shadow-[0_10px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_70px_rgba(0,0,0,0.1)] transition-all duration-700 cursor-pointer flex flex-col sm:flex-row h-full sm:h-[320px] border border-white"
+    onClick={() => router.push(`/packages/${pkg.id}`)}
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.6, delay: index * 0.1 }}
+  >
+    {/* Image Section */}
+    <div className="relative w-full sm:w-[260px] h-[200px] sm:h-full flex-shrink-0">
+      <img
+        src={pkg.image}
+        alt={pkg.title}
+        className="w-full h-full object-cover rounded-[30px] transform group-hover:scale-105 transition-transform duration-1000"
+      />
+    </div>
+
+    {/* Info Section */}
+    <div className="p-6 flex flex-col justify-between flex-grow">
+      <div>
+        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2">
+          {pkg.duration} &nbsp;·&nbsp; PREMIER EXPERIENCE
+        </p>
+        <h3 className="text-xl md:text-2xl font-black text-[#1e1f44] leading-[1.1] mb-2 uppercase tracking-tighter group-hover:text-[#bd9245] transition-colors">
+          {pkg.title}
+        </h3>
+        <div className="flex items-center gap-1 mb-3">
+          {[...Array(5)].map((_, i) => (
+            <Star key={i} className="w-3 h-3 fill-[#bd9245] text-[#bd9245]" />
+          ))}
+          <span className="text-[10px] font-bold text-gray-300 ml-1">Verified Experience</span>
+        </div>
+        <p className="text-gray-400 text-[13px] leading-relaxed line-clamp-2 font-medium">
+          {pkg.subtitle}
+        </p>
+      </div>
+
+      <div className="flex flex-col sm:flex-row gap-3 mt-4">
+        <Button
+          className="flex-1 bg-[#bd9245] hover:bg-[#a07835] text-white font-bold py-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+          onClick={(e) => {
+            e.stopPropagation();
+            router.push(`/packages/${pkg.id}`);
+          }}
+        >
+          <span>View Details</span>
+          <ArrowRight className="w-4 h-4" />
+        </Button>
+        <Button
+          variant="outline"
+          className="flex-1 border-[#1e1f44] text-[#1e1f44] hover:bg-[#1e1f44] hover:text-white font-bold py-4 rounded-xl transition-all duration-300"
+          onClick={(e) => {
+            e.stopPropagation();
+            router.push(`/contact?packageName=${encodeURIComponent(pkg.title)}&packageType=popular`);
+          }}
+        >
+          Enquire Now
+        </Button>
+      </div>
+    </div>
+  </motion.div>
+);
+
 
 export default PopularPackages;

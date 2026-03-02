@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -42,7 +42,7 @@ const LoginPage = () => {
             <div className="mx-auto mb-4 w-16 h-16 bg-primary rounded-full flex items-center justify-center">
               <Lock className="w-8 h-8 text-white" />
             </div>
-            <CardTitle className="text-2xl font-bold text-gray-900">
+            <CardTitle className="text-2xl font-bold text-[#1e1f44]">
               Admin Login
             </CardTitle>
             <p className="text-gray-600 mt-2">
@@ -116,7 +116,7 @@ const LoginPage = () => {
         
         <div className="text-center mt-6">
           <p className="text-sm text-gray-600">
-            © 2025 Premium Dubai Tours. All rights reserved.
+            Â© 2025 Premium Dubai Tours. All rights reserved.
           </p>
         </div>
       </div>
@@ -125,3 +125,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+

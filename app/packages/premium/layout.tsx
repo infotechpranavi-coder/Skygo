@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { Playfair_Display, Cormorant_Garamond, Poppins } from 'next/font/google'
 
 const playfair = Playfair_Display({ 
@@ -38,3 +38,4 @@ export default function PremiumPackagesLayout({
     </div>
   )
 }
+

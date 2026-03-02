@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card";
@@ -783,7 +783,7 @@ export default function DashboardPage() {
         );
 
         pkg.itinerary.forEach((day, index) => {
-          const cleanTitle = day.title.replace(/[⭐*]/g, '').trim();
+          const cleanTitle = day.title.replace(/[â­*]/g, '').trim();
           children.push(
             new Paragraph({
               children: [new TextRun({ text: `Day ${day.day}`, bold: true, size: 20 })],
@@ -915,7 +915,7 @@ export default function DashboardPage() {
                   ...pkg.inclusions.map(inclusion =>
                     new TableRow({
                       children: [
-                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `• ${inclusion}` })] })] }),
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `â€¢ ${inclusion}` })] })] }),
                       ],
                     })
                   ),
@@ -943,7 +943,7 @@ export default function DashboardPage() {
                   ...pkg.exclusions.map(exclusion =>
                     new TableRow({
                       children: [
-                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `• ${exclusion}` })] })] }),
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `â€¢ ${exclusion}` })] })] }),
                       ],
                     })
                   ),
@@ -1020,7 +1020,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <LayoutDashboard className="h-6 w-6 text-primary" />
-                <h2 className="text-xl font-bold text-gray-900">Dashboard</h2>
+                <h2 className="text-xl font-bold text-[#1e1f44]">Dashboard</h2>
               </div>
               <Button
                 variant="ghost"
@@ -1090,7 +1090,7 @@ export default function DashboardPage() {
                   </Button>
                 )}
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-900">
+                  <h1 className="text-3xl font-bold text-[#1e1f44]">
                     {activeView === 'packages' && 'Packages'}
                     {activeView === 'testimonials' && 'Testimonials'}
                     {activeView === 'blogs' && 'Blogs'}
@@ -1438,7 +1438,7 @@ export default function DashboardPage() {
                 <CardContent>
                   <div className="text-center py-12">
                     <MessageSquare className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Testimonials Management</h3>
+                    <h3 className="text-lg font-semibold text-[#1e1f44] mb-2">Testimonials Management</h3>
                     <p className="text-gray-600 mb-6">Testimonials management feature coming soon</p>
                     <Button>
                       <Plus className="h-4 w-4 mr-2" />
@@ -1460,7 +1460,7 @@ export default function DashboardPage() {
                 <CardContent>
                   <div className="text-center py-12">
                     <FileText className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Blog Management</h3>
+                    <h3 className="text-lg font-semibold text-[#1e1f44] mb-2">Blog Management</h3>
                     <p className="text-gray-600 mb-6">Blog management feature coming soon</p>
                     <Button>
                       <Plus className="h-4 w-4 mr-2" />
@@ -1504,3 +1504,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+

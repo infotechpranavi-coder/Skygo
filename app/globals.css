@@ -8,39 +8,70 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%; /* White */
-    --foreground: 0 0% 0%; /* Black */
+    --background: 0 0% 100%;
+    /* White */
+    --foreground: 0 0% 0%;
+    /* Black */
 
-    --card: 0 0% 96%; /* Light grey for cards */
-    --card-foreground: 0 0% 0%; /* Black text on cards */
+    --card: 0 0% 96%;
+    /* Light grey for cards */
+    --card-foreground: 0 0% 0%;
+    /* Black text on cards */
 
-    --popover: 0 0% 100%; /* White */
-    --popover-foreground: 0 0% 0%; /* Black */
+    --popover: 0 0% 100%;
+    /* White */
+    --popover-foreground: 0 0% 0%;
+    /* Black */
 
-    --primary: 0 0% 0%; /* Black as primary */
-    --primary-foreground: 0 0% 100%; /* White text on primary */
+    --primary: 0 0% 0%;
+    /* Black as primary */
+    --primary-foreground: 0 0% 100%;
+    /* White text on primary */
 
-    --secondary: 0 0% 50%; /* Medium grey */
-    --secondary-foreground: 0 0% 100%; /* White text */
+    --secondary: 0 0% 50%;
+    /* Medium grey */
+    --secondary-foreground: 0 0% 100%;
+    /* White text */
 
-    --muted: 0 0% 96%; /* Light grey */
-    --muted-foreground: 0 0% 45%; /* Dark grey text */
+    --muted: 0 0% 96%;
+    /* Light grey */
+    --muted-foreground: 0 0% 45%;
+    /* Dark grey text */
 
-    --accent: 0 0% 90%; /* Light grey accent */
-    --accent-foreground: 0 0% 0%; /* Black text */
+    --accent: 0 0% 90%;
+    /* Light grey accent */
+    --accent-foreground: 0 0% 0%;
+    /* Black text */
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 0 0% 85%; /* Light grey border */
-    --input: 0 0% 96%; /* Light grey input */
-    --ring: 0 0% 0%; /* Black ring */
+    --border: 0 0% 85%;
+    /* Light grey border */
+    --input: 0 0% 96%;
+    /* Light grey input */
+    --ring: 0 0% 0%;
+    /* Black ring */
 
-    /* Travel website specific colors - updated to grey scale */
-    --travel-teal: 0 0% 50%; /* Medium grey */
-    --travel-navy: 0 0% 20%; /* Dark grey */
-    --travel-light-teal: 0 0% 95%; /* Very light grey */
-    --travel-light-bg: 0 0% 98%; /* Almost white grey */
+    /* Brand palette - updated theme */
+    --brand-dark: #1e1f44;
+    /* Deep navy - primary text & dark UI */
+    --brand-mid: #3d407f;
+    /* Indigo - secondary accents & hovers */
+    --brand-gold: #bd9245;
+    /* Gold - primary CTA accent */
+    --brand-green: #22c55e;
+    /* Green - kept for prices & positive indicators */
+
+    /* Travel website specific colors */
+    --travel-teal: 237 39% 59%;
+    /* Indigo mid */
+    --travel-navy: 239 38% 19%;
+    /* Deep navy */
+    --travel-light-teal: 237 39% 95%;
+    /* Light indigo tint */
+    --travel-light-bg: 0 0% 98%;
+    /* Almost white */
 
     /* Animation variables */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -48,21 +79,29 @@ All colors MUST be HSL.
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%; /* Light grey */
+    --sidebar-background: 0 0% 98%;
+    /* Light grey */
 
-    --sidebar-foreground: 0 0% 0%; /* Black */
+    --sidebar-foreground: 0 0% 0%;
+    /* Black */
 
-    --sidebar-primary: 0 0% 0%; /* Black */
+    --sidebar-primary: 0 0% 0%;
+    /* Black */
 
-    --sidebar-primary-foreground: 0 0% 100%; /* White */
+    --sidebar-primary-foreground: 0 0% 100%;
+    /* White */
 
-    --sidebar-accent: 0 0% 95%; /* Light grey */
+    --sidebar-accent: 0 0% 95%;
+    /* Light grey */
 
-    --sidebar-accent-foreground: 0 0% 0%; /* Black */
+    --sidebar-accent-foreground: 0 0% 0%;
+    /* Black */
 
-    --sidebar-border: 0 0% 85%; /* Light grey */
+    --sidebar-border: 0 0% 85%;
+    /* Light grey */
 
-    --sidebar-ring: 0 0% 0%; /* Black */
+    --sidebar-ring: 0 0% 0%;
+    /* Black */
   }
 
   .dark {
@@ -123,7 +162,7 @@ All colors MUST be HSL.
     html {
       scroll-behavior: auto;
     }
-    
+
     *,
     *::before,
     *::after {
@@ -136,12 +175,12 @@ All colors MUST be HSL.
   body {
     @apply bg-white text-foreground;
   }
-  
+
   /* Ensure sections use white background */
   section {
     @apply bg-white;
   }
-  
+
   /* Main content areas */
   main {
     @apply bg-white;
@@ -153,19 +192,19 @@ All colors MUST be HSL.
   .fade-in {
     animation: fade-in 0.6s ease-out forwards;
   }
-  
+
   .slide-up {
     animation: slide-up 0.8s ease-out forwards;
   }
-  
+
   .scale-in {
     animation: scale-in 0.5s ease-out forwards;
   }
-  
+
   .hover-lift {
     transition: var(--transition-smooth);
   }
-  
+
   .hover-lift:hover {
     transform: translateY(-4px);
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
@@ -190,6 +229,7 @@ All colors MUST be HSL.
   }
 
   @media (prefers-reduced-motion: reduce) {
+
     .card-hover,
     .card-hover:hover,
     .card-hover img,
@@ -205,6 +245,7 @@ All colors MUST be HSL.
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -216,6 +257,7 @@ All colors MUST be HSL.
     opacity: 0;
     transform: translateY(50px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -227,8 +269,9 @@ All colors MUST be HSL.
     opacity: 0;
     transform: scale(0.9);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
   }
-  }
+}
