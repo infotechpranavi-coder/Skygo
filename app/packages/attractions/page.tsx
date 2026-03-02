@@ -21,6 +21,7 @@ interface Package {
     alt: string;
   }>;
   rating: number;
+  packageCategory?: string;
 }
 
 const AttractionsActivitiesPage = () => {
@@ -47,14 +48,14 @@ const AttractionsActivitiesPage = () => {
       console.log('Fetching packages from API...');
       const response = await fetch('/api/packages');
       const result = await response.json();
-      
+
       if (result.success && result.data) {
         console.log('Total packages fetched:', result.data.length);
-        
+
         // Filter STRICTLY for attraction packages (packageCategory must be 'Attraction and Activity')
         let attractionPackages = result.data.filter((pkg: Package) =>
           pkg.packageCategory && (
-            pkg.packageCategory === 'Attraction and Activity' || 
+            pkg.packageCategory === 'Attraction and Activity' ||
             pkg.packageCategory === 'attraction and activity'
           )
         );
@@ -76,9 +77,9 @@ const AttractionsActivitiesPage = () => {
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-AE', {
+    return new Intl.NumberFormat('en-ZA', {
       style: 'currency',
-      currency: 'AED',
+      currency: 'ZAR',
       maximumFractionDigits: 0,
     }).format(price);
   };
@@ -139,7 +140,7 @@ const AttractionsActivitiesPage = () => {
                   For visitors, however, choosing the right attractions and activities tickets in Dubai can quickly become overwhelming. With hundreds of ticket types, time slots, peak and non-peak pricing, combo offers, seasonal promotions, and strict entry rules for certain attractions, booking incorrectly can lead to missed experiences or unnecessary costs.
                 </p>
                 <p className="text-lg text-gray-800 font-semibold leading-relaxed">
-                  This is where <span className="text-purple-600">Premium Dubai Tours</span> plays a key role: simplifying access to all major attractions and activities tickets across Dubai, Abu Dhabi, and the UAE, while offering clarity, reliability, and expert guidance.
+                  This is where <span className="text-purple-600">Sky Go</span> plays a key role: simplifying access to all major attractions and activities tickets across South Africa, while offering clarity, reliability, and expert guidance.
                 </p>
               </div>
             </div>
@@ -165,71 +166,71 @@ const AttractionsActivitiesPage = () => {
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {packages.map((pkg) => (
                     <Card key={pkg._id} className="overflow-hidden hover:shadow-2xl transition-all duration-300 border-2 border-transparent hover:border-purple-300 hover:-translate-y-2 group">
-                    <div className="relative">
-                      {pkg.images && pkg.images.length > 0 ? (
-                        <div className="aspect-video relative">
-                          <Image
-                            src={pkg.images[0].url}
-                            alt={pkg.images[0].alt || pkg.title}
-                            fill
-                            className="object-cover group-hover:scale-110 transition-transform duration-300"
-                          />
-                        </div>
-                      ) : (
-                        <div className="aspect-video bg-gradient-to-br from-purple-100 to-indigo-100 flex items-center justify-center">
-                          <Ticket className="h-16 w-16 text-purple-400" />
-                        </div>
-                      )}
-                      <Badge className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-[#1e1f44] font-bold px-3 py-1.5 shadow-lg">
-                        From {formatPrice(pkg.price)}
-                      </Badge>
-                      <Badge className="absolute top-4 left-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold px-3 py-1.5 shadow-lg">
-                        <Ticket className="h-4 w-4 mr-1" />
-                        Ticket
-                      </Badge>
-                    </div>
-
-                    <CardHeader className="bg-white">
-                      <CardTitle className="text-2xl font-bold text-[#1e1f44] group-hover:text-purple-600 transition-colors">
-                        {pkg.title}
-                      </CardTitle>
-                      <p className="text-gray-600 mt-2">{pkg.subtitle}</p>
-                    </CardHeader>
-
-                    <CardContent className="bg-white">
-                      <div className="space-y-3 mb-4">
-                        <div className="flex items-center text-sm text-gray-600">
-                          <MapPin className="h-4 w-4 mr-2 text-purple-600" />
-                          {pkg.location}
-                        </div>
-                        <div className="flex items-center text-sm text-gray-600">
-                          <Clock className="h-4 w-4 mr-2 text-purple-600" />
-                          {pkg.duration}
-                        </div>
-                        <div className="flex items-center text-sm text-gray-600">
-                          <Star className="h-4 w-4 mr-2 fill-yellow-400 text-yellow-400" />
-                          {pkg.rating}/5
-                        </div>
+                      <div className="relative">
+                        {pkg.images && pkg.images.length > 0 ? (
+                          <div className="aspect-video relative">
+                            <Image
+                              src={pkg.images[0].url}
+                              alt={pkg.images[0].alt || pkg.title}
+                              fill
+                              className="object-cover group-hover:scale-110 transition-transform duration-300"
+                            />
+                          </div>
+                        ) : (
+                          <div className="aspect-video bg-gradient-to-br from-purple-100 to-indigo-100 flex items-center justify-center">
+                            <Ticket className="h-16 w-16 text-purple-400" />
+                          </div>
+                        )}
+                        <Badge className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-[#1e1f44] font-bold px-3 py-1.5 shadow-lg">
+                          From {formatPrice(pkg.price)}
+                        </Badge>
+                        <Badge className="absolute top-4 left-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold px-3 py-1.5 shadow-lg">
+                          <Ticket className="h-4 w-4 mr-1" />
+                          Ticket
+                        </Badge>
                       </div>
 
-                      <p className="text-gray-700 text-sm mb-6 line-clamp-3">
-                        {pkg.about}
-                      </p>
+                      <CardHeader className="bg-white">
+                        <CardTitle className="text-2xl font-bold text-[#1e1f44] group-hover:text-purple-600 transition-colors">
+                          {pkg.title}
+                        </CardTitle>
+                        <p className="text-gray-600 mt-2">{pkg.subtitle}</p>
+                      </CardHeader>
 
-                      <div className="flex space-x-3">
-                        <Link href={`/packages/${pkg._id}`} className="flex-1">
-                          <Button className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all">
-                            View Details
-                          </Button>
-                        </Link>
-                        <Link href="/contact" className="flex-1">
-                          <Button variant="outline" className="w-full border-2 border-purple-600 text-purple-600 hover:bg-purple-50 font-semibold">
-                            Book Now
-                          </Button>
-                        </Link>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      <CardContent className="bg-white">
+                        <div className="space-y-3 mb-4">
+                          <div className="flex items-center text-sm text-gray-600">
+                            <MapPin className="h-4 w-4 mr-2 text-purple-600" />
+                            {pkg.location}
+                          </div>
+                          <div className="flex items-center text-sm text-gray-600">
+                            <Clock className="h-4 w-4 mr-2 text-purple-600" />
+                            {pkg.duration}
+                          </div>
+                          <div className="flex items-center text-sm text-gray-600">
+                            <Star className="h-4 w-4 mr-2 fill-yellow-400 text-yellow-400" />
+                            {pkg.rating}/5
+                          </div>
+                        </div>
+
+                        <p className="text-gray-700 text-sm mb-6 line-clamp-3">
+                          {pkg.about}
+                        </p>
+
+                        <div className="flex space-x-3">
+                          <Link href={`/packages/${pkg._id}`} className="flex-1">
+                            <Button className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all">
+                              View Details
+                            </Button>
+                          </Link>
+                          <Link href="/contact" className="flex-1">
+                            <Button variant="outline" className="w-full border-2 border-purple-600 text-purple-600 hover:bg-purple-50 font-semibold">
+                              Book Now
+                            </Button>
+                          </Link>
+                        </div>
+                      </CardContent>
+                    </Card>
                   ))}
                 </div>
               ) : (
@@ -266,8 +267,8 @@ const AttractionsActivitiesPage = () => {
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
               {['First-time visitors', 'Families with children', 'Couples and honeymooners', 'Adventure seekers', 'Culture and museum lovers', 'Luxury and premium travelers'].map((item, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className="group flex items-center space-x-4 p-5 bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-md hover:shadow-xl border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:-translate-y-1"
                 >
                   <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -312,7 +313,7 @@ const AttractionsActivitiesPage = () => {
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-[#1e1f44] mb-4">
                 Why Book with
-                <span className="block text-purple-600">Premium Dubai Tours?</span>
+                <span className="block text-purple-600">Sky Go?</span>
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
                 Your trusted partner for all UAE attractions and activities tickets
@@ -327,7 +328,7 @@ const AttractionsActivitiesPage = () => {
                   <div className="flex-1">
                     <h3 className="text-2xl font-bold text-[#1e1f44] mb-3">1. One Platform, Complete Coverage</h3>
                     <p className="text-gray-700 leading-relaxed">
-                      Instead of booking from multiple sources, we provide all major UAE attractions tickets in one place: Dubai, Abu Dhabi, and beyond.
+                      Instead of booking from multiple sources, we provide all major South African attractions tickets in one place.
                     </p>
                   </div>
                 </div>
@@ -452,8 +453,8 @@ const AttractionsActivitiesPage = () => {
               </p>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {['Burj Khalifa â€“ At the Top Entry Tickets', 'Burj Khalifa Combo Entry Tickets', 'Sky Views Observation Deck', 'The View at The Palm', 'Ain Dubai', 'Dubai Frame'].map((attraction, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className="group bg-gradient-to-br from-white to-gray-50 p-5 rounded-xl shadow-md hover:shadow-xl border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:-translate-y-1"
                   >
                     <div className="flex items-start">
@@ -484,8 +485,8 @@ const AttractionsActivitiesPage = () => {
               <p className="text-lg text-gray-800 font-semibold mb-6">Available tickets include:</p>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {['Dubai Aquarium & Underwater Zoo', 'Dubai Mall Attractions & Activities', 'House of Hype (HOH)', 'Museum of Illusions', 'AYA Universe'].map((attraction, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className="group bg-gradient-to-br from-white to-gray-50 p-5 rounded-xl shadow-md hover:shadow-xl border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:-translate-y-1"
                   >
                     <div className="flex items-start">
@@ -516,8 +517,8 @@ const AttractionsActivitiesPage = () => {
               <p className="text-lg text-gray-800 font-semibold mb-6">Tickets available through Premium Dubai Tours include:</p>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {['Museum of the Future (MOTF)', 'Museum of the Future â€“ Pioneer Pass', 'Shindagha Museum', 'Arte Museum Dubai â€“ Immersive Media Art Exhibition', 'Inside Burj Al Arab Tour'].map((attraction, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className="group bg-gradient-to-br from-white to-gray-50 p-5 rounded-xl shadow-md hover:shadow-xl border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:-translate-y-1"
                   >
                     <div className="flex items-start">
@@ -547,8 +548,8 @@ const AttractionsActivitiesPage = () => {
               </p>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {['Dubai Miracle Garden Entrance Ticket', 'Dubai Butterfly Garden Entrance Ticket', 'Combo: Miracle Garden + Butterfly Garden', 'Glow Garden (Regular Ticket â€“ includes Dinosaur Park & Fantasy Park)', 'The Green Planet', 'The Green Planet (Promotional Offer â€“ booking valid until 31 Jan 2026, ticket validity until 20 Mar 2026)', 'Crocodile Park Dubai', 'Dubai Safari Park â€“ Day Pass', 'Safari Bundle (Park Pass + Train + Explorer Safari)'].map((attraction, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className="group bg-gradient-to-br from-white to-gray-50 p-5 rounded-xl shadow-md hover:shadow-xl border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:-translate-y-1"
                   >
                     <div className="flex items-start">
@@ -579,8 +580,8 @@ const AttractionsActivitiesPage = () => {
               <p className="text-lg text-gray-800 font-semibold mb-6">Tickets available include:</p>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {['Atlantis The Palm â€“ Marine & Waterpark', 'Wild Wadi General Admission', 'Wild Wadi General Admission with Meal', 'Ski Dubai â€“ Snow Park (Mall of the Emirates)', 'Dubai Parks and Resorts (DPR)', 'IMG Worlds of Adventure Dubai', 'Global Village', 'La Perle Dubai'].map((attraction, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className="group bg-gradient-to-br from-white to-gray-50 p-5 rounded-xl shadow-md hover:shadow-xl border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:-translate-y-1"
                   >
                     <div className="flex items-start">
@@ -610,8 +611,8 @@ const AttractionsActivitiesPage = () => {
               </p>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {['Big Bus Tours Dubai â€“ Hop-On Hop-Off', 'Speed Boat Tours in Dubai', 'The Yellow Boats â€“ Dubai', 'The Black Boat (TBB)', 'The Dubai Balloon â€“ Atlantis'].map((attraction, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className="group bg-gradient-to-br from-white to-gray-50 p-5 rounded-xl shadow-md hover:shadow-xl border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:-translate-y-1"
                   >
                     <div className="flex items-start">
@@ -641,8 +642,8 @@ const AttractionsActivitiesPage = () => {
               </p>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {['XLine Dubai Marina', 'Skydive Dubai', 'Dubai Helicopter Tours', 'Deep Dive Dubai', 'Hot Air Balloon Desert Experience', 'Paramotor Desert Adventure', 'Parasailing Experience in Marina', 'Sky & Sea Adventure Sports'].map((attraction, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className="group bg-gradient-to-br from-white to-gray-50 p-5 rounded-xl shadow-md hover:shadow-xl border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:-translate-y-1"
                   >
                     <div className="flex items-start">
@@ -684,8 +685,8 @@ const AttractionsActivitiesPage = () => {
                 </div>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {['Louvre Museum Abu Dhabi â€“ General Admission', 'Louvre Museum Guided Tour (Add-on)', 'Qasr Al Watan â€“ General Admission (Peak & Non-Peak Hours)', 'Natural History Museum Abu Dhabi', 'Zayed National Museum', 'TeamLab Phenomena Abu Dhabi'].map((attraction, index) => (
-                    <div 
-                      key={index} 
+                    <div
+                      key={index}
                       className="group bg-gradient-to-br from-purple-50 to-indigo-50 p-5 rounded-xl shadow-md hover:shadow-xl border border-purple-200 hover:border-purple-400 transition-all duration-300 hover:-translate-y-1"
                     >
                       <div className="flex items-start">
@@ -706,8 +707,8 @@ const AttractionsActivitiesPage = () => {
                 </div>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {['National Aquarium Abu Dhabi', 'The Butterfly Garden Abu Dhabi', 'Combo: National Aquarium + Butterfly Garden', 'Emirates Park Zoo â€“ Regular Pass', 'Emirates Park Zoo â€“ Explorer Pass', 'KidZania Abu Dhabi'].map((attraction, index) => (
-                    <div 
-                      key={index} 
+                    <div
+                      key={index}
                       className="group bg-gradient-to-br from-purple-50 to-indigo-50 p-5 rounded-xl shadow-md hover:shadow-xl border border-purple-200 hover:border-purple-400 transition-all duration-300 hover:-translate-y-1"
                     >
                       <div className="flex items-start">
@@ -728,8 +729,8 @@ const AttractionsActivitiesPage = () => {
                 </div>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {['Ferrari World Abu Dhabi', 'Yas Waterworld', 'Warner Bros. World', 'SeaWorld Abu Dhabi'].map((attraction, index) => (
-                    <div 
-                      key={index} 
+                    <div
+                      key={index}
                       className="group bg-gradient-to-br from-purple-50 to-indigo-50 p-5 rounded-xl shadow-md hover:shadow-xl border border-purple-200 hover:border-purple-400 transition-all duration-300 hover:-translate-y-1"
                     >
                       <div className="flex items-start">
@@ -760,8 +761,8 @@ const AttractionsActivitiesPage = () => {
             </div>
             <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
               {['Ras Al Khaimah Adventure Parks', 'The Yellow Boats â€“ Abu Dhabi & RAK'].map((attraction, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className="group bg-gradient-to-br from-white to-gray-50 p-8 rounded-2xl shadow-lg hover:shadow-xl border-2 border-gray-200 hover:border-purple-400 text-center transition-all duration-300 hover:-translate-y-2"
                 >
                   <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-lg">
@@ -796,8 +797,8 @@ const AttractionsActivitiesPage = () => {
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
               {['Observation Decks', 'Theme Parks & Water Parks', 'Museums & Cultural Attractions', 'Adventure & Extreme Sports', 'Family-Friendly Experiences', 'Dubai vs Abu Dhabi Attractions'].map((category, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className="group bg-gradient-to-br from-purple-50 to-indigo-50 p-6 rounded-xl shadow-md hover:shadow-xl border border-purple-200 hover:border-purple-400 transition-all duration-300 hover:-translate-y-1"
                 >
                   <div className="flex items-center">

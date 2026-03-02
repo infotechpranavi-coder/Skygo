@@ -30,7 +30,7 @@ const LoginPage = () => {
       // Wrong credentials
       setError("Wrong credentials. Please try again.");
     }
-    
+
     setIsLoading(false);
   };
 
@@ -49,7 +49,7 @@ const LoginPage = () => {
               Enter your credentials to access the dashboard
             </p>
           </CardHeader>
-          
+
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               {error && (
@@ -57,7 +57,7 @@ const LoginPage = () => {
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
-              
+
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-medium text-gray-700">
                   Email Address
@@ -75,7 +75,7 @@ const LoginPage = () => {
                   />
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-sm font-medium text-gray-700">
                   Password
@@ -100,7 +100,7 @@ const LoginPage = () => {
                   </button>
                 </div>
               </div>
-              
+
               <Button
                 type="submit"
                 className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-semibold text-lg"
@@ -109,15 +109,13 @@ const LoginPage = () => {
                 {isLoading ? "Signing In..." : "Sign In"}
               </Button>
             </form>
-            
+
 
           </CardContent>
         </Card>
-        
+
         <div className="text-center mt-6">
-          <p className="text-sm text-gray-600">
-            Â© 2025 Premium Dubai Tours. All rights reserved.
-          </p>
+          © 2025 Sky Go. All rights reserved.
         </div>
       </div>
     </div>

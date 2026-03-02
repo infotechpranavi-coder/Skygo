@@ -12,8 +12,8 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 bg-white rounded-lg p-3 sm:p-4 md:p-6 shadow-md flex items-center justify-center">
-                <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28">
+              <div className="relative w-32 h-32 sm:w-36 sm:h-36 md:w-48 md:h-48 bg-white rounded-lg p-3 sm:p-4 md:p-6 shadow-md flex items-center justify-center">
+                <div className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-40 md:h-40">
                   <Image
                     src="/Untitled_design__2_-removebg-preview.png"
                     alt="Sky Go Logo"

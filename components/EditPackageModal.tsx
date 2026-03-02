@@ -75,13 +75,7 @@ interface AccommodationItem {
   nights: string;
 }
 
-interface Review {
-  _id?: string;
-  name: string;
-  rating: number;
-  comment: string;
-  date: string;
-}
+
 
 import { PackageData, Review } from "@/lib/types";
 

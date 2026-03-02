@@ -25,7 +25,7 @@ const BlogsPage = () => {
 A Dubai stopover tour allows transit passengers to step beyond the airport and experience the city's iconic skyline, cultural heritage, and world-class attractions, even if they have only a few hours or a single night. Dubai is one of the very few global transit hubs where exploring the city during a layover is not only possible but genuinely rewarding.
 
 Whether you are a business traveler with a tight connection, a leisure traveler on a long-haul flight, or a first-time visitor curious about the city, a well-organized Dubai transit tour can turn waiting time into a meaningful travel experience.`,
-      author: "Premium Dubai Tours",
+      author: "Sky Go",
       authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
       publishDate: "2024-02-20",
       readTime: "15 min read",
@@ -228,11 +228,11 @@ Dubai is a year-round destination.
 
 During summer, many activities are scheduled in the evening, and attractions remain fully operational. This makes Dubai budget friendly holiday packages especially attractive during off-peak months.
 
-Why Book with Premium Dubai Tours?
+Why Book with Sky Go?
 
 Choosing the right tour operator is just as important as choosing the right itinerary.
 
-Premium Dubai Tours focuses on:
+Sky Go focuses on:
 â€¢ Clear itineraries with no confusion
 â€¢ Transparent inclusions and exclusions
 â€¢ Professional coordination and local expertise
@@ -262,7 +262,7 @@ Conclusion: Choosing the Right Dubai Tour Package
 Dubai offers something for every traveler, whether it's a short city break or a full holiday experience. With structured itineraries, comfortable accommodations, and guided sightseeing, Dubai regular tour packages make exploring the city simple and stress-free.
 
 From 1-night stopovers to 7-night holidays, these packages allow travelers to experience Dubai's highlights at their own pace, with clarity, comfort, and value.`,
-      author: "Premium Dubai Tours",
+      author: "Sky Go",
       authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
       publishDate: "2024-03-15",
       readTime: "18 min read",
@@ -282,7 +282,7 @@ Dubai is a city that rewards thoughtful travel. Beyond the iconic skyline and re
 
 This is where Premium Dubai Tour Packages come into focus.
 
-At Premium Dubai Tours, our premium category is designed for travelers who want Dubai on their own terms. These packages are private, customizable, and priced per vehicle rather than per person. Whether you are traveling with family, celebrating a honeymoon, or simply prefer quiet, well-organized experiences, premium packages allow you to explore Dubai and the UAE with confidence and ease.
+At Sky Go, our premium category is designed for travelers who want Dubai on their own terms. These packages are private, customizable, and priced per vehicle rather than per person. Whether you are traveling with family, celebrating a honeymoon, or simply prefer quiet, well-organized experiences, premium packages allow you to explore Dubai and the UAE with confidence and ease.
 
 This guide explains what premium Dubai tour packages include, who they are ideal for, how they differ from regular tours, and how each duration, from 3 Nights to 6 Nights, is structured to deliver a refined travel experience.
 
@@ -296,7 +296,7 @@ Every premium package is:
 â€¢ Priced per vehicle (up to 6 guests)
 â€¢ Flexible with accommodation options
 
-To accommodate different travel styles, Premium Dubai Tours offers three pricing formats for each premium itinerary:
+To accommodate different travel styles, Sky Go offers three pricing formats for each premium itinerary:
 â€¢ Without hotel accommodation â€“ ideal for residents or guests with pre-booked stays
 â€¢ With 4-star hotel accommodation â€“ balanced comfort and value
 â€¢ With 5-star hotel accommodation â€“ refined luxury and premium hospitality
@@ -337,7 +337,7 @@ For travelers who have already seen Dubai's highlights, premium tours allow deep
 
 Overview of Premium Dubai Tour Package Durations
 
-Premium Dubai Tours currently offers the following premium itinerary durations:
+Sky Go currently offers the following premium itinerary durations:
 â€¢ 3 Nights / 4 Days â€“ Dubai Signature Escape
 â€¢ 4 Nights / 5 Days â€“ Dubai Signature Experience
 â€¢ 5 Nights / 6 Days â€“ Dubai & Abu Dhabi Signature Journey
@@ -435,7 +435,7 @@ Customization is handled before arrival, ensuring clarity and smooth execution.
 
 Accommodation Options Explained
 
-Premium Dubai Tours offers flexibility in accommodation selection:
+Sky Go offers flexibility in accommodation selection:
 â€¢ Without Hotel â€“ Best for residents, frequent travelers, or guests staying with family.
 â€¢ 4-Star Hotels â€“ Comfortable, well-located hotels offering excellent value and convenience.
 â€¢ 5-Star Hotels â€“ Luxury properties with refined service, premium dining, and central locations.
@@ -450,9 +450,9 @@ Dubai is a year-round destination.
 
 Premium tours remain comfortable year-round due to private vehicles and flexible scheduling.
 
-Why Book with Premium Dubai Tours?
+Why Book with Sky Go?
 
-Premium Dubai Tours operates with a service-first philosophy.
+Sky Go operates with a service-first philosophy.
 
 Our advantages include:
 â€¢ Private-only premium operations
@@ -482,10 +482,10 @@ Final Thoughts: Travel Dubai Without Compromise
 
 Dubai offers endless possibilities, but how you experience them matters. Premium Dubai Tour Packages are designed for travelers who want calm planning, private experiences, and thoughtful itineraries.
 
-Whether you choose a short escape or a complete UAE journey, Premium Dubai Tours ensures your trip is comfortable, organized, and personal, from arrival to departure.
+Whether you choose a short escape or a complete UAE journey, Sky Go ensures your trip is comfortable, organized, and personal, from arrival to departure.
 
 Explore Dubai with clarity, privacy, and confidence.`,
-      author: "Premium Dubai Tours",
+      author: "Sky Go",
       authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
       publishDate: "2024-04-10",
       readTime: "20 min read",
@@ -762,7 +762,7 @@ Explore Dubai with clarity, privacy, and confidence.`,
                         {blogs[2].excerpt}
                       </p>
                       <p className="text-gray-600 mb-4 font-merriweather leading-relaxed text-sm">
-                        At Premium Dubai Tours, our premium category is designed for travelers who want Dubai on their own terms. These packages are private, customizable, and priced per vehicle rather than per person, offering exclusivity, comfort, and personalization.
+                        At Sky Go, our premium category is designed for travelers who want Dubai on their own terms. These packages are private, customizable, and priced per vehicle rather than per person, offering exclusivity, comfort, and personalization.
                       </p>
                       <div className="flex flex-wrap gap-2 mb-4">
                         {blogs[2].tags.slice(0, 3).map((tag, index) => (

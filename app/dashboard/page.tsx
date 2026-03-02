@@ -279,7 +279,7 @@ export default function DashboardPage() {
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.place === 'bhutan' ? 'Bhutan' : 'Nepal' })] })] }),
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.duration || 'N/A' })] })] }),
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.location || 'N/A' })] })] }),
-              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `AED ${pkg.price?.toLocaleString() || '0'}` })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `R ${pkg.price?.toLocaleString() || '0'}` })] })] }),
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: (pkg.rating || 0).toString() })] })] }),
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: (pkg.bookings || 0).toString() })] })] }),
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: new Date(pkg.createdAt).toLocaleDateString() })] })] }),
@@ -294,7 +294,7 @@ export default function DashboardPage() {
           properties: {},
           children: [
             new Paragraph({
-              children: [new TextRun({ text: "Premium Dubai Tours - Package Report", bold: true, size: 32 })],
+              children: [new TextRun({ text: "Sky Go - Package Report", bold: true, size: 32 })],
               heading: HeadingLevel.TITLE,
               alignment: AlignmentType.CENTER,
             }),
@@ -557,7 +557,7 @@ export default function DashboardPage() {
       // Create document children array
       const children = [
         new Paragraph({
-          children: [new TextRun({ text: "Premium Dubai Tours", bold: true, size: 32 })],
+          children: [new TextRun({ text: "Sky Go", bold: true, size: 32 })],
           heading: HeadingLevel.TITLE,
           alignment: AlignmentType.CENTER,
         }),

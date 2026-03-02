@@ -761,7 +761,7 @@ Why Choose This Trip ?
 • Ideal for families, honeymooners, and small groups
 • Balanced mix of culture, luxury, and leisure
 
-Why Premium Dubai Tours for This Journey ?
+Why Sky Go for This Journey ?
 
 • Per - vehicle pricing for better value
 • Private vehicles and experienced local staff
@@ -2712,7 +2712,7 @@ Key Highlights`,
                       <div className="mb-12">
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                           {packageData.hotelOptions.map((option: string, idx: number) => {
-                            const priceMatch = option.match(/AED\s*(\d+)/i);
+                            const priceMatch = option.match(/(?:AED|ZAR|R)\s*(\d+)/i);
                             const price = priceMatch ? priceMatch[1] : null;
                             const isHighlighted = option.toLowerCase().includes('prime') || option.toLowerCase().includes('adult');
 
@@ -2737,7 +2737,7 @@ Key Highlights`,
                                   {price ? (
                                     <div className="mt-auto pt-6 border-t border-white/10">
                                       <div className={`text - 4xl font - black tracking - tighter ${isHighlighted ? 'text-[#bd9245]' : 'text-[#1e1f44]'} `}>
-                                        AED {price}
+                                        R {price}
                                       </div>
                                       <p className={`text - xs font - bold uppercase tracking - widest mt - 1 ${isHighlighted ? 'text-white/60' : 'text-gray-400'} `}>
                                         {option.includes('Free') ? 'Complimentary' : 'Per Person'}
@@ -2954,10 +2954,10 @@ Key Highlights`,
                     </div>
                   </div>
 
-                  {/* About Premium Dubai Tours */}
+                  {/* About Sky Go */}
                   <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                     <div className="bg-amber-50 px-6 py-4">
-                      <h4 className="font-bold text-gray-900 text-base">About Premium Dubai Tours</h4>
+                      <h4 className="font-bold text-gray-900 text-base">About Sky Go</h4>
                     </div>
                     <div className="p-6 bg-amber-50/30">
                       <p className="text-gray-600 text-sm leading-relaxed">
@@ -3206,7 +3206,7 @@ Key Highlights`,
                           <p className="text-[10px] text-gray-400 font-medium">Levels 124 & 125</p>
                           <div className="mt-4 flex items-baseline gap-1">
                             <span className="text-[10px] font-bold text-gray-400 uppercase tracking-tight">From</span>
-                            <span className="text-2xl font-bold text-gray-900 tracking-tight">AED 200</span>
+                            <span className="text-2xl font-bold text-gray-900 tracking-tight">R 200</span>
                           </div>
                         </div>
                         <div className="p-5 bg-gray-900 rounded-2xl border border-gray-800 relative group transition-all shadow-lg">
@@ -3216,7 +3216,7 @@ Key Highlights`,
                           <p className="text-[10px] text-white/50 font-medium">Levels 124, 125 & 148</p>
                           <div className="mt-4 flex items-baseline gap-1">
                             <span className="text-[10px] font-bold text-white/40 uppercase tracking-tight">From</span>
-                            <span className="text-2xl font-bold text-amber-500 tracking-tight">AED 410</span>
+                            <span className="text-2xl font-bold text-amber-500 tracking-tight">R 410</span>
                           </div>
                         </div>
                       </div>

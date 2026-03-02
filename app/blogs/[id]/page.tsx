@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
+import {
   ArrowLeft, Calendar, User, Eye, Heart, Share2, Clock
 } from "lucide-react";
 import Image from "next/image";
@@ -40,7 +40,7 @@ const BlogDetailPage = () => {
           title: "Dubai Stopover Tour – Make the Most of Your Layover in Dubai",
           excerpt: "Long international journeys often come with extended layovers, and for many travelers, those hours feel like lost time, spent waiting inside an airport lounge or watching the clock tick between flights. But if your journey routes through Dubai, a layover doesn't have to be a pause.",
           content: "Full content will be rendered below",
-          author: "Premium Dubai Tours",
+          author: "Sky Go",
           authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
           publishDate: "2024-02-20",
           readTime: "15 min read",
@@ -57,7 +57,7 @@ const BlogDetailPage = () => {
           title: "Dubai Tour Packages – Budget Friendly Holidays from 1 Night to 7 Nights",
           excerpt: "Dubai is one of the few destinations in the world that successfully balances modern luxury with cultural heritage, family-friendly attractions with romantic experiences, and short stopovers with extended holidays.",
           content: "Full content will be rendered below",
-          author: "Premium Dubai Tours",
+          author: "Sky Go",
           authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
           publishDate: "2024-03-15",
           readTime: "18 min read",
@@ -74,7 +74,7 @@ const BlogDetailPage = () => {
           title: "Customized Luxury: The Ultimate Guide to Premium Private Travel in Dubai",
           excerpt: "Dubai is a city that rewards thoughtful travel. Beyond the iconic skyline and record-breaking attractions lies a destination best experienced with time, comfort, and careful planning.",
           content: "Full content will be rendered below",
-          author: "Premium Dubai Tours",
+          author: "Sky Go",
           authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
           publishDate: "2024-04-10",
           readTime: "20 min read",
@@ -251,7 +251,7 @@ const BlogDetailPage = () => {
               <p className="text-lg text-gray-700 leading-relaxed mb-6 font-merriweather">
                 Not every transit city is suitable for layover exploration. Dubai stands out for several practical and experiential reasons.
               </p>
-              
+
               <div className="space-y-6">
                 <div>
                   <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3 font-montserrat">
@@ -452,9 +452,9 @@ const BlogDetailPage = () => {
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 font-montserrat">
                 Practical Tips for Planning a Dubai Layover Tour
               </h2>
-              
+
               <div className="space-y-6">
-                  <div>
+                <div>
                   <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3 font-montserrat">
                     Check Visa Requirements Early
                   </h3>

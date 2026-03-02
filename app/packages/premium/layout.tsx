@@ -1,21 +1,21 @@
 ﻿import type { Metadata } from 'next'
 import { Playfair_Display, Cormorant_Garamond, Poppins } from 'next/font/google'
 
-const playfair = Playfair_Display({ 
+const playfair = Playfair_Display({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700', '800', '900'],
   variable: '--font-playfair',
   display: 'swap',
 })
 
-const cormorant = Cormorant_Garamond({ 
+const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
   variable: '--font-cormorant',
   display: 'swap',
 })
 
-const poppins = Poppins({ 
+const poppins = Poppins({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
   variable: '--font-poppins',
@@ -23,8 +23,8 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: 'Premium Dubai Tours | Customized & Luxury Dubai Travel Experiences',
-  description: 'Discover Dubai with Premium Dubai Tours. Enjoy personalized travel experiences tailored to your preferences. Book now for reliable, premium Dubai tours.',
+  title: 'Sky Go | Customized & Luxury Travel Experiences',
+  description: 'Discover the world with Sky Go. Enjoy personalized travel experiences tailored to your preferences. Book now for reliable, premium tours.',
 }
 
 export default function PremiumPackagesLayout({

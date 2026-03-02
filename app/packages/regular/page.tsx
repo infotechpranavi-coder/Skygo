@@ -518,16 +518,16 @@ const RegularPackagesPage = () => {
 
       const response = await fetch(url);
       const result = await response.json();
-      
+
       if (result.success && result.data) {
         // Filter STRICTLY for regular packages (packageCategory must be 'Regular' or 'regular')
         let regularPackages = result.data.filter((pkg: Package) =>
           pkg.packageCategory && (
-            pkg.packageCategory === 'Regular' || 
+            pkg.packageCategory === 'Regular' ||
             pkg.packageCategory === 'regular'
           )
         );
-        
+
         setPackages(regularPackages);
       } else {
         setPackages([]);
@@ -593,9 +593,9 @@ const RegularPackagesPage = () => {
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-AE', {
+    return new Intl.NumberFormat('en-ZA', {
       style: 'currency',
-      currency: 'AED',
+      currency: 'ZAR',
       maximumFractionDigits: 0,
     }).format(price);
   };
@@ -655,114 +655,114 @@ const RegularPackagesPage = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div>
-                {filteredPackages.length === 0 ? (
-                  <div className="text-center py-12">
-                    <div className="w-24 h-24 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
-                      <Search className="h-12 w-12 text-gray-400" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-[#1e1f44] mb-2">No regular packages found</h3>
-                    <p className="text-gray-600 mb-6">Try adjusting your search criteria</p>
-                    <Button onClick={() => {
-                      setFilters({
-                        searchTerm: "",
-                        priceRange: [0, 50000],
-                        durationRange: [1, 30],
-                        location: "all",
-                        departureCity: [],
-                        tourType: [],
-                        departBetween: {
-                          startDate: "",
-                          endDate: ""
-                        }
-                      });
-                    }}>
-                      Clear Filters
-                    </Button>
+              {filteredPackages.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="w-24 h-24 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
+                    <Search className="h-12 w-12 text-gray-400" />
                   </div>
-                ) : (
-                  <>
-                    <div className="flex justify-between items-center mb-8">
-                      <h2 className="text-2xl font-bold text-[#1e1f44]">
-                        Regular Packages
-                      </h2>
-                      <div className="text-sm text-gray-600">
-                        {filteredPackages.length} package{filteredPackages.length !== 1 ? 's' : ''} found
-                      </div>
+                  <h3 className="text-xl font-semibold text-[#1e1f44] mb-2">No regular packages found</h3>
+                  <p className="text-gray-600 mb-6">Try adjusting your search criteria</p>
+                  <Button onClick={() => {
+                    setFilters({
+                      searchTerm: "",
+                      priceRange: [0, 50000],
+                      durationRange: [1, 30],
+                      location: "all",
+                      departureCity: [],
+                      tourType: [],
+                      departBetween: {
+                        startDate: "",
+                        endDate: ""
+                      }
+                    });
+                  }}>
+                    Clear Filters
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <div className="flex justify-between items-center mb-8">
+                    <h2 className="text-2xl font-bold text-[#1e1f44]">
+                      Regular Packages
+                    </h2>
+                    <div className="text-sm text-gray-600">
+                      {filteredPackages.length} package{filteredPackages.length !== 1 ? 's' : ''} found
                     </div>
+                  </div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                      {filteredPackages.map((pkg) => (
-                        <Card key={pkg._id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                          <div className="relative">
-                            {pkg.images && pkg.images.length > 0 ? (
-                              <div className="aspect-video relative">
-                                <Image
-                                  src={pkg.images[0].url}
-                                  alt={pkg.images[0].alt || pkg.title}
-                                  fill
-                                  className="object-cover"
-                                />
-                              </div>
-                            ) : (
-                              <div className="aspect-video bg-gray-200 flex items-center justify-center">
-                                <Mountain className="h-12 w-12 text-gray-400" />
-                              </div>
-                            )}
-                            <Badge className="absolute top-4 right-4 bg-white text-[#1e1f44]">
-                              {pkg.price > 0 ? formatPrice(pkg.price) : 'Custom Pricing'}
-                            </Badge>
-                            <Badge className="absolute top-4 left-4 bg-primary text-white">
-                              Regular
-                            </Badge>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {filteredPackages.map((pkg) => (
+                      <Card key={pkg._id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                        <div className="relative">
+                          {pkg.images && pkg.images.length > 0 ? (
+                            <div className="aspect-video relative">
+                              <Image
+                                src={pkg.images[0].url}
+                                alt={pkg.images[0].alt || pkg.title}
+                                fill
+                                className="object-cover"
+                              />
+                            </div>
+                          ) : (
+                            <div className="aspect-video bg-gray-200 flex items-center justify-center">
+                              <Mountain className="h-12 w-12 text-gray-400" />
+                            </div>
+                          )}
+                          <Badge className="absolute top-4 right-4 bg-white text-[#1e1f44]">
+                            {pkg.price > 0 ? formatPrice(pkg.price) : 'Custom Pricing'}
+                          </Badge>
+                          <Badge className="absolute top-4 left-4 bg-primary text-white">
+                            Regular
+                          </Badge>
+                        </div>
+
+                        <CardHeader>
+                          <CardTitle className="text-xl">{pkg.title}</CardTitle>
+                          <p className="text-gray-600">{pkg.subtitle}</p>
+                        </CardHeader>
+
+                        <CardContent>
+                          <div className="space-y-3">
+                            <div className="flex items-center text-sm text-gray-600">
+                              <MapPin className="h-4 w-4 mr-2" />
+                              {pkg.location}
+                            </div>
+                            <div className="flex items-center text-sm text-gray-600">
+                              <Clock className="h-4 w-4 mr-2" />
+                              {pkg.duration}
+                            </div>
+                            <div className="flex items-center text-sm text-gray-600">
+                              <Users className="h-4 w-4 mr-2" />
+                              {pkg.capacity}
+                            </div>
+                            <div className="flex items-center text-sm text-gray-600">
+                              <Star className="h-4 w-4 mr-2" />
+                              {pkg.rating}/5
+                            </div>
                           </div>
 
-                          <CardHeader>
-                            <CardTitle className="text-xl">{pkg.title}</CardTitle>
-                            <p className="text-gray-600">{pkg.subtitle}</p>
-                          </CardHeader>
+                          <p className="text-gray-600 text-sm mt-4 line-clamp-3">
+                            {pkg.about}
+                          </p>
 
-                          <CardContent>
-                            <div className="space-y-3">
-                              <div className="flex items-center text-sm text-gray-600">
-                                <MapPin className="h-4 w-4 mr-2" />
-                                {pkg.location}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Clock className="h-4 w-4 mr-2" />
-                                {pkg.duration}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Users className="h-4 w-4 mr-2" />
-                                {pkg.capacity}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Star className="h-4 w-4 mr-2" />
-                                {pkg.rating}/5
-                              </div>
-                            </div>
-
-                            <p className="text-gray-600 text-sm mt-4 line-clamp-3">
-                              {pkg.about}
-                            </p>
-
-                            <div className="mt-6 flex space-x-2">
-                              <Link href={`/packages/${pkg._id}`} className="flex-1">
-                                <Button className="w-full">
-                                  View Details
-                                </Button>
-                              </Link>
-                              <Link href="/contact" className="flex-1">
-                                <Button variant="outline" className="w-full">
-                                  Book Now
-                                </Button>
-                              </Link>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  </>
-                )}
+                          <div className="mt-6 flex space-x-2">
+                            <Link href={`/packages/${pkg._id}`} className="flex-1">
+                              <Button className="w-full">
+                                View Details
+                              </Button>
+                            </Link>
+                            <Link href="/contact" className="flex-1">
+                              <Button variant="outline" className="w-full">
+                                Book Now
+                              </Button>
+                            </Link>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

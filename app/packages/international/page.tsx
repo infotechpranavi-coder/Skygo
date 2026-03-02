@@ -299,9 +299,9 @@ const InternationalPackagesPage = () => {
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-AE', {
+    return new Intl.NumberFormat('en-ZA', {
       style: 'currency',
-      currency: 'AED',
+      currency: 'ZAR',
       maximumFractionDigits: 0,
     }).format(price);
   };

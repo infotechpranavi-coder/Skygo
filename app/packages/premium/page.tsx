@@ -247,7 +247,7 @@ const PremiumPackagesPage = () => {
         // Filter STRICTLY for premium packages (packageCategory must be 'Premium' or 'premium')
         let premiumPackages = result.data.filter((pkg: Package) =>
           pkg.packageCategory && (
-            pkg.packageCategory === 'Premium' || 
+            pkg.packageCategory === 'Premium' ||
             pkg.packageCategory === 'premium'
           )
         );
@@ -317,9 +317,9 @@ const PremiumPackagesPage = () => {
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-AE', {
+    return new Intl.NumberFormat('en-ZA', {
       style: 'currency',
-      currency: 'AED',
+      currency: 'ZAR',
       maximumFractionDigits: 0,
     }).format(price);
   };
@@ -379,7 +379,7 @@ const PremiumPackagesPage = () => {
         {/* Decorative Background Elements */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl"></div>
-        
+
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-16">
@@ -391,7 +391,7 @@ const PremiumPackagesPage = () => {
                 Discover Dubai with a <span className="bg-gradient-to-r from-amber-500 to-amber-600 bg-clip-text text-transparent">Local Tour Operating Company</span>
               </h2>
             </div>
-            
+
             <div className="grid md:grid-cols-2 gap-8 mb-12">
               <Card className="border-2 border-amber-500/20 hover:border-amber-500/40 transition-all duration-300 hover:shadow-xl bg-white/80 backdrop-blur-sm">
                 <CardContent className="p-8">
@@ -404,7 +404,7 @@ const PremiumPackagesPage = () => {
                   </p>
                 </CardContent>
               </Card>
-              
+
               <Card className="border-2 border-amber-500/20 hover:border-amber-500/40 transition-all duration-300 hover:shadow-xl bg-white/80 backdrop-blur-sm">
                 <CardContent className="p-8">
                   <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
@@ -426,119 +426,119 @@ const PremiumPackagesPage = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div>
-                {filteredPackages.length === 0 ? (
-                  <div className="text-center py-12">
-                    <div className="w-24 h-24 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
-                      <Search className="h-12 w-12 text-gray-400" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-[#1e1f44] mb-2">No premium packages found</h3>
-                    <p className="text-gray-600 mb-6">Try adjusting your search criteria</p>
-                    <Button onClick={() => {
-                      setFilters({
-                        searchTerm: "",
-                        priceRange: [0, 50000],
-                        durationRange: [1, 30],
-                        location: "all",
-                        departureCity: [],
-                        tourType: [],
-                        departBetween: {
-                          startDate: "",
-                          endDate: ""
-                        }
-                      });
-                    }}>
-                      Clear Filters
-                    </Button>
+              {filteredPackages.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="w-24 h-24 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
+                    <Search className="h-12 w-12 text-gray-400" />
                   </div>
-                ) : (
-                  <>
-                    <div className="flex justify-between items-center mb-8">
-                      <h2 className="text-2xl font-bold text-[#1e1f44] font-playfair tracking-tight">
-                        Premium Packages
-                      </h2>
-                      <div className="text-sm text-gray-600">
-                        {filteredPackages.length} package{filteredPackages.length !== 1 ? 's' : ''} found
-                      </div>
+                  <h3 className="text-xl font-semibold text-[#1e1f44] mb-2">No premium packages found</h3>
+                  <p className="text-gray-600 mb-6">Try adjusting your search criteria</p>
+                  <Button onClick={() => {
+                    setFilters({
+                      searchTerm: "",
+                      priceRange: [0, 50000],
+                      durationRange: [1, 30],
+                      location: "all",
+                      departureCity: [],
+                      tourType: [],
+                      departBetween: {
+                        startDate: "",
+                        endDate: ""
+                      }
+                    });
+                  }}>
+                    Clear Filters
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <div className="flex justify-between items-center mb-8">
+                    <h2 className="text-2xl font-bold text-[#1e1f44] font-playfair tracking-tight">
+                      Premium Packages
+                    </h2>
+                    <div className="text-sm text-gray-600">
+                      {filteredPackages.length} package{filteredPackages.length !== 1 ? 's' : ''} found
                     </div>
+                  </div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                      {filteredPackages.map((pkg) => (
-                        <Card 
-                          key={pkg._id} 
-                          className="overflow-hidden hover:shadow-xl transition-all duration-300 group border-2 border-transparent hover:border-amber-500/30"
-                        >
-                          <div className="relative">
-                            {pkg.images && pkg.images.length > 0 ? (
-                              <div className="aspect-video relative overflow-hidden">
-                                <Image
-                                  src={pkg.images[0].url}
-                                  alt={pkg.images[0].alt || pkg.title}
-                                  fill
-                                  className="object-cover group-hover:scale-110 transition-transform duration-300"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                              </div>
-                            ) : (
-                              <div className="aspect-video bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
-                                <Crown className="h-12 w-12 text-amber-600" />
-                              </div>
-                            )}
-                            <Badge className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-[#1e1f44] font-semibold shadow-lg">
-                              {pkg.price > 0 ? formatPrice(pkg.price) : 'Custom Pricing'}
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {filteredPackages.map((pkg) => (
+                      <Card
+                        key={pkg._id}
+                        className="overflow-hidden hover:shadow-xl transition-all duration-300 group border-2 border-transparent hover:border-amber-500/30"
+                      >
+                        <div className="relative">
+                          {pkg.images && pkg.images.length > 0 ? (
+                            <div className="aspect-video relative overflow-hidden">
+                              <Image
+                                src={pkg.images[0].url}
+                                alt={pkg.images[0].alt || pkg.title}
+                                fill
+                                className="object-cover group-hover:scale-110 transition-transform duration-300"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                            </div>
+                          ) : (
+                            <div className="aspect-video bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
+                              <Crown className="h-12 w-12 text-amber-600" />
+                            </div>
+                          )}
+                          <Badge className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-[#1e1f44] font-semibold shadow-lg">
+                            {pkg.price > 0 ? formatPrice(pkg.price) : 'Custom Pricing'}
+                          </Badge>
+                          <Badge className="absolute top-4 left-4 bg-amber-500 text-white shadow-lg">
+                            Premium
+                          </Badge>
+                          {pkg.images && pkg.images.length > 1 && (
+                            <Badge className="absolute bottom-4 right-4 bg-black/50 text-white backdrop-blur-sm">
+                              <Camera className="h-3 w-3 mr-1" />
+                              {pkg.images.length} Photos
                             </Badge>
-                            <Badge className="absolute top-4 left-4 bg-amber-500 text-white shadow-lg">
-                              Premium
-                            </Badge>
-                            {pkg.images && pkg.images.length > 1 && (
-                              <Badge className="absolute bottom-4 right-4 bg-black/50 text-white backdrop-blur-sm">
-                                <Camera className="h-3 w-3 mr-1" />
-                                {pkg.images.length} Photos
-                              </Badge>
-                            )}
+                          )}
+                        </div>
+
+                        <CardHeader>
+                          <CardTitle className="text-xl font-cormorant tracking-wide group-hover:text-amber-600 transition-colors">{pkg.title}</CardTitle>
+                          <p className="text-gray-600 font-poppins font-light">{pkg.subtitle}</p>
+                        </CardHeader>
+
+                        <CardContent>
+                          <div className="space-y-3">
+                            <div className="flex items-center text-sm text-gray-600">
+                              <MapPin className="h-4 w-4 mr-2 text-amber-500" />
+                              {pkg.location}
+                            </div>
+                            <div className="flex items-center text-sm text-gray-600">
+                              <Clock className="h-4 w-4 mr-2 text-amber-500" />
+                              {pkg.duration}
+                            </div>
+                            <div className="flex items-center text-sm text-gray-600">
+                              <Users className="h-4 w-4 mr-2 text-amber-500" />
+                              {pkg.capacity}
+                            </div>
+                            <div className="flex items-center text-sm text-gray-600">
+                              <Star className="h-4 w-4 mr-2 text-amber-500 fill-amber-500" />
+                              {pkg.rating}/5
+                            </div>
                           </div>
 
-                          <CardHeader>
-                            <CardTitle className="text-xl font-cormorant tracking-wide group-hover:text-amber-600 transition-colors">{pkg.title}</CardTitle>
-                            <p className="text-gray-600 font-poppins font-light">{pkg.subtitle}</p>
-                          </CardHeader>
+                          <p className="text-gray-600 text-sm mt-4 line-clamp-3 font-poppins font-light">
+                            {pkg.about}
+                          </p>
 
-                          <CardContent>
-                            <div className="space-y-3">
-                              <div className="flex items-center text-sm text-gray-600">
-                                <MapPin className="h-4 w-4 mr-2 text-amber-500" />
-                                {pkg.location}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Clock className="h-4 w-4 mr-2 text-amber-500" />
-                                {pkg.duration}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Users className="h-4 w-4 mr-2 text-amber-500" />
-                                {pkg.capacity}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Star className="h-4 w-4 mr-2 text-amber-500 fill-amber-500" />
-                                {pkg.rating}/5
-                              </div>
-                            </div>
-
-                            <p className="text-gray-600 text-sm mt-4 line-clamp-3 font-poppins font-light">
-                              {pkg.about}
-                            </p>
-
-                            <div className="mt-6">
-                              <Link href={`/packages/${pkg._id}`} className="block">
-                                <Button className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white">
-                                  View Full Details
-                                </Button>
-                              </Link>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  </>
-                )}
+                          <div className="mt-6">
+                            <Link href={`/packages/${pkg._id}`} className="block">
+                              <Button className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white">
+                                View Full Details
+                              </Button>
+                            </Link>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -565,7 +565,7 @@ const PremiumPackagesPage = () => {
                   </CardContent>
                 </Card>
               </div>
-              
+
               <div className="space-y-6">
                 <div className="flex items-start space-x-4 p-6 bg-gradient-to-br from-amber-50 to-white rounded-2xl border border-amber-500/10 hover:shadow-lg transition-all">
                   <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center shadow-md">
@@ -576,7 +576,7 @@ const PremiumPackagesPage = () => {
                     <p className="text-gray-600 font-poppins font-light">Every moment is carefully planned to maximize your enjoyment</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start space-x-4 p-6 bg-gradient-to-br from-amber-50 to-white rounded-2xl border border-amber-500/10 hover:shadow-lg transition-all">
                   <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center shadow-md">
                     <Heart className="h-6 w-6 text-white fill-white" />
@@ -586,7 +586,7 @@ const PremiumPackagesPage = () => {
                     <p className="text-gray-600 font-poppins font-light">Your comfort and satisfaction are our top priorities</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start space-x-4 p-6 bg-gradient-to-br from-amber-50 to-white rounded-2xl border border-amber-500/10 hover:shadow-lg transition-all">
                   <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center shadow-md">
                     <Camera className="h-6 w-6 text-white" />
@@ -618,7 +618,7 @@ const PremiumPackagesPage = () => {
                 Our tours are ideal for travelers who value:
               </p>
             </div>
-            
+
             <div className="grid md:grid-cols-2 gap-6 mb-12">
               {[
                 {
@@ -661,7 +661,7 @@ const PremiumPackagesPage = () => {
                 </Card>
               ))}
             </div>
-            
+
             <div className="text-center">
               <Card className="inline-block border-2 border-amber-500/20 bg-gradient-to-r from-amber-50 to-white p-8 shadow-xl">
                 <CardContent className="p-0">
@@ -690,7 +690,7 @@ const PremiumPackagesPage = () => {
                 Unlike budget or mass-market options, our customized Dubai tours focus on:
               </p>
             </div>
-            
+
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
               {[
                 { icon: Users, title: "Smaller group sizes", desc: "Private bookings for a more personal experience" },
@@ -713,7 +713,7 @@ const PremiumPackagesPage = () => {
                 </Card>
               ))}
             </div>
-            
+
             <div className="relative">
               <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-amber-600 rounded-3xl blur opacity-25"></div>
               <Card className="relative border-2 border-amber-500/30 bg-gradient-to-r from-amber-500/10 to-amber-600/10 backdrop-blur-sm">
@@ -796,7 +796,7 @@ const PremiumPackagesPage = () => {
                 Every tour includes:
               </p>
             </div>
-            
+
             <div className="grid md:grid-cols-2 gap-4 mb-10">
               {[
                 "Best Hotel/Resort accommodation as per your interest",
@@ -820,7 +820,7 @@ const PremiumPackagesPage = () => {
                 </Card>
               ))}
             </div>
-            
+
             <Card className="border-2 border-amber-500/20 bg-gradient-to-r from-white to-amber-50/30">
               <CardContent className="p-8 text-center">
                 <Sparkles className="h-8 w-8 text-amber-600 mx-auto mb-4" />
@@ -853,7 +853,7 @@ const PremiumPackagesPage = () => {
                   </p>
                 </CardContent>
               </Card>
-              
+
               <Card className="group border-2 border-amber-500/10 hover:border-amber-500/30 transition-all duration-300 hover:shadow-2xl bg-gradient-to-br from-white to-amber-50/20 overflow-hidden">
                 <CardContent className="p-10">
                   <div className="flex items-center mb-6">
@@ -1226,8 +1226,8 @@ const PremiumPackagesPage = () => {
                       Book Now
                     </Button>
                   </Link>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="flex-1 border-2 border-amber-500 text-amber-600 hover:bg-amber-50 text-lg py-6"
                     onClick={() => setIsModalOpen(false)}
                   >

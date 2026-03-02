@@ -336,7 +336,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center py-2">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <div className="relative w-32 h-32 md:w-40 md:h-40">
+            <div className="relative w-40 h-40 md:w-56 md:h-56">
               <Image
                 src="/Untitled_design__2_-removebg-preview.png"
                 alt="Sky Go Logo"

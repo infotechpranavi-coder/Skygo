@@ -69,7 +69,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
   };
 
   const updateItineraryDay = (id: string, field: 'title' | 'description', value: string) => {
-    setItinerary(prev => prev.map(day => 
+    setItinerary(prev => prev.map(day =>
       day.id === id ? { ...day, [field]: value } : day
     ));
   };
@@ -105,7 +105,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
       bookings: 0,
       rating: 0
     };
-    
+
     onPackageCreated(packageData);
     handleClose();
   };
@@ -185,7 +185,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
 
           {/* About Section */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">About Premium Dubai Tours</label>
+            <label className="text-sm font-medium">About Sky Go</label>
             <Textarea
               placeholder="Write about your company and this package..."
               value={formData.about}
@@ -233,7 +233,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
               <label className="text-sm font-medium">Package Images</label>
               <span className="text-xs text-gray-500">Max 5 images</span>
             </div>
-            
+
             {/* Hidden file input */}
             <input
               ref={fileInputRef}

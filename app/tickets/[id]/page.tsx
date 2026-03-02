@@ -25,18 +25,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-interface PackageData {
-    _id: string;
-    title: string;
-    subtitle: string;
-    about: string;
-    location: string;
-    price: number;
-    duration: string;
-    rating: number;
-    images: Array<{ url: string; alt: string }>;
-    packageCategory?: string;
-}
+import { PackageData } from "@/lib/types";
 
 const TicketDetailPage = () => {
     const params = useParams();
