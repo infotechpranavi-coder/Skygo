@@ -308,9 +308,9 @@ Why Choose This Trip?
 • Perfect for families, couples, and honeymooners
 • Customizable activities and flexible scheduling
 
-Why Skygo South Africa for This Trip?
+Why Sky Go for This Trip?
 
-At Skygo South Africa, luxury is not about exaggeration; it’s about execution, reliability, and transparency.
+At Sky Go, luxury is not about exaggeration; it’s about execution, reliability, and transparency.
 
 • Private-first approach: No shared vehicles or rushed group schedules
 • Per-vehicle pricing: Better value for families and small groups
@@ -1432,7 +1432,7 @@ This transit tour operates throughout the year.
 
 Cape Town's infrastructure ensures comfort even during cooler months.
 
-Why Skygo South Africa for This Transit Trip ?
+Why Sky Go for This Transit Trip ?
 
 • Expertise in short - stay and stopover logistics
 • Flight - time - sensitive planning
@@ -1625,7 +1625,7 @@ With flexible hotel categories and a mix of guided tours and personal free time,
 
 Tour Overview 
 Cape Town is a destination of contrasts, historic neighborhoods sit beside futuristic skylines, calm coastal landscapes balance vibrant urban life, and traditional hospitality blends seamlessly with modern style.The Cape Town Classic Discovery tour has been crafted to reflect this diversity while maintaining simplicity and ease throughout the journey.
-From the moment you arrive, all major travel logistics are handled by Skygo South Africa, allowing you to focus entirely on enjoying the destination.Private airport transfers ensure a smooth arrival, while carefully scheduled sightseeing days prevent fatigue.
+From the moment you arrive, all major travel logistics are handled by Sky Go, allowing you to focus entirely on enjoying the destination. Private airport transfers ensure a smooth arrival, while carefully scheduled sightseeing days prevent fatigue.
 The tour introduces Cape Town gradually, starting with a relaxed arrival day followed by guided city exploration.Guests experience historical Cape Town, with its heritage areas and traditional markets, and modern districts, known for architectural landmarks.
 A wildlife safari offers a cultural contrast to the city experience, providing insight into the region's natural landscape. The evening Harbour Cruise delivers a calm, scenic dining experience, ideal for families and couples alike.
 The inclusion of a Winelands tour adds depth to the itinerary, offering a broader understanding of the Western Cape beyond the city.A dedicated free day allows guests to shop, relax, or explore independently, an essential element for a comfortable holiday.
@@ -3335,7 +3335,7 @@ Key Highlights`,
                       </div>
                       <div>
                         <p className="text-amber-600 text-[10px] font-bold uppercase tracking-widest mb-1">Assisted Booking</p>
-                        <p className="font-bold text-lg leading-tight">+27 21 408 7600</p>
+                        <p className="font-bold text-lg leading-tight">+237 6 83 57 76 76</p>
                         <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest mt-1">24/7 Priority Support</p>
                       </div>
                     </div>

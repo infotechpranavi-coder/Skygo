@@ -52,7 +52,7 @@ ${formData.message}
 *This inquiry was submitted through the website contact form.*`;
 
       // WhatsApp number (with country code)
-      const phoneNumber = "27214087600";
+      const phoneNumber = "237683577676";
 
       // Create WhatsApp URL
       const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
@@ -284,17 +284,17 @@ ${formData.message}
               <div className="flex flex-col items-center">
                 <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-secondary mb-1 sm:mb-2" />
                 <p className="text-xs sm:text-sm text-gray-600">Call us</p>
-                <p className="font-semibold text-secondary text-sm sm:text-base">+27 21 408 7600</p>
+                <p className="font-semibold text-secondary text-sm sm:text-base">+237 6 83 57 76 76</p>
               </div>
               <div className="flex flex-col items-center">
                 <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-secondary mb-1 sm:mb-2" />
                 <p className="text-xs sm:text-sm text-gray-600">Email us</p>
-                <p className="font-semibold text-secondary text-sm sm:text-base">info@skygo.co.za</p>
+                <p className="font-semibold text-secondary text-sm sm:text-base">sales@skygovoyages.com</p>
               </div>
               <div className="flex flex-col items-center">
                 <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-secondary mb-1 sm:mb-2" />
                 <p className="text-xs sm:text-sm text-gray-600">Visit us</p>
-                <p className="font-semibold text-secondary text-xs sm:text-sm">V&A Waterfront, Cape Town, 8001, South Africa</p>
+                <p className="font-semibold text-secondary text-xs sm:text-sm">Head office- Yaoundé, Cameroon</p>
               </div>
             </div>
           </div>

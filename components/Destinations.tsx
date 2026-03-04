@@ -39,8 +39,8 @@ const Destinations = () => {
     <section id="destinations" className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4">South African Destinations</h2>
-          <p className="text-xl text-muted-foreground">Discover amazing places across South Africa</p>
+          <h2 className="text-4xl font-bold mb-4">Global Destinations</h2>
+          <p className="text-xl text-muted-foreground">Discover amazing places across the world</p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

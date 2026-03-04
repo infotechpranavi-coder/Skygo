@@ -113,12 +113,12 @@ const AboutPage = () => {
               About Us
             </h1>
             <p className="text-xl md:text-2xl mb-10 text-white/80 max-w-3xl mx-auto font-medium leading-relaxed">
-              A premium-focused South African travel brand dedicated to delivering well-crafted travel experiences defined by comfort, clarity, and service quality
+              A premium-focused global travel brand dedicated to delivering well-crafted travel experiences defined by comfort, clarity, and service quality
             </p>
             <div className="flex flex-wrap justify-center gap-6 text-white/60 text-sm font-bold uppercase tracking-widest">
               <div className="flex items-center space-x-2">
                 <MapPin className="h-4 w-4" />
-                <span>Based in Cape Town</span>
+                <span>Based in Yaoundé</span>
               </div>
               <span className="text-white/30">·</span>
               <div className="flex items-center space-x-2">
@@ -156,17 +156,17 @@ const AboutPage = () => {
                   </Badge>
                 </div>
                 <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1e1f44] leading-tight">
-                  About Skygo South Africa
+                  About Sky Go
                 </h2>
                 <div className="space-y-5 text-gray-700 leading-relaxed text-lg">
                   <p>
-                    Skygo South Africa is a local tour operator based in Cape Town, South Africa. We operate Regular Tours, Premium Tours, Luxury Tours, Adventure Activities, and Day Tours/Attractions and activities in all regions, along with neighboring country tours from South Africa.
+                    Sky Go is a premier tour operator based in Yaoundé, Cameroon. We operate Regular Tours, Premium Tours, Luxury Tours, Adventure Activities, and Day Tours/Attractions and activities globally.
                   </p>
                   <p>
                     We specialize in premium South African tours, luxury experiences, and customized travel services for travelers who value comfort, clarity, and professional service over rushed itineraries or unclear pricing. We are not a marketplace for budget deals; however, we also have some regular tours that are more budget-friendly for those customers.
                   </p>
                   <p className="font-semibold text-[#1e1f44]">
-                    We are a specialized South African tour company dedicated to delivering quality, transparency, and genuine comfort to our guests from around the world.
+                    We are a specialized tour company dedicated to delivering quality, transparency, and genuine comfort to our guests from around the world.
                   </p>
                 </div>
               </div>
@@ -196,7 +196,7 @@ const AboutPage = () => {
                   The South African tourism market can be overwhelming. Travelers often encounter massive price differences: for instance, a safari can range from ZAR 500 to ZAR 15,000, and cruise dinners from ZAR 300 to ZAR 5,000. This often leaves visitors confused about what they are actually paying for.
                 </p>
                 <p>
-                  We founded Skygo South Africa to address this gap and eliminate that uncertainty. We do not chase the lowest price; we pursue the highest value. Our goal is to clearly explain what guests receive, why prices vary, and how service levels affect the overall experience.
+                  We founded Sky Go to address this gap and eliminate that uncertainty. We do not chase the lowest price; we pursue the highest value. Our goal is to clearly explain what guests receive, why prices vary, and how service levels affect the overall experience.
                 </p>
                 <p className="font-semibold text-[#1e1f44]">
                   We believe pricing should reflect quality, not confusion. So, we provide a transparent, premium experience where the quality of the vehicle, the expertise of the guide, and the standard of the food and services are guaranteed.

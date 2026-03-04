@@ -318,7 +318,7 @@ const TourDetailPage = () => {
                                 <Button
                                     variant="outline"
                                     className="w-full h-16 border-white/20 bg-white/5 hover:bg-white/10 text-white font-bold rounded-[24px] uppercase tracking-widest text-xs"
-                                    onClick={() => window.open('https://wa.me/27214087600', '_blank')}
+                                    onClick={() => window.open('https://wa.me/237683577676', '_blank')}
                                 >
                                     Chat with Expert
                                 </Button>
@@ -355,7 +355,7 @@ const TourDetailPage = () => {
                             </div>
                             <div>
                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Need Help?</p>
-                                <p className="text-lg font-black text-gray-900">+27 21 408 7600</p>
+                                <p className="text-lg font-black text-gray-900">+237 6 83 57 76 76</p>
                             </div>
                         </div>
                     </div>

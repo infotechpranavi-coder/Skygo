@@ -100,8 +100,8 @@ const ExploreWithUs = () => {
               <div className="flex flex-col">
                 <div className="flex items-center space-x-2">
                   <Phone className="h-5 w-5 text-[#bd9245]" />
-                  <a href="tel:+27214087600" className="text-gray-900 text-lg font-semibold hover:text-[#bd9245] transition-colors">
-                    +27 21 408 7600
+                  <a href="tel:+237683577676" className="text-gray-900 text-lg font-semibold hover:text-[#bd9245] transition-colors">
+                    +237 6 83 57 76 76
                   </a>
                 </div>
                 <span className="text-xs text-gray-500 mt-1">CALL NOW</span>

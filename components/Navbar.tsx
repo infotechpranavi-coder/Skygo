@@ -268,11 +268,11 @@ const Navbar = () => {
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
                   <Phone className="h-4 w-4" />
-                  <span>+27 21 408 7600, +27 21 408 7601</span>
+                  <span>+237 6 83 57 76 76</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Mail className="h-4 w-4" />
-                  <span>info@skygo.co.za</span>
+                  <span>sales@skygovoyages.com</span>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
@@ -280,7 +280,7 @@ const Navbar = () => {
                   variant="ghost"
                   size="sm"
                   className="text-white hover:bg-gray-800"
-                  onClick={() => window.open('https://wa.me/27214087600', '_blank')}
+                  onClick={() => window.open('https://wa.me/237683577676', '_blank')}
                 >
                   <MessageCircle className="h-4 w-4 mr-2" />
                   Live Chat
@@ -301,13 +301,13 @@ const Navbar = () => {
           {/* Row 1: Phone Numbers */}
           <div className="flex items-center justify-center space-x-2 text-sm">
             <Phone className="h-4 w-4" />
-            <span>+27 21 408 7600, +27 21 408 7601</span>
+            <span>+237 6 83 57 76 76</span>
           </div>
 
           {/* Row 2: Email */}
           <div className="flex items-center justify-center space-x-2 text-base mt-2">
             <Mail className="h-4 w-4" />
-            <span>info@skygo.co.za</span>
+            <span>sales@skygovoyages.com</span>
           </div>
 
           {/* Row 3: Live Chat & Login */}
@@ -316,7 +316,7 @@ const Navbar = () => {
               variant="ghost"
               size="sm"
               className="text-white hover:bg-gray-800 text-base px-4 py-2"
-              onClick={() => window.open('https://wa.me/27214087600', '_blank')}
+              onClick={() => window.open('https://wa.me/237683577676', '_blank')}
             >
               <MessageCircle className="h-5 w-5 mr-2" />
               Live Chat

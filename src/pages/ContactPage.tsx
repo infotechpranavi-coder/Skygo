@@ -12,19 +12,19 @@ const ContactPage = () => {
     {
       icon: Phone,
       title: "Phone Numbers",
-      details: ["+27 21 408 7600", "+27 21 408 7601"],
+      details: ["+237 6 83 57 76 76"],
       description: "Call us anytime for immediate assistance"
     },
     {
       icon: Mail,
       title: "Email Address",
-      details: ["info@skygo.co.za"],
+      details: ["sales@skygovoyages.com"],
       description: "Send us your queries and we'll respond within 24 hours"
     },
     {
       icon: MapPin,
       title: "Office Address",
-      details: ["19 Dock Rd, V&A Waterfront", "Cape Town, 8001, South Africa"],
+      details: ["Head office- Yaoundé ,Cameroon"],
       description: "Visit our office for personalized travel planning"
     },
     {
@@ -95,7 +95,10 @@ const ContactPage = () => {
 
               {/* Quick Contact Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button className="bg-green-600 hover:bg-green-700 text-white hover-lift flex items-center gap-2">
+                <Button
+                  className="bg-green-600 hover:bg-green-700 text-white hover-lift flex items-center gap-2"
+                  onClick={() => window.open('https://wa.me/237683577676', '_blank')}
+                >
                   <MessageCircle className="h-5 w-5" />
                   WhatsApp
                 </Button>

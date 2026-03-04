@@ -885,7 +885,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
             </Button>
           </div>
 
-          {/* Why Skygo South Africa Tours */}
+          {/* Why Sky Go Tours */}
           <div className="space-y-2">
             <label className="text-sm font-medium">Why Sky Go for This Journey?</label>
             {whySkygoSouthAfricaTours.map((item, index) => (

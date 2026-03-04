@@ -175,7 +175,7 @@ const TicketDetailPage = () => {
                                     <div className="space-y-4">
                                         <p className="text-gray-400 font-bold text-[10px] uppercase tracking-[0.4em]">Origin</p>
                                         <p className="text-5xl font-black text-gray-900 tracking-tighter">CPT</p>
-                                        <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">Cape Town, South Africa</p>
+                                        <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">Yaoundé, Cameroon</p>
                                     </div>
                                     <div className="flex flex-col items-center justify-center space-y-4">
                                         <div className="w-full flex items-center gap-3">

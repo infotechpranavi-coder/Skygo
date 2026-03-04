@@ -58,8 +58,11 @@ const HeroExplore = () => {
             className="w-full h-full object-cover"
           />
         </motion.div>
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-black/60"></div>
+        {/* Even Lighter Orange Gradient Overlay with Top Blend */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-orange-300/5 to-transparent"></div>
+        <div className="absolute inset-0 bg-white/5 backdrop-blur-[0.5px]"></div>
+        {/* Subtle top-down fade for navbar blending */}
+        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-white/20 to-transparent"></div>
       </div>
 
       {/* Giant "EXPLORE" Background Text with Parallax */}

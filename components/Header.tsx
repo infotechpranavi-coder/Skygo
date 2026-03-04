@@ -31,7 +31,7 @@ const Header = () => {
 
   // WhatsApp contact function
   const handleWhatsAppClick = () => {
-    const phoneNumber = "27214087600"; // WhatsApp number with country code
+    const phoneNumber = "237683577676"; // WhatsApp number with country code
     const message = "Hi! I'm interested in your tour packages. Can you please provide more information?";
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -66,21 +66,17 @@ const Header = () => {
                 <div className="flex flex-col items-center space-y-0.5">
                   <div className="flex items-center space-x-1">
                     <Phone className="h-3 w-3" />
-                    <span>+27 21 408 7600</span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <Phone className="h-3 w-3" />
-                    <span>+27 82 000 0000</span>
+                    <span> +237 6 83 57 76 76</span>
                   </div>
                 </div>
                 <div className="flex items-center space-x-1">
                   <Mail className="h-3 w-3" />
-                  <span className="truncate">info@skygo.co.za</span>
+                  <span className="truncate">sales@skygovoyages.com</span>
                 </div>
               </div>
               <div className="flex justify-center">
                 <a
-                  href="https://wa.me/27214087600"
+                  href="https://wa.me/237683577676"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center space-x-1 hover:text-green-400 transition-colors duration-200 text-xs"
@@ -99,14 +95,14 @@ const Header = () => {
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
                   <Phone className="h-4 w-4" />
-                  <span>+27 21 408 7600, +27 82 000 0000</span>
+                  <span>+237 6 83 57 76 76</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Mail className="h-4 w-4" />
-                  <span>info@skygo.co.za</span>
+                  <span>sales@skygovoyages.com</span>
                 </div>
                 <a
-                  href="https://wa.me/27214087600"
+                  href="https://wa.me/237683577676"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center space-x-2 hover:text-green-400 transition-colors duration-200"

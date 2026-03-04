@@ -119,7 +119,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
     setWhyChooseThisTrip(prev => prev.map((item, i) => i === index ? value : item));
   };
 
-  // Why Skygo South Africa Tours handlers
+  // Why Sky Go Tours handlers
   const addWhySkygoSouthAfricaTours = () => {
     setWhySkygoSouthAfricaTours(prev => [...prev, ""]);
   };
@@ -641,7 +641,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
             </div>
           </div>
 
-          {/* Why Skygo South Africa Tours */}
+          {/* Why Sky Go Tours */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium">Why Sky Go for This Journey?</label>

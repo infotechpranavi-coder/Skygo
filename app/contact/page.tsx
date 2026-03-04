@@ -58,7 +58,7 @@ const ContactForm = () => {
     setIsSubmitting(true);
 
     // Create WhatsApp message with form data
-    const whatsappMessage = `Hello! I'm interested in booking a trip with Skygo South Africa.
+    const whatsappMessage = `Hello! I'm interested in booking a trip with Sky Go.
 
 *Contact Information:*
 â€¢ Name: ${formData.name}
@@ -80,7 +80,7 @@ Please get back to me with more information about available packages and pricing
     const encodedMessage = encodeURIComponent(whatsappMessage);
 
     // Create WhatsApp URL
-    const whatsappUrl = `https://wa.me/27214087600?text=${encodedMessage}`;
+    const whatsappUrl = `https://wa.me/237683577676?text=${encodedMessage}`;
 
     // Open WhatsApp in new tab
     window.open(whatsappUrl, '_blank');
@@ -103,19 +103,19 @@ Please get back to me with more information about available packages and pricing
     {
       icon: MapPin,
       title: "Address Location",
-      details: ["19 Dock Rd, V&A Waterfront", "Cape Town, 8001, South Africa"],
-      description: "Located in the heart of Cape Town"
+      details: ["Head office- Yaoundé ,Cameroon"],
+      description: "Located in the heart of Yaoundé"
     },
     {
       icon: Phone,
       title: "Phone Numbers",
-      details: ["+27 21 408 7600", "+27 21 408 7601"],
+      details: ["+237 6 83 57 76 76"],
       description: "Available 24/7 for emergency support"
     },
     {
       icon: Mail,
       title: "Email Address",
-      details: ["info@skygo.co.za"],
+      details: ["sales@skygovoyages.com"],
       description: "We respond within 24 hours"
     },
     {
@@ -128,22 +128,16 @@ Please get back to me with more information about available packages and pricing
 
   const teamMembers = [
     {
-      name: "Thabo Mbeki",
-      role: "General Manager",
-      email: "info@skygo.co.za",
-      phone: "+27 21 408 7600"
-    },
-    {
       name: "Customer Support",
       role: "Tour Operations",
-      email: "info@skygo.co.za",
-      phone: "+27 21 408 7601"
+      email: "sales@skygovoyages.com",
+      phone: "+237 6 83 57 76 76"
     },
     {
-      name: "Skygo South Africa",
+      name: "Sky Go Team",
       role: "Customer Relations",
-      email: "info@skygo.co.za",
-      phone: "+27 21 408 7600"
+      email: "sales@skygovoyages.com",
+      phone: "+237 6 83 57 76 76"
     }
   ];
 
@@ -247,7 +241,7 @@ Please get back to me with more information about available packages and pricing
                             type="tel"
                             value={formData.phone}
                             onChange={handleInputChange}
-                            placeholder="+27 21 408 7600"
+                            placeholder="+237 6 83 57 76 76"
                           />
                         </div>
                         <div>
@@ -368,7 +362,7 @@ Please get back to me with more information about available packages and pricing
                           allowFullScreen
                           loading="lazy"
                           referrerPolicy="no-referrer-when-downgrade"
-                          title="Skygo South Africa Location - V&A Waterfront, Cape Town, South Africa"
+                          title="Sky Go Location - Yaoundé, Cameroon"
                         ></iframe>
                       </div>
                     </CardContent>
@@ -376,10 +370,10 @@ Please get back to me with more information about available packages and pricing
                   <div className="mt-4 text-center">
                     <p className="text-sm text-gray-600">
                       <MapPin className="h-4 w-4 inline mr-1" />
-                      19 Dock Rd, V&A Waterfront, Cape Town, 8001, South Africa
+                      Head office- Yaoundé, Cameroon
                     </p>
                     <a
-                      href="https://www.google.com/maps/place/V%26A+Waterfront/@-33.9036,18.4201,15z"
+                      href="https://www.google.com/maps/search/Yaoundé,+Cameroon"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-primary hover:text-primary/80 text-sm font-medium mt-2 inline-block"
@@ -537,13 +531,13 @@ Please get back to me with more information about available packages and pricing
               Let's create the perfect travel experience for you
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="tel:+27214087600">
+              <a href="tel:+237683577676">
                 <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-gray-100">
                   <Phone className="h-5 w-5 mr-2" />
                   Call Us Now
                 </Button>
               </a>
-              <a href="mailto:info@skygo.co.za">
+              <a href="mailto:sales@skygovoyages.com">
                 <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
                   <MessageCircle className="h-5 w-5 mr-2" />
                   Send Email
