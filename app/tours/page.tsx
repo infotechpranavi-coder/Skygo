@@ -56,7 +56,7 @@ const ToursPage = () => {
 
     const fetchPackages = async () => {
         try {
-            const response = await fetch('/api/packages');
+            const response = await fetch('/api/tours');
             const result = await response.json();
             if (result.success) {
                 setPackages(result.data);

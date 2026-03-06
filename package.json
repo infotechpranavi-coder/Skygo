@@ -40,7 +40,7 @@
     "@tanstack/react-query": "^5.56.2",
     "axios": "^1.11.0",
     "class-variance-authority": "^0.7.1",
-    "cloudinary": "^1.41.0",
+    "cloudinary": "^1.41.3",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "detect-node-es": "^1.1.0",

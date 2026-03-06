@@ -4,9 +4,21 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { Badge } from "../../components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../../components/ui/dropdown-menu";
 import CreatePackageModal from "../../components/CreatePackageModal";
+import CreateTourModal from "../../components/CreateTourModal";
+import CreateTicketModal from "../../components/CreateTicketModal";
+import EditTourModal from "../../components/EditTourModal";
+import EditTicketModal from "../../components/EditTicketModal";
 import PackageDetailModal from "../../components/PackageDetailModal";
 import EditPackageModal from "../../components/EditPackageModal";
+import CreateBannerModal from "../../components/CreateBannerModal";
+import EditBannerModal from "../../components/EditBannerModal";
 import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType, HeadingLevel, ImageRun } from 'docx';
 import { saveAs } from 'file-saver';
 import axios from 'axios';
@@ -25,24 +37,44 @@ import {
   FileText,
   Menu,
   X,
-  LayoutDashboard
+  LayoutDashboard,
+  Users,
+  TrendingUp,
+  MapPin,
+  Clock,
+  LogOut,
+  Compass,
+  Plane,
+  Image as ImageIcon
 } from "lucide-react";
 import { Input } from "../../components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 import { cn } from "../../lib/utils";
 
-import { PackageData } from "@/lib/types";
+import { PackageData, TourData, TicketData, BannerData } from "@/lib/types";
 
-type DashboardView = 'packages' | 'testimonials' | 'blogs';
+type DashboardView = 'packages' | 'tours' | 'tickets' | 'banners' | 'testimonials' | 'blogs';
 
 export default function DashboardPage() {
   const [activeView, setActiveView] = useState<DashboardView>('packages');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isCreatePackageModalOpen, setIsCreatePackageModalOpen] = useState(false);
+  const [isCreateTourModalOpen, setIsCreateTourModalOpen] = useState(false);
+  const [isCreateTicketModalOpen, setIsCreateTicketModalOpen] = useState(false);
   const [isViewPackageModalOpen, setIsViewPackageModalOpen] = useState(false);
   const [isEditPackageModalOpen, setIsEditPackageModalOpen] = useState(false);
+  const [isEditTourModalOpen, setIsEditTourModalOpen] = useState(false);
+  const [isEditTicketModalOpen, setIsEditTicketModalOpen] = useState(false);
+  const [isCreateBannerModalOpen, setIsCreateBannerModalOpen] = useState(false);
+  const [isEditBannerModalOpen, setIsEditBannerModalOpen] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<PackageData | null>(null);
+  const [selectedTour, setSelectedTour] = useState<TourData | null>(null);
+  const [selectedTicket, setSelectedTicket] = useState<TicketData | null>(null);
+  const [selectedBanner, setSelectedBanner] = useState<BannerData | null>(null);
   const [packages, setPackages] = useState<PackageData[]>([]);
+  const [tours, setTours] = useState<TourData[]>([]);
+  const [tickets, setTickets] = useState<TicketData[]>([]);
+  const [banners, setBanners] = useState<BannerData[]>([]);
   const [filteredPackages, setFilteredPackages] = useState<PackageData[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -84,8 +116,41 @@ export default function DashboardPage() {
     }
   };
 
+  const fetchTours = async () => {
+    try {
+      const response = await fetch('/api/tours');
+      const data = await response.json();
+      if (data.success) setTours(data.data);
+    } catch (error) {
+      console.error('Error fetching tours:', error);
+    }
+  };
+
+  const fetchTickets = async () => {
+    try {
+      const response = await fetch('/api/tickets');
+      const data = await response.json();
+      if (data.success) setTickets(data.data);
+    } catch (error) {
+      console.error('Error fetching tickets:', error);
+    }
+  };
+
+  const fetchBanners = async () => {
+    try {
+      const response = await fetch('/api/banners');
+      const data = await response.json();
+      if (data.success) setBanners(data.data);
+    } catch (error) {
+      console.error('Error fetching banners:', error);
+    }
+  };
+
   useEffect(() => {
     fetchPackages();
+    fetchTours();
+    fetchTickets();
+    fetchBanners();
   }, []);
 
   useEffect(() => {
@@ -137,36 +202,73 @@ export default function DashboardPage() {
     setFilteredPackages(filtered);
   };
 
-  const handlePackageCreated = async (packageData: any) => {
-    try {
-      console.log('Sending package data to API:', JSON.stringify(packageData, null, 2));
+  const handlePackageCreated = (newPackage: PackageData) => {
+    setPackages(prev => [newPackage, ...prev]);
+    setIsCreatePackageModalOpen(false);
+  };
 
-      const response = await fetch('/api/packages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(packageData),
-      });
+  const handleTourCreated = (newTour: TourData) => {
+    setTours(prev => [newTour, ...prev]);
+    setIsCreateTourModalOpen(false);
+  };
 
-      console.log('API response status:', response.status);
-      const result = await response.json();
-      console.log('API response data:', result);
+  const handleTicketCreated = (newTicket: TicketData) => {
+    setTickets(prev => [newTicket, ...prev]);
+    setIsCreateTicketModalOpen(false);
+  };
 
-      if (result.success) {
-        setPackages(prev => [result.data, ...prev]);
-        alert('Package created successfully!');
-      } else {
-        alert(`Error creating package: ${result.error}`);
+  const handleBannerCreated = (newBanner: BannerData) => {
+    setBanners(prev => [newBanner, ...prev]);
+    setIsCreateBannerModalOpen(false);
+  };
+
+  const handleDeleteTour = async (tour: TourData) => {
+    if (window.confirm(`Are you sure you want to delete tour "${tour.title}"?`)) {
+      try {
+        const res = await fetch(`/api/tours/${tour._id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.success) {
+          setTours(prev => prev.filter(t => t._id !== tour._id));
+        }
+      } catch (err) {
+        console.error('Error deleting tour:', err);
       }
-    } catch (error) {
-      console.error('Error creating package:', error);
-      alert('Error creating package. Please try again.');
+    }
+  };
+
+  const handleDeleteTicket = async (ticket: TicketData) => {
+    if (window.confirm(`Are you sure you want to delete ticket "${ticket.title}"?`)) {
+      try {
+        const res = await fetch(`/api/tickets/${ticket._id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.success) {
+          setTickets(prev => prev.filter(t => t._id !== ticket._id));
+        }
+      } catch (err) {
+        console.error('Error deleting ticket:', err);
+      }
+    }
+  };
+
+  const handleDeleteBanner = async (banner: BannerData) => {
+    if (window.confirm(`Are you sure you want to delete banner "${banner.title}"?`)) {
+      try {
+        const res = await fetch(`/api/banners/${banner._id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.success) {
+          setBanners(prev => prev.filter(b => b._id !== banner._id));
+        }
+      } catch (err) {
+        console.error('Error deleting banner:', err);
+      }
     }
   };
 
   const openCreatePackageModal = () => {
-    setIsCreatePackageModalOpen(true);
+    if (activeView === 'packages') setIsCreatePackageModalOpen(true);
+    else if (activeView === 'tours') setIsCreateTourModalOpen(true);
+    else if (activeView === 'tickets') setIsCreateTicketModalOpen(true);
+    else if (activeView === 'banners') setIsCreateBannerModalOpen(true);
   };
 
   const handleViewPackage = (pkg: PackageData) => {
@@ -212,6 +314,24 @@ export default function DashboardPage() {
     setPackages(prev => prev.map(p => p._id === updatedPackage._id ? updatedPackage : p));
     setSelectedPackage(null);
     setIsEditPackageModalOpen(false);
+  };
+
+  const handleTourUpdated = (updatedTour: TourData) => {
+    setTours(prev => prev.map(t => t._id === updatedTour._id ? updatedTour : t));
+    setSelectedTour(null);
+    setIsEditTourModalOpen(false);
+  };
+
+  const handleTicketUpdated = (updatedTicket: TicketData) => {
+    setTickets(prev => prev.map(t => t._id === updatedTicket._id ? updatedTicket : t));
+    setSelectedTicket(null);
+    setIsEditTicketModalOpen(false);
+  };
+
+  const handleBannerUpdated = (updatedBanner: BannerData) => {
+    setBanners(prev => prev.map(b => b._id === updatedBanner._id ? updatedBanner : b));
+    setSelectedBanner(null);
+    setIsEditBannerModalOpen(false);
   };
 
   const handleDuplicatePackage = async (pkg: PackageData) => {
@@ -930,135 +1050,177 @@ export default function DashboardPage() {
       id: 'packages' as DashboardView,
       label: 'Packages',
       icon: Package,
-      description: 'Manage tour packages'
+    },
+    {
+      id: 'tours' as DashboardView,
+      label: 'Tours',
+      icon: Compass,
+    },
+    {
+      id: 'tickets' as DashboardView,
+      label: 'Tickets',
+      icon: Plane,
+    },
+    {
+      id: 'banners' as DashboardView,
+      label: 'Banners',
+      icon: ImageIcon,
     },
     {
       id: 'testimonials' as DashboardView,
       label: 'Testimonials',
-      icon: MessageSquare,
-      description: 'Manage customer reviews'
+      icon: Users,
     },
     {
       id: 'blogs' as DashboardView,
       label: 'Blogs',
       icon: FileText,
-      description: 'Manage blog posts'
     }
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-[#faf8f3] flex font-inter overflow-hidden relative">
       {/* Sidebar */}
-      <aside className={cn(
-        "bg-white border-r transition-all duration-300 ease-in-out fixed lg:static inset-y-0 left-0 z-50",
-        sidebarOpen ? "w-64" : "w-0 lg:w-0",
-        "overflow-hidden lg:overflow-visible"
-      )}>
-        <div className="h-full flex flex-col">
+      <aside
+        className={cn(
+          "flex-shrink-0 transition-all duration-500 ease-in-out relative z-30",
+          sidebarOpen ? "w-72" : "w-0",
+          "overflow-hidden"
+        )}
+      >
+        {/* Sidebar Background */}
+        <div className="w-72 h-full absolute inset-0 bg-[#111827] z-0 shadow-2xl"></div>
+
+        <div className="relative h-full flex flex-col z-10">
           {/* Sidebar Header */}
-          <div className="p-6 border-b">
+          <div className="p-8 border-b border-white/10">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <LayoutDashboard className="h-6 w-6 text-primary" />
-                <h2 className="text-xl font-bold text-[#1e1f44]">Dashboard</h2>
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-xl bg-[#bd9245] flex items-center justify-center shadow-lg shadow-[#bd9245]/20">
+                  <LayoutDashboard className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-black text-white tracking-tighter uppercase">SKY GO</h2>
+                  <p className="text-[10px] font-bold text-[#bd9245] uppercase tracking-widest">Management</p>
+                </div>
               </div>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setSidebarOpen(false)}
-                className="lg:hidden"
+                className="lg:hidden text-white/50 hover:text-white"
               >
-                <X className="h-4 w-4" />
+                <X className="h-5 w-5" />
               </Button>
             </div>
           </div>
 
           {/* Navigation Items */}
-          <nav className="flex-1 p-4 space-y-2">
+          <nav className="flex-1 p-6 space-y-3">
             {sidebarItems.map((item) => {
               const Icon = item.icon;
+              const isActive = activeView === item.id;
               return (
                 <button
                   key={item.id}
                   onClick={() => setActiveView(item.id)}
                   className={cn(
-                    "w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-left",
-                    activeView === item.id
-                      ? "bg-primary text-white"
-                      : "text-gray-700 hover:bg-gray-100"
+                    "w-full flex items-center space-x-4 px-5 py-4 rounded-2xl transition-all duration-300 group",
+                    isActive
+                      ? "bg-[#bd9245] text-white shadow-xl shadow-[#bd9245]/20"
+                      : "text-white/60 hover:bg-white/5 hover:text-white"
                   )}
                 >
-                  <Icon className="h-5 w-5" />
-                  <div className="flex-1">
-                    <div className="font-medium">{item.label}</div>
-                    <div className={cn(
-                      "text-xs",
-                      activeView === item.id ? "text-white/80" : "text-gray-500"
-                    )}>
-                      {item.description}
-                    </div>
+                  <div className={cn(
+                    "p-2 rounded-lg transition-colors",
+                    isActive ? "bg-white/20" : "bg-white/5 group-hover:bg-white/10"
+                  )}>
+                    <Icon className="h-5 w-5" />
                   </div>
+                  <div className="font-bold text-sm tracking-tight">{item.label}</div>
                 </button>
               );
             })}
           </nav>
+
+          {/* Sidebar Footer */}
+          <div className="p-6 border-t border-white/10">
+            <div className="bg-white/5 rounded-2xl p-4 border border-white/10">
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#bd9245] to-orange-300 flex items-center justify-center font-bold text-white shadow-lg">
+                  AD
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-white uppercase tracking-tighter">Admin User</div>
+                  <div className="text-[10px] text-white/40 font-bold uppercase tracking-widest">Yaoundé HQ</div>
+                </div>
+              </div>
+              <Button variant="ghost" className="w-full justify-start text-white/50 hover:text-white hover:bg-red-500/10 hover:text-red-400 p-2 h-auto text-xs font-bold uppercase tracking-widest">
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
+          </div>
         </div>
       </aside>
 
-      {/* Sidebar Overlay for Mobile */}
+      {/* Sidebar Overlay for Mobile — optional close on tap */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 z-20 bg-black/20 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0 lg:ml-0">
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Header */}
-        <div className="bg-white border-b">
-          <div className="px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
+        <div className="bg-white/50 backdrop-blur-md sticky top-0 z-40 border-b border-gray-200/50">
+          <div className="px-8 py-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex items-center space-x-5">
                 {!sidebarOpen && (
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => setSidebarOpen(true)}
+                    className="bg-[#111827] text-white hover:bg-[#bd9245] rounded-xl p-2 h-auto"
                   >
-                    <Menu className="h-5 w-5" />
+                    <Menu className="h-6 w-6" />
                   </Button>
                 )}
                 <div>
-                  <h1 className="text-3xl font-bold text-[#1e1f44]">
-                    {activeView === 'packages' && 'Packages'}
-                    {activeView === 'testimonials' && 'Testimonials'}
-                    {activeView === 'blogs' && 'Blogs'}
+                  <h1 className="text-4xl font-black text-[#111827] tracking-tighter uppercase">
+                    {activeView === 'packages' && 'Package Management'}
+                    {activeView === 'tours' && 'Tours Management'}
+                    {activeView === 'tickets' && 'Tickets Inventory'}
+                    {activeView === 'banners' && 'Home Banners'}
+                    {activeView === 'testimonials' && 'Guest Feedback'}
+                    {activeView === 'blogs' && 'Content Studio'}
                   </h1>
-                  <p className="text-gray-600 mt-1">
-                    {activeView === 'packages' && 'Manage your tour packages'}
-                    {activeView === 'testimonials' && 'Manage customer testimonials and reviews'}
-                    {activeView === 'blogs' && 'Manage blog posts and articles'}
+                  <p className="text-[11px] font-bold text-gray-400 uppercase tracking-[0.3em] mt-1">
+                    {activeView === 'packages' && 'Curating premium experiences for global travelers'}
+                    {activeView === 'tours' && 'Managing specialized guided local experiences'}
+                    {activeView === 'tickets' && 'Coordinating global air travel inventory'}
+                    {activeView === 'banners' && 'Management of homepage hero slider visuals'}
+                    {activeView === 'testimonials' && 'Monitoring guest satisfaction and reviews'}
+                    {activeView === 'blogs' && 'Managing luxury travel narratives'}
                   </p>
                 </div>
               </div>
               <div className="flex items-center space-x-4">
-                {activeView === 'packages' && (
-                  <Button size="sm" onClick={openCreatePackageModal}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    New Package
-                  </Button>
-                )}
-                {activeView === 'testimonials' && (
-                  <Button size="sm">
-                    <Plus className="h-4 w-4 mr-2" />
-                    New Testimonial
-                  </Button>
-                )}
-                {activeView === 'blogs' && (
-                  <Button size="sm">
-                    <Plus className="h-4 w-4 mr-2" />
-                    New Blog
+                <div className="hidden sm:flex items-center gap-2 bg-gray-100 p-1.5 rounded-2xl mr-2">
+                  <div className="px-4 py-2 bg-white rounded-xl shadow-sm text-[10px] font-black uppercase text-[#111827] tracking-widest">
+                    v2.1 Stable
+                  </div>
+                </div>
+                {(activeView === 'packages' || activeView === 'tours' || activeView === 'tickets') && (
+                  <Button
+                    onClick={openCreatePackageModal}
+                    className="bg-[#111827] hover:bg-[#bd9245] text-white font-black px-6 py-6 rounded-2xl shadow-xl shadow-[#111827]/10 transition-all uppercase text-xs tracking-widest flex gap-3"
+                  >
+                    <Plus className="h-5 w-5" />
+                    {activeView === 'packages' ? 'New Package' : activeView === 'tours' ? 'New Tour' : activeView === 'tickets' ? 'New Ticket' : 'New Banner'}
                   </Button>
                 )}
               </div>
@@ -1069,115 +1231,115 @@ export default function DashboardPage() {
         {/* Content Area */}
         <div className="flex-1 overflow-auto">
           {activeView === 'packages' && (
-            <div className="container mx-auto px-6 py-8">
-              {/* Packages Table */}
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle>Your Packages</CardTitle>
-                      <CardDescription>Manage and track all your tour packages</CardDescription>
+            <div className="container mx-auto px-8 py-10 space-y-10">
+              {/* Quick Stats */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                  { label: 'Total Packages', value: packages.length, icon: Package, color: 'text-blue-600', bg: 'bg-blue-50' },
+                  { label: 'Active Bookings', value: packages.reduce((sum, p) => sum + (p.bookings || 0), 0), icon: Users, color: 'text-[#bd9245]', bg: 'bg-[#bd9245]/10' },
+                  { label: 'Avg Rating', value: packages.length > 0 ? (packages.reduce((sum, p) => sum + (p.rating || 0), 0) / packages.length).toFixed(1) : '0.0', icon: Star, color: 'text-orange-500', bg: 'bg-orange-50' },
+                  { label: 'Regional Coverage', value: '4 Districts', icon: MapPin, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                ].map((stat, i) => (
+                  <Card key={i} className="rounded-[32px] border-white shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center", stat.bg)}>
+                        <stat.icon className={cn("h-6 w-6", stat.color)} />
+                      </div>
+                      <div className="flex items-center gap-1 text-emerald-500 bg-emerald-50 px-2 py-1 rounded-lg">
+                        <TrendingUp className="h-3 w-3" />
+                        <span className="text-[10px] font-black">+12%</span>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <Button variant="outline" size="sm" onClick={handleExportToWord}>
+                    <div className="text-3xl font-black text-[#111827] tracking-tighter">{stat.value}</div>
+                    <div className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mt-1">{stat.label}</div>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Packages Table UI Refined */}
+              <Card className="rounded-[40px] border-white shadow-sm overflow-hidden">
+                <CardHeader className="p-8 pb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                    <div>
+                      <CardTitle className="text-2xl font-black text-[#111827] tracking-tight uppercase">EXPERIENCE INVENTORY</CardTitle>
+                      <CardDescription className="text-sm font-medium text-gray-400">Total catalog of curated domestic and international packages</CardDescription>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleExportToWord}
+                        className="rounded-2xl border-gray-100 hover:bg-[#bd9245] hover:text-white font-bold h-12 px-6"
+                      >
                         <Download className="h-4 w-4 mr-2" />
-                        Export Word
+                        Generate Report
                       </Button>
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent>
-                  {/* Filters Section */}
-                  <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                <CardContent className="p-8 pt-4">
+                  {/* Filters Section Refined */}
+                  <div className="mb-10 p-6 bg-gray-50/50 rounded-[30px] border border-gray-100">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                       {/* Search */}
-                      <div className="lg:col-span-2">
-                        <div className="relative">
-                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                      <div className="lg:col-span-1">
+                        <div className="relative group">
+                          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-[#bd9245] h-4 w-4 transition-colors" />
                           <Input
-                            placeholder="Search packages..."
+                            placeholder="Find package..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-10"
+                            className="h-14 pl-12 pr-4 rounded-2xl border-white shadow-sm focus:ring-[#bd9245] focus:border-[#bd9245]"
                           />
                         </div>
                       </div>
 
                       {/* Package Type Filter */}
                       <Select value={packageTypeFilter} onValueChange={setPackageTypeFilter}>
-                        <SelectTrigger>
+                        <SelectTrigger className="h-14 rounded-2xl border-white shadow-sm bg-white">
                           <SelectValue placeholder="Package Type" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Types</SelectItem>
-                          <SelectItem value="domestic">Domestic</SelectItem>
-                          <SelectItem value="international">International</SelectItem>
+                        <SelectContent className="rounded-2xl border-white shadow-xl">
+                          <SelectItem value="all">All Market Segments</SelectItem>
+                          <SelectItem value="domestic">Domestic Experiences</SelectItem>
+                          <SelectItem value="international">Global Destinations</SelectItem>
                         </SelectContent>
                       </Select>
 
                       {/* Category Filter */}
                       <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                        <SelectTrigger>
+                        <SelectTrigger className="h-14 rounded-2xl border-white shadow-sm bg-white">
                           <SelectValue placeholder="Category" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Categories</SelectItem>
-                          <SelectItem value="Cultural">Cultural</SelectItem>
-                          <SelectItem value="Adventure">Adventure</SelectItem>
-                          <SelectItem value="Wildlife">Wildlife</SelectItem>
-                          <SelectItem value="Trekking">Trekking</SelectItem>
-                          <SelectItem value="Spiritual">Spiritual</SelectItem>
-                          <SelectItem value="Beach">Beach</SelectItem>
+                        <SelectContent className="rounded-2xl border-white shadow-xl">
+                          <SelectItem value="all">All Experiences</SelectItem>
+                          <SelectItem value="Cultural">Cultural Immersive</SelectItem>
+                          <SelectItem value="Adventure">High Adventure</SelectItem>
+                          <SelectItem value="Wildlife">Safari & Wildlife</SelectItem>
+                          <SelectItem value="Luxury">Premium Luxury</SelectItem>
                         </SelectContent>
                       </Select>
 
                       {/* Place Filter */}
                       <Select value={placeFilter} onValueChange={setPlaceFilter}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Place" />
+                        <SelectTrigger className="h-14 rounded-2xl border-white shadow-sm bg-white">
+                          <SelectValue placeholder="Region" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Places</SelectItem>
+                        <SelectContent className="rounded-2xl border-white shadow-xl">
+                          <SelectItem value="all">All Regions</SelectItem>
                           {packageTypeFilter === 'domestic' ? (
                             <>
-                              {/* Domestic Places */}
-                              <SelectItem value="darjeeling">Darjeeling</SelectItem>
-                              <SelectItem value="sikkim">Sikkim</SelectItem>
-                              <SelectItem value="meghalaya">Meghalaya</SelectItem>
-                              <SelectItem value="arunachal">Arunachal</SelectItem>
-                              <SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
-                              <SelectItem value="kashmir">Kashmir</SelectItem>
-                              <SelectItem value="leh-ladakh">Leh Ladakh</SelectItem>
-                            </>
-                          ) : packageTypeFilter === 'international' ? (
-                            <>
-                              {/* International Places */}
-                              <SelectItem value="vietnam">Vietnam</SelectItem>
-                              <SelectItem value="sri-lanka">Sri Lanka</SelectItem>
-                              <SelectItem value="bali">Bali</SelectItem>
-                              <SelectItem value="malaysia">Malaysia</SelectItem>
-                              <SelectItem value="singapore">Singapore</SelectItem>
+                              <SelectItem value="darjeeling">Darjeeling Hub</SelectItem>
+                              <SelectItem value="sikkim">Sikkim Valley</SelectItem>
+                              <SelectItem value="meghalaya">Meghalaya Plateau</SelectItem>
+                              <SelectItem value="cape-town">Cape Town Central</SelectItem>
+                              <SelectItem value="kruger">Kruger National Park</SelectItem>
                             </>
                           ) : (
                             <>
-                              {/* All Places when no type filter is selected */}
-                              {/* Domestic Places */}
-                              <SelectItem value="darjeeling">Darjeeling</SelectItem>
-                              <SelectItem value="sikkim">Sikkim</SelectItem>
-                              <SelectItem value="meghalaya">Meghalaya</SelectItem>
-                              <SelectItem value="arunachal">Arunachal</SelectItem>
-                              <SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
-                              <SelectItem value="kashmir">Kashmir</SelectItem>
-                              <SelectItem value="leh-ladakh">Leh Ladakh</SelectItem>
-                              {/* International Places */}
-                              <SelectItem value="vietnam">Vietnam</SelectItem>
-                              <SelectItem value="sri-lanka">Sri Lanka</SelectItem>
-                              <SelectItem value="bali">Bali</SelectItem>
-                              <SelectItem value="malaysia">Malaysia</SelectItem>
-                              <SelectItem value="singapore">Singapore</SelectItem>
-                              {/* Legacy Places */}
-                              <SelectItem value="bhutan">Bhutan</SelectItem>
-                              <SelectItem value="nepal">Nepal</SelectItem>
+                              <SelectItem value="vietnam">Vietnam Coastal</SelectItem>
+                              <SelectItem value="sri-lanka">Sri Lanka Island</SelectItem>
+                              <SelectItem value="bali">Bali Tropical</SelectItem>
                             </>
                           )}
                         </SelectContent>
@@ -1221,107 +1383,103 @@ export default function DashboardPage() {
                       <tbody>
                         {filteredPackages.length > 0 ? (
                           filteredPackages.map((pkg) => (
-                            <tr key={pkg._id} className="border-b">
-                              <td className="p-3">
-                                <div className="flex items-center space-x-3">
+                            <tr key={pkg._id} className="group hover:bg-[#faf8f3] transition-colors">
+                              <td className="p-4">
+                                <div className="flex items-center space-x-4">
                                   {pkg.images && pkg.images.length > 0 ? (
-                                    <div className="w-12 h-12 rounded-lg overflow-hidden border-2 border-gray-200">
+                                    <div className="w-14 h-14 rounded-2xl overflow-hidden border-2 border-white shadow-sm flex-shrink-0">
                                       <img
                                         src={pkg.images[0].url}
                                         alt={pkg.title}
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                       />
                                     </div>
                                   ) : (
-                                    <div className="w-12 h-12 rounded-lg border-2 border-gray-200 flex items-center justify-center bg-gray-100">
-                                      <Package className="h-6 w-6 text-gray-400" />
+                                    <div className="w-14 h-14 rounded-2xl border-2 border-white bg-gray-50 flex items-center justify-center shadow-sm flex-shrink-0">
+                                      <Package className="h-6 w-6 text-gray-300" />
                                     </div>
                                   )}
-                                  <span className="font-medium">{pkg.title}</span>
+                                  <div className="min-w-0">
+                                    <div className="font-bold text-[#111827] truncate leading-tight tracking-tight uppercase text-sm">{pkg.title}</div>
+                                    <div className="text-[10px] font-bold text-gray-400 mt-0.5 truncate uppercase tracking-widest">{pkg.subtitle?.substring(0, 30)}...</div>
+                                  </div>
                                 </div>
                               </td>
-                              <td className="p-3">
-                                <Badge variant={pkg.packageType === 'domestic' ? 'default' : 'secondary'}>
-                                  {pkg.packageType === 'domestic' ? 'Domestic' : 'International'}
+                              <td className="p-4">
+                                <Badge className={cn(
+                                  "rounded-lg px-2 py-0.5 text-[10px] font-black uppercase tracking-widest border-none",
+                                  pkg.packageType === 'domestic'
+                                    ? "bg-emerald-50 text-emerald-600"
+                                    : "bg-blue-50 text-blue-600"
+                                )}>
+                                  {pkg.packageType}
                                 </Badge>
                               </td>
-                              <td className="p-3">
-                                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                                  {pkg.packageCategory || 'Cultural'}
-                                </Badge>
+                              <td className="p-4">
+                                <span className="text-[11px] font-bold text-gray-600 bg-gray-100 px-3 py-1 rounded-full uppercase tracking-tight">
+                                  {pkg.packageCategory || 'Luxury'}
+                                </span>
                               </td>
-                              <td className="p-3">
-                                <Badge variant="outline">
-                                  {pkg.place === 'darjeeling' ? 'Darjeeling' :
-                                    pkg.place === 'sikkim' ? 'Sikkim' :
-                                      pkg.place === 'meghalaya' ? 'Meghalaya' :
-                                        pkg.place === 'arunachal' ? 'Arunachal' :
-                                          pkg.place === 'himachal-pradesh' ? 'Himachal Pradesh' :
-                                            pkg.place === 'kashmir' ? 'Kashmir' :
-                                              pkg.place === 'leh-ladakh' ? 'Leh Ladakh' :
-                                                pkg.place === 'vietnam' ? 'Vietnam' :
-                                                  pkg.place === 'sri-lanka' ? 'Sri Lanka' :
-                                                    pkg.place === 'bali' ? 'Bali' :
-                                                      pkg.place === 'malaysia' ? 'Malaysia' :
-                                                        pkg.place === 'singapore' ? 'Singapore' :
-                                                          pkg.place === 'bhutan' ? 'Bhutan' :
-                                                            pkg.place === 'nepal' ? 'Nepal' : pkg.place}
-                                </Badge>
-                              </td>
-                              <td className="p-3">{pkg.duration || "N/A"}</td>
-                              <td className="p-3">{pkg.location || "N/A"}</td>
-                              <td className="p-3 font-medium">R {pkg.price?.toLocaleString() || "0"}</td>
-                              <td className="p-3">
-                                <div className="flex items-center">
-                                  <Star className="h-4 w-4 text-yellow-500 fill-current mr-1" />
-                                  {pkg.rating || 0}
+                              <td className="p-4">
+                                <div className="flex flex-col">
+                                  <span className="text-xs font-bold text-[#111827] uppercase tracking-tighter italic">{getFormattedPlace(pkg.place)}</span>
+                                  <span className="text-[10px] font-medium text-gray-400">{pkg.location || "Global HQ"}</span>
                                 </div>
                               </td>
-                              <td className="p-3">
-                                <div className="flex items-center space-x-2">
+                              <td className="p-4">
+                                <div className="flex items-center gap-2 text-xs font-bold text-gray-500 bg-gray-50 px-3 py-1.5 rounded-xl w-fit">
+                                  <Clock className="h-3 w-3 text-[#bd9245]" />
+                                  {pkg.duration?.split(' ')[0]}D / {pkg.duration?.split(' ')[3]}N
+                                </div>
+                              </td>
+                              <td className="p-4">
+                                <div className="text-sm font-black text-[#111827] tracking-tight">
+                                  R {pkg.price?.toLocaleString()}
+                                </div>
+                                <div className="text-[9px] font-bold text-[#bd9245] uppercase tracking-widest">Premium Tier</div>
+                              </td>
+                              <td className="p-4">
+                                <div className="flex items-center gap-1.5 bg-orange-50 px-3 py-1.5 rounded-xl w-fit">
+                                  <Star className="h-3.5 w-3.5 text-orange-500 fill-current" />
+                                  <span className="text-xs font-black text-orange-600">{pkg.rating || 5.0}</span>
+                                </div>
+                              </td>
+                              <td className="p-4">
+                                <div className="flex items-center justify-center gap-2">
                                   <Button
                                     variant="ghost"
                                     size="sm"
                                     onClick={() => handleViewPackage(pkg)}
-                                    title="View Package"
+                                    className="w-10 h-10 rounded-xl bg-white border border-gray-100 hover:bg-[#111827] hover:text-white shadow-sm flex items-center justify-center p-0 transition-all"
                                   >
-                                    <Eye className="h-4 w-4" />
+                                    <Eye className="h-5 w-5" />
                                   </Button>
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => handleEditPackage(pkg)}
-                                    title="Edit Package"
-                                  >
-                                    <Edit className="h-4 w-4" />
-                                  </Button>
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => handleDuplicatePackage(pkg)}
-                                    title="Duplicate Package"
-                                    className="text-blue-500 hover:text-blue-700 hover:bg-blue-50"
-                                  >
-                                    <Copy className="h-4 w-4" />
-                                  </Button>
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => handleExportSinglePackageToWord(pkg)}
-                                    title="Export Package to Word"
-                                    className="text-green-500 hover:text-green-700 hover:bg-green-50"
-                                  >
-                                    <Download className="h-4 w-4" />
-                                  </Button>
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => handleDeletePackage(pkg)}
-                                    title="Delete Package"
-                                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                                  >
-                                    <Trash2 className="h-4 w-4" />
-                                  </Button>
+                                  <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="w-10 h-10 rounded-xl bg-white border border-gray-100 hover:bg-[#bd9245] hover:text-white shadow-sm flex items-center justify-center p-0 transition-all"
+                                      >
+                                        <Menu className="h-5 w-5" />
+                                      </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end" className="rounded-2xl border-white shadow-2xl p-2 w-48">
+                                      <DropdownMenuItem onClick={() => handleEditPackage(pkg)} className="rounded-xl flex gap-3 font-bold text-xs uppercase tracking-widest p-3">
+                                        <Edit className="h-4 w-4 text-blue-500" /> Modify Package
+                                      </DropdownMenuItem>
+                                      <DropdownMenuItem onClick={() => handleDuplicatePackage(pkg)} className="rounded-xl flex gap-3 font-bold text-xs uppercase tracking-widest p-3">
+                                        <Copy className="h-4 w-4 text-[#bd9245]" /> Clone Entry
+                                      </DropdownMenuItem>
+                                      <DropdownMenuItem onClick={() => handleExportSinglePackageToWord(pkg)} className="rounded-xl flex gap-3 font-bold text-xs uppercase tracking-widest p-3">
+                                        <Download className="h-4 w-4 text-emerald-500" /> Export Doc
+                                      </DropdownMenuItem>
+                                      <div className="h-px bg-gray-100 my-1" />
+                                      <DropdownMenuItem onClick={() => handleDeletePackage(pkg)} className="rounded-xl flex gap-3 font-bold text-xs uppercase tracking-widest p-3 text-red-500 hover:text-red-600 hover:bg-red-50">
+                                        <Trash2 className="h-4 w-4" /> Delete Forever
+                                      </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                  </DropdownMenu>
                                 </div>
                               </td>
                             </tr>
@@ -1368,57 +1526,237 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {activeView === 'testimonials' && (
-            <div className="container mx-auto px-6 py-8">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Testimonials</CardTitle>
-                  <CardDescription>Manage customer testimonials and reviews</CardDescription>
+          {activeView === 'tours' && (
+            <div className="container mx-auto px-8 py-10 space-y-10">
+              <Card className="rounded-[40px] border-white shadow-sm overflow-hidden">
+                <CardHeader className="p-8 pb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                    <div>
+                      <CardTitle className="text-2xl font-black text-[#111827] tracking-tight uppercase">Tours Inventory</CardTitle>
+                      <CardDescription className="text-sm font-medium text-gray-400">Total catalog of curated guided tours</CardDescription>
+                    </div>
+                  </div>
                 </CardHeader>
-                <CardContent>
-                  <div className="text-center py-12">
-                    <MessageSquare className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-[#1e1f44] mb-2">Testimonials Management</h3>
-                    <p className="text-gray-600 mb-6">Testimonials management feature coming soon</p>
-                    <Button>
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add Testimonial
-                    </Button>
+                <CardContent className="p-8 pt-4">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b">
+                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Tour Title</th>
+                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Type</th>
+                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Location</th>
+                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Price</th>
+                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Rating</th>
+                          <th className="text-center p-3 text-xs font-black uppercase tracking-widest text-gray-400">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {tours.map((tour) => (
+                          <tr key={tour._id} className="group hover:bg-[#faf8f3] transition-colors border-b border-gray-50 last:border-0">
+                            <td className="p-4">
+                              <div className="flex items-center space-x-3">
+                                {tour.images?.[0] ? (
+                                  <img src={tour.images[0].url} className="w-10 h-10 rounded-xl object-cover" alt="" />
+                                ) : (
+                                  <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center"><Compass className="h-5 w-5 text-gray-300" /></div>
+                                )}
+                                <div className="font-bold text-sm text-[#111827]">{tour.title}</div>
+                              </div>
+                            </td>
+                            <td className="p-4"><Badge variant="outline" className="rounded-lg text-[10px] uppercase font-black">{tour.tourType}</Badge></td>
+                            <td className="p-4 text-xs font-bold text-gray-500 uppercase">{tour.location}</td>
+                            <td className="p-4 text-sm font-black text-[#111827]">R {tour.price?.toLocaleString()}</td>
+                            <td className="p-4">
+                              <div className="flex items-center gap-1 text-orange-500 font-black text-xs">
+                                <Star className="h-3 w-3 fill-current" /> {tour.rating || 5.0}
+                              </div>
+                            </td>
+                            <td className="p-4 text-center">
+                              <div className="flex items-center justify-center gap-2">
+                                <Button variant="ghost" size="sm" onClick={() => { setSelectedTour(tour); setIsEditTourModalOpen(true); }} className="text-blue-500 hover:bg-blue-50 rounded-xl"><Edit className="h-4 w-4" /></Button>
+                                <Button variant="ghost" size="sm" onClick={() => handleDeleteTour(tour)} className="text-red-500 hover:text-red-600 hover:bg-red-50 rounded-xl"><Trash2 className="h-4 w-4" /></Button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 </CardContent>
               </Card>
             </div>
           )}
 
-          {activeView === 'blogs' && (
-            <div className="container mx-auto px-6 py-8">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Blogs</CardTitle>
-                  <CardDescription>Manage blog posts and articles</CardDescription>
+          {activeView === 'tickets' && (
+            <div className="container mx-auto px-8 py-10 space-y-10">
+              <Card className="rounded-[40px] border-white shadow-sm overflow-hidden">
+                <CardHeader className="p-8 pb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                    <div>
+                      <CardTitle className="text-2xl font-black text-[#111827] tracking-tight uppercase">Tickets Inventory</CardTitle>
+                      <CardDescription className="text-sm font-medium text-gray-400">Available flight tickets and airline inventory</CardDescription>
+                    </div>
+                  </div>
                 </CardHeader>
-                <CardContent>
-                  <div className="text-center py-12">
-                    <FileText className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-[#1e1f44] mb-2">Blog Management</h3>
-                    <p className="text-gray-600 mb-6">Blog management feature coming soon</p>
-                    <Button>
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add Blog Post
-                    </Button>
+                <CardContent className="p-8 pt-4">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b">
+                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Title</th>
+                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Carrier</th>
+                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Route</th>
+                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Class</th>
+                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Price</th>
+                          <th className="text-center p-3 text-xs font-black uppercase tracking-widest text-gray-400">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {tickets.map((ticket) => (
+                          <tr key={ticket._id} className="group hover:bg-[#faf8f3] transition-colors border-b border-gray-50 last:border-0">
+                            <td className="p-4">
+                              <div className="flex items-center space-x-3">
+                                <Plane className="h-5 w-5 text-[#bd9245]" />
+                                <div className="font-bold text-sm text-[#111827]">{ticket.title}</div>
+                              </div>
+                            </td>
+                            <td className="p-4 text-xs font-bold uppercase">{ticket.carrier}</td>
+                            <td className="p-4 text-xs font-bold text-gray-500">{ticket.route}</td>
+                            <td className="p-4"><Badge className="bg-blue-50 text-blue-600 rounded-lg text-[10px] uppercase font-black">{ticket.travelClass}</Badge></td>
+                            <td className="p-4 text-sm font-black text-[#111827]">R {ticket.price?.toLocaleString()}</td>
+                            <td className="p-4 text-center">
+                              <div className="flex items-center justify-center gap-2">
+                                <Button variant="ghost" size="sm" onClick={() => { setSelectedTicket(ticket); setIsEditTicketModalOpen(true); }} className="text-blue-500 hover:bg-blue-50 rounded-xl"><Edit className="h-4 w-4" /></Button>
+                                <Button variant="ghost" size="sm" onClick={() => handleDeleteTicket(ticket)} className="text-red-500 hover:text-red-600 hover:bg-red-50 rounded-xl"><Trash2 className="h-4 w-4" /></Button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {activeView === 'banners' && (
+            <div className="container mx-auto px-8 py-10 space-y-10">
+              <Card className="rounded-[40px] border-white shadow-sm overflow-hidden">
+                <CardHeader className="p-8 pb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                    <div>
+                      <CardTitle className="text-2xl font-black text-[#111827] tracking-tight uppercase">Home Page Banners</CardTitle>
+                      <CardDescription className="text-sm font-medium text-gray-400">Manage the hero slider banners on the home page</CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-8 pt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {banners.map((banner) => (
+                      <Card key={banner._id} className="rounded-3xl border-gray-100 overflow-hidden group shadow-sm hover:shadow-xl transition-all duration-500">
+                        <div className="relative aspect-video">
+                          <img src={banner.image?.url} className="w-full h-full object-cover" alt={banner.title} />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                          <div className="absolute bottom-4 left-4 right-4">
+                            <h4 className="text-white font-black text-lg uppercase tracking-tighter leading-none">{banner.title}</h4>
+                            <p className="text-[#bd9245] font-bold text-[10px] uppercase tracking-widest mt-1">{banner.subtitle}</p>
+                          </div>
+                          <div className="absolute top-4 left-4">
+                            <Badge className={cn(
+                              "rounded-lg px-2 py-0.5 text-[9px] font-black uppercase tracking-widest border-none",
+                              banner.isActive ? "bg-emerald-500 text-white" : "bg-gray-500 text-white"
+                            )}>
+                              {banner.isActive ? 'Active' : 'Inactive'}
+                            </Badge>
+                          </div>
+                          <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Button variant="secondary" size="icon" onClick={() => { setSelectedBanner(banner); setIsEditBannerModalOpen(true); }} className="h-8 w-8 rounded-lg bg-white/90 text-[#111827] hover:bg-[#bd9245] hover:text-white"><Edit className="h-4 w-4" /></Button>
+                            <Button variant="secondary" size="icon" onClick={() => handleDeleteBanner(banner)} className="h-8 w-8 rounded-lg bg-white/90 text-red-500 hover:bg-red-500 hover:text-white"><Trash2 className="h-4 w-4" /></Button>
+                          </div>
+                        </div>
+                        <CardContent className="p-4 bg-white flex justify-between items-center">
+                          <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                            <Clock className="h-3 w-3" /> Order: {banner.order}
+                          </div>
+                          <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                            {new Date(banner.createdAt).toLocaleDateString()}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                    {banners.length === 0 && (
+                      <div className="col-span-full py-20 text-center border-2 border-dashed border-gray-100 rounded-[40px] bg-gray-50/30">
+                        <ImageIcon className="h-12 w-12 text-gray-200 mx-auto mb-4" />
+                        <h4 className="text-[#111827] font-black uppercase tracking-tighter text-xl">No Banners Found</h4>
+                        <p className="text-gray-400 text-sm font-medium mt-2">Start by creating your first hero banner for the home page.</p>
+                        <Button onClick={() => setIsCreateBannerModalOpen(true)} className="mt-6 bg-[#bd9245] hover:bg-[#111827] text-white rounded-2xl px-8 h-12 font-black uppercase tracking-widest text-[10px] transition-all">
+                          Create Banner
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {activeView === 'testimonials' && (
+            <div className="container mx-auto px-8 py-12">
+              <Card className="rounded-[40px] border-white shadow-sm overflow-hidden p-12">
+                <div className="max-w-md mx-auto text-center space-y-6">
+                  <div className="w-24 h-24 bg-[#bd9245]/10 rounded-[32px] flex items-center justify-center mx-auto shadow-inner">
+                    <MessageSquare className="h-10 w-10 text-[#bd9245]" />
+                  </div>
+                  <div>
+                    <h3 className="text-3xl font-black text-[#111827] tracking-tight uppercase">Guest Feedback</h3>
+                    <p className="text-gray-400 font-medium text-sm mt-2">The satisfaction monitoring node is currently undergoing maintenance. Coming soon as part of the v2.2 update.</p>
+                  </div>
+                  <Button className="bg-[#111827] hover:bg-[#bd9245] text-white font-black px-10 py-6 rounded-2xl shadow-xl transition-all uppercase text-xs tracking-widest">
+                    Notify Me on Launch
+                  </Button>
+                </div>
+              </Card>
+            </div>
+          )}
+
+          {activeView === 'blogs' && (
+            <div className="container mx-auto px-8 py-12">
+              <Card className="rounded-[40px] border-white shadow-sm overflow-hidden p-12">
+                <div className="max-w-md mx-auto text-center space-y-6">
+                  <div className="w-24 h-24 bg-[#111827] rounded-[32px] flex items-center justify-center mx-auto shadow-2xl">
+                    <FileText className="h-10 w-10 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-3xl font-black text-[#111827] tracking-tight uppercase">Content Studio</h3>
+                    <p className="text-gray-400 font-medium text-sm mt-2">The narrative management module is scheduled for implementation in Phase 3. Your current blog posts remain active.</p>
+                  </div>
+                  <Button variant="outline" className="border-gray-200 text-[#111827] font-black px-10 py-6 rounded-2xl transition-all uppercase text-xs tracking-widest">
+                    View Published Content
+                  </Button>
+                </div>
               </Card>
             </div>
           )}
         </div>
       </div>
 
-      {/* Create Package Modal */}
       <CreatePackageModal
         isOpen={isCreatePackageModalOpen}
         onClose={() => setIsCreatePackageModalOpen(false)}
         onPackageCreated={handlePackageCreated}
+      />
+
+      <CreateTourModal
+        isOpen={isCreateTourModalOpen}
+        onClose={() => setIsCreateTourModalOpen(false)}
+        onTourCreated={handleTourCreated}
+      />
+
+      <CreateTicketModal
+        isOpen={isCreateTicketModalOpen}
+        onClose={() => setIsCreateTicketModalOpen(false)}
+        onTicketCreated={handleTicketCreated}
       />
 
       {/* View Package Modal */}
@@ -1440,6 +1778,43 @@ export default function DashboardPage() {
         }}
         packageData={selectedPackage}
         onPackageUpdated={handlePackageUpdated}
+      />
+
+      {/* Edit Tour Modal */}
+      <EditTourModal
+        isOpen={isEditTourModalOpen}
+        onClose={() => {
+          setIsEditTourModalOpen(false);
+          setSelectedTour(null);
+        }}
+        tourData={selectedTour}
+        onTourUpdated={handleTourUpdated}
+      />
+
+      {/* Edit Ticket Modal */}
+      <EditTicketModal
+        isOpen={isEditTicketModalOpen}
+        onClose={() => {
+          setIsEditTicketModalOpen(false);
+          setSelectedTicket(null);
+        }}
+        ticketData={selectedTicket}
+        onTicketUpdated={handleTicketUpdated}
+      />
+      <CreateBannerModal
+        isOpen={isCreateBannerModalOpen}
+        onClose={() => setIsCreateBannerModalOpen(false)}
+        onBannerCreated={handleBannerCreated}
+      />
+
+      <EditBannerModal
+        isOpen={isEditBannerModalOpen}
+        onClose={() => {
+          setIsEditBannerModalOpen(false);
+          setSelectedBanner(null);
+        }}
+        banner={selectedBanner}
+        onBannerUpdated={handleBannerUpdated}
       />
     </div>
   );

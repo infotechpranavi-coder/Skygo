@@ -1,3 +1,4 @@
+"use client";
 import { useState, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -6,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Minus, X } from "lucide-react";
+import { Plus, Minus, X, Upload, Star } from "lucide-react";
 
 interface ItineraryDay {
   id: string;
@@ -15,10 +16,17 @@ interface ItineraryDay {
   description: string;
 }
 
-interface InclusionExclusionItem {
+interface InclusionExclusionCategory {
   id: string;
   category: string;
   items: string[];
+}
+
+interface Review {
+  name: string;
+  rating: number;
+  comment: string;
+  date: string;
 }
 
 interface CreatePackageModalProps {
@@ -34,304 +42,130 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
     ideaFor: "",
     abstract: "",
     tourOverview: "",
+    about: "Premium Sky Go Tours is a specialized travel management company dedicated to crafting exceptional journeys across dynamic destinations.",
+    services: "Customized travel planning, Guided tours & local experiences, Group & family vacations, Luxury & adventure travel",
+    tourDetails: "This carefully curated package offers a perfect blend of iconic landmarks, cultural immersion, and leisure activities.",
+    price: "",
+    duration: "",
+    location: "",
+    capacity: "",
+    packageType: "international" as "international" | "domestic",
+    place: "dubai",
     packageCategory: "Regular",
-    bestTimeToVisit: {
-      yearRound: "",
-      winter: "",
-      summer: "",
-    },
+    bestTimeToVisit: { yearRound: "", winter: "", summer: "" },
   });
 
-  const [hotelOptions, setHotelOptions] = useState<string[]>([""]);
   const [keyHighlights, setKeyHighlights] = useState<string[]>([""]);
-  const [whyChooseThisTrip, setWhyChooseThisTrip] = useState<string[]>([""]);
-  const [whySkygoSouthAfricaTours, setWhySkygoSouthAfricaTours] = useState<string[]>([""]);
+  const [hotelOptions, setHotelOptions] = useState<string[]>(["Deluxe Package: 3★ hotels", "Gold Package: 4★ hotels", "Platinum Package: 5★ hotels"]);
+  const [whyChooseThisTrip, setWhyChooseThisTrip] = useState<string[]>(["Well-balanced itinerary", "Transparent pricing"]);
+  const [whyPremiumDubaiTours, setWhyPremiumDubaiTours] = useState<string[]>(["Dedicated customer support", "Experienced guides"]);
   const [itinerary, setItinerary] = useState<ItineraryDay[]>([
-    { id: "1", day: 1, title: "", description: "" }
+    { id: "1", day: 1, title: "Arrival & Transfer", description: "Greeting at airport. Private transfer to hotel. Evening at leisure." }
   ]);
-  const [inclusions, setInclusions] = useState<InclusionExclusionItem[]>([
-    { id: "1", category: "", items: [""] }
+  const [inclusions, setInclusions] = useState<InclusionExclusionCategory[]>([
+    { id: "1", category: "General", items: ["Airport transfers", "Daily breakfast", "Sightseeing tours"] }
   ]);
-  const [exclusions, setExclusions] = useState<InclusionExclusionItem[]>([
-    { id: "1", category: "", items: [""] }
+  const [exclusions, setExclusions] = useState<InclusionExclusionCategory[]>([
+    { id: "1", category: "General", items: ["International airfare", "Visa fees", "Personal expenses"] }
   ]);
-  const [uploading, setUploading] = useState(false);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [images, setImages] = useState<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
+  // --- Handlers ---
+  const handleInputChange = (field: string, value: string) => setFormData(prev => ({ ...prev, [field]: value }));
 
-  const handleBestTimeToVisitChange = (field: 'yearRound' | 'winter' | 'summer', value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      bestTimeToVisit: {
-        ...prev.bestTimeToVisit,
-        [field]: value
+  const fileToBase64 = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = e => reject(e);
+    });
+
+  const handleSubmit = async () => {
+    if (!formData.title || !formData.price) {
+      setSubmitError("Title and Price are required.");
+      return;
+    }
+    setIsSubmitting(true);
+    setSubmitError("");
+    try {
+      // 1. Upload images to Cloudinary
+      const uploadedImages: Array<{ public_id: string; url: string; alt: string }> = [];
+      for (const file of images) {
+        const base64 = await fileToBase64(file);
+        const uploadRes = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: base64 })
+        });
+        const uploadData = await uploadRes.json();
+        if (!uploadData.success) throw new Error(`Image upload failed: ${uploadData.error}`);
+        uploadedImages.push({ public_id: uploadData.public_id, url: uploadData.url, alt: formData.title });
       }
-    }));
-  };
 
-  // Hotel Options handlers
-  const addHotelOption = () => {
-    setHotelOptions(prev => [...prev, ""]);
-  };
+      // 2. Build payload
+      const payload = {
+        ...formData,
+        price: parseFloat(formData.price as string),
+        keyHighlights: keyHighlights.filter(h => h.trim()),
+        hotelOptions: hotelOptions.filter(h => h.trim()),
+        whyChooseThisTrip: whyChooseThisTrip.filter(w => w.trim()),
+        whyPremiumDubaiTours: whyPremiumDubaiTours.filter(w => w.trim()),
+        itinerary: itinerary.map(d => ({ day: d.day, title: d.title, description: d.description })),
+        inclusions: inclusions.map(inc => ({ category: inc.category, items: inc.items.filter(i => i.trim()) })),
+        exclusions: exclusions.map(exc => ({ category: exc.category, items: exc.items.filter(i => i.trim()) })),
+        reviews,
+        images: uploadedImages,
+        transportation: [],
+        accommodation: [],
+        bookings: 0,
+        rating: 0,
+      };
 
-  const removeHotelOption = (index: number) => {
-    if (hotelOptions.length > 1) {
-      setHotelOptions(prev => prev.filter((_, i) => i !== index));
-    }
-  };
-
-  const updateHotelOption = (index: number, value: string) => {
-    setHotelOptions(prev => prev.map((item, i) => i === index ? value : item));
-  };
-
-  // Key Highlights handlers
-  const addKeyHighlight = () => {
-    setKeyHighlights(prev => [...prev, ""]);
-  };
-
-  const removeKeyHighlight = (index: number) => {
-    if (keyHighlights.length > 1) {
-      setKeyHighlights(prev => prev.filter((_, i) => i !== index));
-    }
-  };
-
-  const updateKeyHighlight = (index: number, value: string) => {
-    setKeyHighlights(prev => prev.map((item, i) => i === index ? value : item));
-  };
-
-  // Why Choose This Trip handlers
-  const addWhyChooseThisTrip = () => {
-    setWhyChooseThisTrip(prev => [...prev, ""]);
-  };
-
-  const removeWhyChooseThisTrip = (index: number) => {
-    if (whyChooseThisTrip.length > 1) {
-      setWhyChooseThisTrip(prev => prev.filter((_, i) => i !== index));
-    }
-  };
-
-  const updateWhyChooseThisTrip = (index: number, value: string) => {
-    setWhyChooseThisTrip(prev => prev.map((item, i) => i === index ? value : item));
-  };
-
-  // Why Sky Go Tours handlers
-  const addWhySkygoSouthAfricaTours = () => {
-    setWhySkygoSouthAfricaTours(prev => [...prev, ""]);
-  };
-
-  const removeWhySkygoSouthAfricaTours = (index: number) => {
-    if (whySkygoSouthAfricaTours.length > 1) {
-      setWhySkygoSouthAfricaTours(prev => prev.filter((_, i) => i !== index));
-    }
-  };
-
-  const updateWhySkygoSouthAfricaTours = (index: number, value: string) => {
-    setWhySkygoSouthAfricaTours(prev => prev.map((item, i) => i === index ? value : item));
-  };
-
-  // Itinerary handlers
-  const addItineraryDay = () => {
-    const newDay = itinerary.length + 1;
-    setItinerary(prev => [
-      ...prev,
-      { id: Date.now().toString(), day: newDay, title: "", description: "" }
-    ]);
-  };
-
-  const removeItineraryDay = (id: string) => {
-    if (itinerary.length > 1) {
-      setItinerary(prev => {
-        const filtered = prev.filter(day => day.id !== id);
-        return filtered.map((day, index) => ({
-          ...day,
-          day: index + 1
-        }));
+      // 3. Save to MongoDB
+      const res = await fetch('/api/packages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       });
+      const result = await res.json();
+      if (!result.success) throw new Error(result.error || 'Failed to save package');
+
+      // 4. Notify dashboard
+      onPackageCreated(result.data);
+      handleClose();
+    } catch (err: any) {
+      setSubmitError(err.message || 'Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
-  };
-
-  const updateItineraryDay = (id: string, field: 'title' | 'description', value: string) => {
-    setItinerary(prev => prev.map(day =>
-      day.id === id ? { ...day, [field]: value } : day
-    ));
-  };
-
-  // Inclusions handlers
-  const addInclusionCategory = () => {
-    const newId = Date.now().toString();
-    setInclusions(prev => [...prev, { id: newId, category: "", items: [""] }]);
-  };
-
-  const removeInclusionCategory = (id: string) => {
-    if (inclusions.length > 1) {
-      setInclusions(prev => prev.filter(item => item.id !== id));
-    }
-  };
-
-  const updateInclusionCategory = (id: string, value: string) => {
-    setInclusions(prev => prev.map(item =>
-      item.id === id ? { ...item, category: value } : item
-    ));
-  };
-
-  const addInclusionItem = (categoryId: string) => {
-    setInclusions(prev => prev.map(item =>
-      item.id === categoryId ? { ...item, items: [...item.items, ""] } : item
-    ));
-  };
-
-  const removeInclusionItem = (categoryId: string, itemIndex: number) => {
-    setInclusions(prev => prev.map(item =>
-      item.id === categoryId
-        ? { ...item, items: item.items.filter((_, i) => i !== itemIndex) }
-        : item
-    ));
-  };
-
-  const updateInclusionItem = (categoryId: string, itemIndex: number, value: string) => {
-    setInclusions(prev => prev.map(item =>
-      item.id === categoryId
-        ? { ...item, items: item.items.map((itm, i) => i === itemIndex ? value : itm) }
-        : item
-    ));
-  };
-
-  // Exclusions handlers
-  const addExclusionCategory = () => {
-    const newId = Date.now().toString();
-    setExclusions(prev => [...prev, { id: newId, category: "", items: [""] }]);
-  };
-
-  const removeExclusionCategory = (id: string) => {
-    if (exclusions.length > 1) {
-      setExclusions(prev => prev.filter(item => item.id !== id));
-    }
-  };
-
-  const updateExclusionCategory = (id: string, value: string) => {
-    setExclusions(prev => prev.map(item =>
-      item.id === id ? { ...item, category: value } : item
-    ));
-  };
-
-  const addExclusionItem = (categoryId: string) => {
-    setExclusions(prev => prev.map(item =>
-      item.id === categoryId ? { ...item, items: [...item.items, ""] } : item
-    ));
-  };
-
-  const removeExclusionItem = (categoryId: string, itemIndex: number) => {
-    setExclusions(prev => prev.map(item =>
-      item.id === categoryId
-        ? { ...item, items: item.items.filter((_, i) => i !== itemIndex) }
-        : item
-    ));
-  };
-
-  const updateExclusionItem = (categoryId: string, itemIndex: number, value: string) => {
-    setExclusions(prev => prev.map(item =>
-      item.id === categoryId
-        ? { ...item, items: item.items.map((itm, i) => i === itemIndex ? value : itm) }
-        : item
-    ));
   };
 
   const handleClose = () => {
-    // Reset form
     setFormData({
-      title: "",
-      subtitle: "",
-      ideaFor: "",
-      abstract: "",
-      tourOverview: "",
-      packageCategory: "Regular",
-      bestTimeToVisit: {
-        yearRound: "",
-        winter: "",
-        summer: "",
-      },
+      title: "", subtitle: "", ideaFor: "", abstract: "", tourOverview: "",
+      about: "Premium Sky Go Tours is a specialized travel management company dedicated to crafting exceptional journeys across dynamic destinations.",
+      services: "Customized travel planning, Guided tours & local experiences, Group & family vacations, Luxury & adventure travel",
+      tourDetails: "This carefully curated package offers a perfect blend of iconic landmarks, cultural immersion, and leisure activities.",
+      price: "", duration: "", location: "", capacity: "",
+      packageType: "international", place: "dubai", packageCategory: "Regular",
+      bestTimeToVisit: { yearRound: "", winter: "", summer: "" },
     });
-    setHotelOptions([""]);
     setKeyHighlights([""]);
-    setWhyChooseThisTrip([""]);
-    setWhySkygoSouthAfricaTours([""]);
-    setItinerary([{ id: "1", day: 1, title: "", description: "" }]);
-    setInclusions([{ id: "1", category: "", items: [""] }]);
-    setExclusions([{ id: "1", category: "", items: [""] }]);
+    setHotelOptions(["Deluxe Package: 3★ hotels", "Gold Package: 4★ hotels", "Platinum Package: 5★ hotels"]);
+    setWhyChooseThisTrip(["Well-balanced itinerary", "Transparent pricing"]);
+    setWhyPremiumDubaiTours(["Dedicated customer support", "Experienced guides"]);
+    setItinerary([{ id: "1", day: 1, title: "Arrival & Transfer", description: "Greeting at airport. Private transfer to hotel. Evening at leisure." }]);
+    setInclusions([{ id: "1", category: "General", items: ["Airport transfers", "Daily breakfast"] }]);
+    setExclusions([{ id: "1", category: "General", items: ["International airfare", "Visa fees"] }]);
+    setReviews([]);
+    setImages([]);
+    setSubmitError("");
     onClose();
-  };
-
-  const handleSubmit = async () => {
-    try {
-      setUploading(true);
-
-      // Validate required fields
-      if (!formData.title || !formData.subtitle) {
-        alert('Please fill in Title and Subtitle');
-        return;
-      }
-
-      // Prepare package data
-      const packageData = {
-        title: formData.title,
-        subtitle: formData.subtitle,
-        ideaFor: formData.ideaFor,
-        abstract: formData.abstract,
-        tourOverview: formData.tourOverview,
-        keyHighlights: keyHighlights.filter(item => item.trim() !== ""),
-        hotelOptions: hotelOptions.filter(item => item.trim() !== ""),
-        bestTimeToVisit: formData.bestTimeToVisit,
-        whyChooseThisTrip: whyChooseThisTrip.filter(item => item.trim() !== ""),
-        whyPremiumDubaiTours: whySkygoSouthAfricaTours.filter(item => item.trim() !== ""),
-        itinerary: itinerary.map(day => ({
-          day: day.day,
-          title: day.title,
-          description: day.description
-        })),
-        inclusions: inclusions
-          .filter(item => item.category.trim() !== "" || item.items.some(i => i.trim() !== ""))
-          .map(item => ({
-            category: item.category,
-            items: item.items.filter(i => i.trim() !== "")
-          })),
-        exclusions: exclusions
-          .filter(item => item.category.trim() !== "" || item.items.some(i => i.trim() !== ""))
-          .map(item => ({
-            category: item.category,
-            items: item.items.filter(i => i.trim() !== "")
-          })),
-        // Required fields for model
-        about: formData.abstract || formData.tourOverview || "",
-        tourDetails: formData.tourOverview || formData.abstract || "",
-        price: 0,
-        duration: "",
-        location: "Cape Town, South Africa",
-        capacity: "",
-        packageType: "domestic",
-        place: "cape-town",
-        packageCategory: formData.packageCategory || "Regular",
-        images: [],
-        transportation: [],
-        accommodation: [],
-        reviews: [],
-        bookings: 0,
-        rating: 0
-      };
-
-      console.log('Package data being sent:', JSON.stringify(packageData, null, 2));
-      onPackageCreated(packageData);
-      handleClose();
-    } catch (error) {
-      console.error('Error creating package:', error);
-      alert('Failed to create package. Please try again.');
-    } finally {
-      setUploading(false);
-    }
   };
 
   return (
@@ -339,507 +173,317 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Create New Package</DialogTitle>
-          <DialogDescription>
-            Fill in the details to create a new tour package
-          </DialogDescription>
+          <DialogDescription>Fill in all the details to publish a new tour package. Fields marked * are required.</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6 py-4">
-          {/* Title */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Title *</label>
-            <Input
-              placeholder="Enter package title"
-              value={formData.title}
-              onChange={(e) => handleInputChange('title', e.target.value)}
-            />
+
+          {/* Basic Info */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Title *</label>
+              <Input placeholder="e.g. Dubai Grand Experience" value={formData.title} onChange={e => handleInputChange('title', e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Subtitle</label>
+              <Input placeholder="e.g. 6 Nights / 7 Days" value={formData.subtitle} onChange={e => handleInputChange('subtitle', e.target.value)} />
+            </div>
           </div>
 
-          {/* Subtitle */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Subtitle *</label>
-            <Input
-              placeholder="Enter package subtitle"
-              value={formData.subtitle}
-              onChange={(e) => handleInputChange('subtitle', e.target.value)}
-            />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Price (₹) *</label>
+              <Input type="number" placeholder="e.g. 49999" value={formData.price} onChange={e => handleInputChange('price', e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Duration</label>
+              <Input placeholder="e.g. 6N/7D" value={formData.duration} onChange={e => handleInputChange('duration', e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Capacity</label>
+              <Input placeholder="e.g. 2 Adults + 1 Child" value={formData.capacity} onChange={e => handleInputChange('capacity', e.target.value)} />
+            </div>
           </div>
 
-          {/* Idea For */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Package Type *</label>
+              <Select value={formData.packageType} onValueChange={v => handleInputChange('packageType', v)}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="domestic">Domestic</SelectItem>
+                  <SelectItem value="international">International</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Place *</label>
+              <Select value={formData.place} onValueChange={v => handleInputChange('place', v)}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="darjeeling">Darjeeling</SelectItem>
+                  <SelectItem value="sikkim">Sikkim</SelectItem>
+                  <SelectItem value="meghalaya">Meghalaya</SelectItem>
+                  <SelectItem value="kashmir">Kashmir</SelectItem>
+                  <SelectItem value="leh-ladakh">Leh Ladakh</SelectItem>
+                  <SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
+                  <SelectItem value="dubai">Dubai</SelectItem>
+                  <SelectItem value="oman">Oman</SelectItem>
+                  <SelectItem value="bhutan">Bhutan</SelectItem>
+                  <SelectItem value="nepal">Nepal</SelectItem>
+                  <SelectItem value="vietnam">Vietnam</SelectItem>
+                  <SelectItem value="sri-lanka">Sri Lanka</SelectItem>
+                  <SelectItem value="bali">Bali</SelectItem>
+                  <SelectItem value="malaysia">Malaysia</SelectItem>
+                  <SelectItem value="singapore">Singapore</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Category *</label>
+              <Select value={formData.packageCategory} onValueChange={v => handleInputChange('packageCategory', v)}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Regular">Regular</SelectItem>
+                  <SelectItem value="Premium">Premium</SelectItem>
+                  <SelectItem value="Luxury">Luxury</SelectItem>
+                  <SelectItem value="Adventure">Adventure</SelectItem>
+                  <SelectItem value="Deluxe">Deluxe</SelectItem>
+                  <SelectItem value="Oman Tour">Oman Tour</SelectItem>
+                  <SelectItem value="Attraction and Activity">Attraction & Activity</SelectItem>
+                  <SelectItem value="Cultural">Cultural</SelectItem>
+                  <SelectItem value="Wildlife">Wildlife</SelectItem>
+                  <SelectItem value="Trekking">Trekking</SelectItem>
+                  <SelectItem value="Beach">Beach</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Location</label>
+            <Input placeholder="e.g. Dubai, UAE" value={formData.location} onChange={e => handleInputChange('location', e.target.value)} />
+          </div>
+
           <div className="space-y-2">
             <label className="text-sm font-medium">Idea For</label>
-            <Input
-              placeholder="e.g., Airline stopovers, short holidays, business travelers"
-              value={formData.ideaFor}
-              onChange={(e) => handleInputChange('ideaFor', e.target.value)}
-            />
+            <Input placeholder="e.g. Families, Couples, Solo travelers" value={formData.ideaFor} onChange={e => handleInputChange('ideaFor', e.target.value)} />
           </div>
 
-          {/* Abstract */}
+          {/* Abstract & Overview */}
           <div className="space-y-2">
             <label className="text-sm font-medium">Abstract</label>
-            <Textarea
-              placeholder="Enter abstract description"
-              value={formData.abstract}
-              onChange={(e) => handleInputChange('abstract', e.target.value)}
-              rows={4}
-              className="resize-none"
-            />
+            <Textarea placeholder="Short executive summary of the package..." value={formData.abstract} onChange={e => handleInputChange('abstract', e.target.value)} rows={3} />
           </div>
-
-          {/* Tour Overview */}
           <div className="space-y-2">
             <label className="text-sm font-medium">Tour Overview</label>
-            <Textarea
-              placeholder="Enter tour overview"
-              value={formData.tourOverview}
-              onChange={(e) => handleInputChange('tourOverview', e.target.value)}
-              rows={6}
-              className="resize-none"
-            />
-          </div>
-
-          {/* Package Category */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Package Category *</label>
-            <Select
-              value={formData.packageCategory}
-              onValueChange={(value) => setFormData({ ...formData, packageCategory: value })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Regular">Regular Packages</SelectItem>
-                <SelectItem value="Premium">Premium Packages</SelectItem>
-                <SelectItem value="Luxury">Luxury Packages</SelectItem>
-                <SelectItem value="Adventure">Adventure Packages</SelectItem>
-                <SelectItem value="Oman Tour">Oman Tour</SelectItem>
-                <SelectItem value="Attraction and Activity">Attraction and Activity</SelectItem>
-                <SelectItem value="Cultural">Cultural</SelectItem>
-                <SelectItem value="Wildlife">Wildlife</SelectItem>
-                <SelectItem value="Trekking">Trekking</SelectItem>
-                <SelectItem value="Spiritual">Spiritual</SelectItem>
-                <SelectItem value="Beach">Beach</SelectItem>
-                <SelectItem value="Deluxe">Deluxe</SelectItem>
-              </SelectContent>
-            </Select>
+            <Textarea placeholder="Detailed overview of the tour experience..." value={formData.tourOverview} onChange={e => handleInputChange('tourOverview', e.target.value)} rows={5} />
           </div>
 
           {/* Key Highlights */}
-          <div className="space-y-4">
+          <div className="space-y-3">
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium">Key Highlights</label>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={addKeyHighlight}
-                className="flex items-center gap-2"
-              >
-                <Plus className="h-4 w-4" />
-                Add Highlight
-              </Button>
+              <Button type="button" variant="outline" size="sm" onClick={() => setKeyHighlights(p => [...p, ""])}><Plus className="h-4 w-4 mr-1" /> Add</Button>
             </div>
-            <div className="space-y-2">
-              {keyHighlights.map((highlight, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <Input
-                    placeholder={`Highlight ${index + 1}`}
-                    value={highlight}
-                    onChange={(e) => updateKeyHighlight(index, e.target.value)}
-                  />
-                  {keyHighlights.length > 1 && (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeKeyHighlight(index)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  )}
-                </div>
-              ))}
-            </div>
+            {keyHighlights.map((h, i) => (
+              <div key={i} className="flex gap-2">
+                <Input placeholder={`Highlight ${i + 1}`} value={h} onChange={e => setKeyHighlights(p => p.map((x, j) => j === i ? e.target.value : x))} />
+                {keyHighlights.length > 1 && <Button variant="ghost" size="icon" onClick={() => setKeyHighlights(p => p.filter((_, j) => j !== i))}><X className="h-4 w-4 text-red-500" /></Button>}
+              </div>
+            ))}
           </div>
 
           {/* Hotel Options */}
-          <div className="space-y-4">
+          <div className="space-y-3">
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium">Hotel Options</label>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={addHotelOption}
-                className="flex items-center gap-2"
-              >
-                <Plus className="h-4 w-4" />
-                Add Option
-              </Button>
+              <Button type="button" variant="outline" size="sm" onClick={() => setHotelOptions(p => [...p, ""])}><Plus className="h-4 w-4 mr-1" /> Add</Button>
             </div>
-            <div className="space-y-2">
-              {hotelOptions.map((option, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <Input
-                    placeholder={`Hotel option ${index + 1}`}
-                    value={option}
-                    onChange={(e) => updateHotelOption(index, e.target.value)}
-                  />
-                  {hotelOptions.length > 1 && (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeHotelOption(index)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Detailed Itinerary */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">Detailed Itinerary</label>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={addItineraryDay}
-                className="flex items-center gap-2"
-              >
-                <Plus className="h-4 w-4" />
-                Add Day
-              </Button>
-            </div>
-            <div className="space-y-4">
-              {itinerary.map((day) => (
-                <Card key={day.id}>
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg flex items-center gap-2">
-                        <Badge variant="secondary">Day {day.day}</Badge>
-                      </CardTitle>
-                      {itinerary.length > 1 && (
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => removeItineraryDay(day.id)}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          <Minus className="h-4 w-4" />
-                        </Button>
-                      )}
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div>
-                      <label className="text-sm font-medium">Day {day.day} Title</label>
-                      <Input
-                        placeholder={`Day ${day.day} title...`}
-                        value={day.title}
-                        onChange={(e) => updateItineraryDay(day.id, 'title', e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium">Day {day.day} Description</label>
-                      <Textarea
-                        placeholder={`Day ${day.day} description...`}
-                        value={day.description}
-                        onChange={(e) => updateItineraryDay(day.id, 'description', e.target.value)}
-                        rows={4}
-                        className="resize-none"
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            {hotelOptions.map((h, i) => (
+              <div key={i} className="flex gap-2">
+                <Input placeholder={`Hotel tier ${i + 1} (e.g. Deluxe: 3★)`} value={h} onChange={e => setHotelOptions(p => p.map((x, j) => j === i ? e.target.value : x))} />
+                {hotelOptions.length > 1 && <Button variant="ghost" size="icon" onClick={() => setHotelOptions(p => p.filter((_, j) => j !== i))}><X className="h-4 w-4 text-red-500" /></Button>}
+              </div>
+            ))}
           </div>
 
           {/* Best Time to Visit */}
-          <div className="space-y-4">
-            <label className="text-sm font-medium">Best Time to Visit South Africa</label>
-            <div className="space-y-3">
-              <div>
-                <label className="text-xs text-gray-600">Year Round</label>
-                <Textarea
-                  placeholder="Available year-round description..."
-                  value={formData.bestTimeToVisit.yearRound}
-                  onChange={(e) => handleBestTimeToVisitChange('yearRound', e.target.value)}
-                  rows={2}
-                  className="resize-none"
-                />
-              </div>
-              <div>
-                <label className="text-xs text-gray-600">Winter</label>
-                <Textarea
-                  placeholder="Winter season description..."
-                  value={formData.bestTimeToVisit.winter}
-                  onChange={(e) => handleBestTimeToVisitChange('winter', e.target.value)}
-                  rows={2}
-                  className="resize-none"
-                />
-              </div>
-              <div>
-                <label className="text-xs text-gray-600">Summer</label>
-                <Textarea
-                  placeholder="Summer season description..."
-                  value={formData.bestTimeToVisit.summer}
-                  onChange={(e) => handleBestTimeToVisitChange('summer', e.target.value)}
-                  rows={2}
-                  className="resize-none"
-                />
-              </div>
+          <div className="space-y-3">
+            <label className="text-sm font-medium">Best Time to Visit</label>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div><label className="text-xs text-gray-500">Year Round</label><Textarea rows={2} placeholder="Year-round details..." value={formData.bestTimeToVisit.yearRound} onChange={e => setFormData(p => ({ ...p, bestTimeToVisit: { ...p.bestTimeToVisit, yearRound: e.target.value } }))} /></div>
+              <div><label className="text-xs text-gray-500">Winter</label><Textarea rows={2} placeholder="Winter season details..." value={formData.bestTimeToVisit.winter} onChange={e => setFormData(p => ({ ...p, bestTimeToVisit: { ...p.bestTimeToVisit, winter: e.target.value } }))} /></div>
+              <div><label className="text-xs text-gray-500">Summer</label><Textarea rows={2} placeholder="Summer season details..." value={formData.bestTimeToVisit.summer} onChange={e => setFormData(p => ({ ...p, bestTimeToVisit: { ...p.bestTimeToVisit, summer: e.target.value } }))} /></div>
             </div>
           </div>
 
           {/* Why Choose This Trip */}
-          <div className="space-y-4">
+          <div className="space-y-3">
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium">Why Choose This Trip?</label>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={addWhyChooseThisTrip}
-                className="flex items-center gap-2"
-              >
-                <Plus className="h-4 w-4" />
-                Add Point
-              </Button>
+              <Button type="button" variant="outline" size="sm" onClick={() => setWhyChooseThisTrip(p => [...p, ""])}><Plus className="h-4 w-4 mr-1" /> Add</Button>
             </div>
-            <div className="space-y-2">
-              {whyChooseThisTrip.map((point, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <Input
-                    placeholder={`Point ${index + 1}`}
-                    value={point}
-                    onChange={(e) => updateWhyChooseThisTrip(index, e.target.value)}
-                  />
-                  {whyChooseThisTrip.length > 1 && (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeWhyChooseThisTrip(index)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  )}
-                </div>
-              ))}
-            </div>
+            {whyChooseThisTrip.map((w, i) => (
+              <div key={i} className="flex gap-2">
+                <Input placeholder={`Reason ${i + 1}`} value={w} onChange={e => setWhyChooseThisTrip(p => p.map((x, j) => j === i ? e.target.value : x))} />
+                {whyChooseThisTrip.length > 1 && <Button variant="ghost" size="icon" onClick={() => setWhyChooseThisTrip(p => p.filter((_, j) => j !== i))}><X className="h-4 w-4 text-red-500" /></Button>}
+              </div>
+            ))}
           </div>
 
-          {/* Why Sky Go Tours */}
+          {/* Why Premium Tours */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium">Why Premium Sky Go Tours?</label>
+              <Button type="button" variant="outline" size="sm" onClick={() => setWhyPremiumDubaiTours(p => [...p, ""])}><Plus className="h-4 w-4 mr-1" /> Add</Button>
+            </div>
+            {whyPremiumDubaiTours.map((w, i) => (
+              <div key={i} className="flex gap-2">
+                <Input placeholder={`Point ${i + 1}`} value={w} onChange={e => setWhyPremiumDubaiTours(p => p.map((x, j) => j === i ? e.target.value : x))} />
+                {whyPremiumDubaiTours.length > 1 && <Button variant="ghost" size="icon" onClick={() => setWhyPremiumDubaiTours(p => p.filter((_, j) => j !== i))}><X className="h-4 w-4 text-red-500" /></Button>}
+              </div>
+            ))}
+          </div>
+
+          {/* Itinerary */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">Why Sky Go for This Journey?</label>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={addWhySkygoSouthAfricaTours}
-                className="flex items-center gap-2"
-              >
-                <Plus className="h-4 w-4" />
-                Add Point
-              </Button>
+              <label className="text-sm font-medium">Day-wise Itinerary</label>
+              <Button type="button" variant="outline" size="sm" onClick={() => setItinerary(p => [...p, { id: Date.now().toString(), day: p.length + 1, title: "", description: "" }])}><Plus className="h-4 w-4 mr-1" /> Add Day</Button>
             </div>
-            <div className="space-y-2">
-              {whySkygoSouthAfricaTours.map((point, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <Input
-                    placeholder={`Point ${index + 1}`}
-                    value={point}
-                    onChange={(e) => updateWhySkygoSouthAfricaTours(index, e.target.value)}
-                  />
-                  {whySkygoSouthAfricaTours.length > 1 && (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeWhySkygoSouthAfricaTours(index)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  )}
-                </div>
-              ))}
-            </div>
+            {itinerary.map((day) => (
+              <Card key={day.id}>
+                <CardHeader className="pb-2">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-base"><Badge variant="secondary">Day {day.day}</Badge></CardTitle>
+                    {itinerary.length > 1 && <Button variant="ghost" size="sm" className="text-red-500" onClick={() => setItinerary(p => p.filter(d => d.id !== day.id).map((d, i) => ({ ...d, day: i + 1 })))}><Minus className="h-4 w-4" /></Button>}
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <Input placeholder={`Day ${day.day} title`} value={day.title} onChange={e => setItinerary(p => p.map(d => d.id === day.id ? { ...d, title: e.target.value } : d))} />
+                  <Textarea rows={4} placeholder={`Day ${day.day} description...`} value={day.description} onChange={e => setItinerary(p => p.map(d => d.id === day.id ? { ...d, description: e.target.value } : d))} />
+                </CardContent>
+              </Card>
+            ))}
           </div>
 
           {/* Inclusions */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">Inclusions</label>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={addInclusionCategory}
-                className="flex items-center gap-2"
-              >
-                <Plus className="h-4 w-4" />
-                Add Category
-              </Button>
+              <label className="text-sm font-medium text-green-700">✓ Inclusions</label>
+              <Button type="button" variant="outline" size="sm" onClick={() => setInclusions(p => [...p, { id: Date.now().toString(), category: "", items: [""] }])}><Plus className="h-4 w-4 mr-1" /> Add Category</Button>
             </div>
-            <div className="space-y-4">
-              {inclusions.map((category) => (
-                <Card key={category.id}>
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <Input
-                        placeholder="Category name"
-                        value={category.category}
-                        onChange={(e) => updateInclusionCategory(category.id, e.target.value)}
-                        className="max-w-xs"
-                      />
-                      {inclusions.length > 1 && (
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => removeInclusionCategory(category.id)}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          <Minus className="h-4 w-4" />
-                        </Button>
-                      )}
+            {inclusions.map(cat => (
+              <Card key={cat.id} className="border-green-100">
+                <CardContent className="pt-4 space-y-2">
+                  <div className="flex gap-2">
+                    <Input placeholder="Category name (e.g. Transfers, Meals)" value={cat.category} onChange={e => setInclusions(p => p.map(c => c.id === cat.id ? { ...c, category: e.target.value } : c))} />
+                    {inclusions.length > 1 && <Button variant="ghost" size="icon" onClick={() => setInclusions(p => p.filter(c => c.id !== cat.id))}><Minus className="h-4 w-4 text-red-500" /></Button>}
+                  </div>
+                  {cat.items.map((item, idx) => (
+                    <div key={idx} className="flex gap-2 pl-4">
+                      <Input className="h-8 text-sm" placeholder={`Item ${idx + 1}`} value={item} onChange={e => setInclusions(p => p.map(c => c.id === cat.id ? { ...c, items: c.items.map((x, j) => j === idx ? e.target.value : x) } : c))} />
+                      {cat.items.length > 1 && <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setInclusions(p => p.map(c => c.id === cat.id ? { ...c, items: c.items.filter((_, j) => j !== idx) } : c))}><X className="h-3 w-3 text-red-400" /></Button>}
                     </div>
-                  </CardHeader>
-                  <CardContent className="space-y-2">
-                    {category.items.map((item, itemIndex) => (
-                      <div key={itemIndex} className="flex items-center gap-2">
-                        <Input
-                          placeholder={`Item ${itemIndex + 1}`}
-                          value={item}
-                          onChange={(e) => updateInclusionItem(category.id, itemIndex, e.target.value)}
-                        />
-                        {category.items.length > 1 && (
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => removeInclusionItem(category.id, itemIndex)}
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            <X className="h-4 w-4" />
-                          </Button>
-                        )}
-                      </div>
-                    ))}
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => addInclusionItem(category.id)}
-                      className="flex items-center gap-2"
-                    >
-                      <Plus className="h-4 w-4" />
-                      Add Item
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                  ))}
+                  <Button variant="ghost" size="sm" className="ml-4 h-7 text-xs" onClick={() => setInclusions(p => p.map(c => c.id === cat.id ? { ...c, items: [...c.items, ""] } : c))}><Plus className="h-3 w-3 mr-1" /> Add Item</Button>
+                </CardContent>
+              </Card>
+            ))}
           </div>
 
           {/* Exclusions */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">Exclusions</label>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={addExclusionCategory}
-                className="flex items-center gap-2"
-              >
-                <Plus className="h-4 w-4" />
-                Add Category
-              </Button>
+              <label className="text-sm font-medium text-red-700">✗ Exclusions</label>
+              <Button type="button" variant="outline" size="sm" onClick={() => setExclusions(p => [...p, { id: Date.now().toString(), category: "", items: [""] }])}><Plus className="h-4 w-4 mr-1" /> Add Category</Button>
             </div>
-            <div className="space-y-4">
-              {exclusions.map((category) => (
-                <Card key={category.id}>
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <Input
-                        placeholder="Category name"
-                        value={category.category}
-                        onChange={(e) => updateExclusionCategory(category.id, e.target.value)}
-                        className="max-w-xs"
-                      />
-                      {exclusions.length > 1 && (
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => removeExclusionCategory(category.id)}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          <Minus className="h-4 w-4" />
-                        </Button>
-                      )}
+            {exclusions.map(cat => (
+              <Card key={cat.id} className="border-red-100">
+                <CardContent className="pt-4 space-y-2">
+                  <div className="flex gap-2">
+                    <Input placeholder="Category name (e.g. Airfare, Visa)" value={cat.category} onChange={e => setExclusions(p => p.map(c => c.id === cat.id ? { ...c, category: e.target.value } : c))} />
+                    {exclusions.length > 1 && <Button variant="ghost" size="icon" onClick={() => setExclusions(p => p.filter(c => c.id !== cat.id))}><Minus className="h-4 w-4 text-red-500" /></Button>}
+                  </div>
+                  {cat.items.map((item, idx) => (
+                    <div key={idx} className="flex gap-2 pl-4">
+                      <Input className="h-8 text-sm" placeholder={`Item ${idx + 1}`} value={item} onChange={e => setExclusions(p => p.map(c => c.id === cat.id ? { ...c, items: c.items.map((x, j) => j === idx ? e.target.value : x) } : c))} />
+                      {cat.items.length > 1 && <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setExclusions(p => p.map(c => c.id === cat.id ? { ...c, items: c.items.filter((_, j) => j !== idx) } : c))}><X className="h-3 w-3 text-red-400" /></Button>}
                     </div>
-                  </CardHeader>
-                  <CardContent className="space-y-2">
-                    {category.items.map((item, itemIndex) => (
-                      <div key={itemIndex} className="flex items-center gap-2">
-                        <Input
-                          placeholder={`Item ${itemIndex + 1}`}
-                          value={item}
-                          onChange={(e) => updateExclusionItem(category.id, itemIndex, e.target.value)}
-                        />
-                        {category.items.length > 1 && (
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => removeExclusionItem(category.id, itemIndex)}
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            <X className="h-4 w-4" />
-                          </Button>
-                        )}
-                      </div>
-                    ))}
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => addExclusionItem(category.id)}
-                      className="flex items-center gap-2"
-                    >
-                      <Plus className="h-4 w-4" />
-                      Add Item
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
+                  ))}
+                  <Button variant="ghost" size="sm" className="ml-4 h-7 text-xs" onClick={() => setExclusions(p => p.map(c => c.id === cat.id ? { ...c, items: [...c.items, ""] } : c))}><Plus className="h-3 w-3 mr-1" /> Add Item</Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Images */}
+          <div className="space-y-3">
+            <label className="text-sm font-medium">Package Images (Max 5)</label>
+            <div className="border-2 border-dashed border-gray-200 rounded-xl p-8 flex flex-col items-center gap-3">
+              <Upload className="h-8 w-8 text-gray-400" />
+              <p className="text-sm text-gray-500">Upload high-resolution images</p>
+              <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>Choose Files</Button>
+              <input ref={fileInputRef} type="file" multiple accept="image/*" className="hidden" onChange={e => {
+                const files = e.target.files;
+                if (files) setImages(p => [...p, ...Array.from(files)].slice(0, 5));
+              }} />
+              {images.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {images.map((f, i) => (
+                    <Badge key={i} variant="secondary" className="flex items-center gap-1">
+                      {f.name.length > 20 ? f.name.substring(0, 20) + '...' : f.name}
+                      <X className="h-3 w-3 cursor-pointer" onClick={() => setImages(p => p.filter((_, j) => j !== i))} />
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
+
+          {/* Reviews */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium">Guest Reviews (Optional)</label>
+              <Button type="button" variant="outline" size="sm" onClick={() => setReviews(p => [...p, { name: "", rating: 5, comment: "", date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) }])}><Plus className="h-4 w-4 mr-1" /> Add Review</Button>
+            </div>
+            {reviews.map((r, i) => (
+              <Card key={i}>
+                <CardContent className="pt-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold uppercase text-gray-400">Reviewer {i + 1}</span>
+                    <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setReviews(p => p.filter((_, j) => j !== i))}><X className="h-3 w-3 text-red-500" /></Button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <Input placeholder="Guest Name" value={r.name} onChange={e => setReviews(p => p.map((x, j) => j === i ? { ...x, name: e.target.value } : x))} />
+                    <div className="flex items-center gap-2 border rounded-md px-3">
+                      <Star className="h-3 w-3 text-amber-500 fill-amber-500" />
+                      <input type="number" min={1} max={5} className="w-full text-sm font-bold outline-none" value={r.rating} onChange={e => setReviews(p => p.map((x, j) => j === i ? { ...x, rating: parseInt(e.target.value) } : x))} />
+                    </div>
+                  </div>
+                  <Textarea placeholder="Guest review comment..." value={r.comment} onChange={e => setReviews(p => p.map((x, j) => j === i ? { ...x, comment: e.target.value } : x))} rows={2} />
+                  <Input placeholder="Date (e.g. 15 Oct 2024)" value={r.date} onChange={e => setReviews(p => p.map((x, j) => j === i ? { ...x, date: e.target.value } : x))} />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
         </div>
 
-        <DialogFooter className="flex gap-2">
-          <Button variant="outline" onClick={handleClose} disabled={uploading}>
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit} className="bg-blue-600 hover:bg-blue-700" disabled={uploading}>
-            {uploading ? 'Creating...' : 'Create Package'}
-          </Button>
+        <DialogFooter className="flex flex-col gap-3">
+          {submitError && <p className="text-sm text-rose-600 font-medium w-full text-center">{submitError}</p>}
+          <div className="flex gap-3 justify-end">
+            <Button variant="outline" onClick={handleClose} disabled={isSubmitting}>Cancel</Button>
+            <Button onClick={handleSubmit} disabled={isSubmitting} className="bg-gray-900 hover:bg-black text-white">
+              {isSubmitting ? (
+                <span className="flex items-center gap-2">
+                  <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
+                  Publishing...
+                </span>
+              ) : "Publish Package"}
+            </Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

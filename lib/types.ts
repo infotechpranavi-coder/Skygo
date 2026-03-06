@@ -24,6 +24,7 @@ export interface PackageData {
     };
     whyChooseThisTrip?: string[];
     whyPremiumDubaiTours?: string[];
+    whyPremiumSkygoTours?: string[];
     price: number;
     duration: string;
     location: string;
@@ -64,6 +65,78 @@ export interface PackageData {
     reviews?: Review[];
     bookings: number;
     rating: number;
+    createdAt: string;
+    updatedAt: string;
+}
+export interface TourData {
+    _id: string;
+    title: string;
+    subtitle: string;
+    about: string;
+    price: number;
+    duration: string;
+    location: string;
+    capacity: string;
+    tourType: string;
+    guideName: string;
+    meetingPoint: string;
+    groupSize: string;
+    highlights: string[];
+    images: Array<{
+        public_id: string;
+        url: string;
+        alt: string;
+    }>;
+    itinerary: Array<{
+        day: number;
+        title: string;
+        description: string;
+    }>;
+    inclusions: string[];
+    exclusions: string[];
+    bookings: number;
+    rating: number;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface TicketData {
+    _id: string;
+    title: string;
+    carrier: string;
+    route: string;
+    price: number;
+    travelClass: string;
+    departureTime: string;
+    arrivalTime: string;
+    luggageAllowance: string;
+    refundPolicy: string;
+    validity: string;
+    location: string;
+    images: Array<{
+        public_id: string;
+        url: string;
+        alt: string;
+    }>;
+    description: string;
+    isAvailable: boolean;
+    bookings: number;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface BannerData {
+    _id: string;
+    title: string;
+    subtitle: string;
+    image: {
+        public_id: string;
+        url: string;
+        alt: string;
+    };
+    link?: string;
+    order?: number;
+    isActive: boolean;
     createdAt: string;
     updatedAt: string;
 }

@@ -1,20 +1,21 @@
 'use client'
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Playfair_Display, Inter } from 'next/font/google';
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
-    MapPin, Clock, Users, Star, Calendar, Phone,
-    CheckCircle, Camera, Globe, Heart, Share,
-    Utensils, Info, ShieldCheck, ArrowRight, ChevronLeft,
+    MapPin, Clock, Star, Calendar, Phone,
+    CheckCircle, Globe, Heart, Share,
+    ShieldCheck, ArrowRight, ChevronLeft,
     Compass, Mountain, Award
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { TourData } from "@/lib/types";
 
 const playfair = Playfair_Display({
     subsets: ['latin'],
@@ -26,51 +27,38 @@ const inter = Inter({
     variable: '--font-inter',
 });
 
-interface Package {
-    _id: string;
-    title: string;
-    subtitle: string;
-    about: string;
-    itinerary: Array<{
-        day: number;
-        title: string;
-        description: string;
-    }>;
-    price: number;
-    duration: string;
-    location: string;
-    images: Array<{ url: string; alt: string }>;
-    rating: number;
-    packageCategory?: string;
-}
-
 const TourDetailPage = () => {
     const params = useParams();
     const router = useRouter();
-    const [packageData, setPackageData] = useState<Package | null>(null);
+    const [tourData, setTourData] = useState<TourData | null>(null);
     const [loading, setLoading] = useState(true);
     const [activeDay, setActiveDay] = useState(1);
 
-    useEffect(() => {
-        const fetchPackage = async () => {
-            try {
-                const response = await fetch('/api/packages');
-                const result = await response.json();
-                if (result.success) {
-                    const pkg = result.data.find((p: any) => p._id === params?.id);
-                    setPackageData(pkg || null);
-                }
-            } catch (error) {
-                console.error('Error fetching tour details:', error);
-            } finally {
-                setLoading(false);
+    const fetchTour = useCallback(async () => {
+        if (!params?.id) return;
+        try {
+            setLoading(true);
+            const response = await fetch(`/api/tours/${params.id}`);
+            const result = await response.json();
+            if (result.success) {
+                setTourData(result.data);
+            } else {
+                setTourData(null);
             }
-        };
-
-        if (params?.id) fetchPackage();
+        } catch (error) {
+            console.error('Error fetching tour details:', error);
+            setTourData(null);
+        } finally {
+            setLoading(false);
+        }
     }, [params?.id]);
 
-    const formatPrice = (price: number) => {
+    useEffect(() => {
+        fetchTour();
+    }, [fetchTour]);
+
+    const formatPrice = (price?: number) => {
+        if (!price) return 'R 0';
         return new Intl.NumberFormat('en-ZA', {
             style: 'currency',
             currency: 'ZAR',
@@ -86,7 +74,7 @@ const TourDetailPage = () => {
         );
     }
 
-    if (!packageData) {
+    if (!tourData) {
         return (
             <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">
                 <Compass className="h-20 w-20 text-gray-200 mb-6" />
@@ -102,10 +90,10 @@ const TourDetailPage = () => {
         <div className={cn("min-h-screen bg-[#faf8f6]", playfair.variable, inter.variable)}>
             {/* Immersive Hero Header */}
             <section className="relative h-[70vh] w-full overflow-hidden">
-                {packageData.images?.[0] ? (
+                {tourData.images?.[0] ? (
                     <Image
-                        src={packageData.images[0].url}
-                        alt={packageData.title}
+                        src={tourData.images[0].url}
+                        alt={tourData.title}
                         fill
                         className="object-cover"
                         priority
@@ -145,23 +133,23 @@ const TourDetailPage = () => {
                         className="max-w-4xl"
                     >
                         <Badge className="bg-[#bd9245] text-white border-none px-4 py-1.5 rounded-full mb-6 uppercase tracking-[0.2em] text-[10px] font-bold">
-                            Premium Tour Experience
+                            {tourData.tourType || 'Premium'} Tour Experience
                         </Badge>
                         <h1 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter leading-[0.9] mb-4 drop-shadow-2xl">
-                            {packageData.title}
+                            {tourData.title}
                         </h1>
                         <div className="flex flex-wrap items-center gap-6 text-white/90 font-medium text-sm">
                             <span className="flex items-center gap-2">
                                 <MapPin className="h-4 w-4 text-[#bd9245]" />
-                                {packageData.location}
+                                {tourData.location}
                             </span>
                             <span className="flex items-center gap-2">
                                 <Clock className="h-4 w-4 text-[#bd9245]" />
-                                {packageData.duration}
+                                {tourData.duration}
                             </span>
                             <span className="flex items-center gap-2">
                                 <Star className="h-4 w-4 text-amber-400 fill-amber-400" />
-                                {packageData.rating}/5 Professional Rating
+                                {tourData.rating || 5.0}/5 Professional Rating
                             </span>
                         </div>
                     </motion.div>
@@ -183,21 +171,21 @@ const TourDetailPage = () => {
                                 Tour Overview
                             </h2>
                             <p className="text-gray-600 text-lg leading-relaxed mb-10 font-medium">
-                                {packageData.about}
+                                {tourData.about}
                             </p>
 
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-8 border-t border-gray-50">
                                 <div className="space-y-1">
                                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Group Size</p>
-                                    <p className="text-lg font-black text-gray-900">Up to 12 Guest</p>
+                                    <p className="text-lg font-black text-gray-900">{tourData.groupSize || 'Up to 12'} Guest</p>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Guide Type</p>
-                                    <p className="text-lg font-black text-gray-900">Local Expert</p>
+                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Guide Name</p>
+                                    <p className="text-lg font-black text-gray-900">{tourData.guideName || 'Local Expert'}</p>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Transport</p>
-                                    <p className="text-lg font-black text-gray-900">Private SUV</p>
+                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Meeting Point</p>
+                                    <p className="text-lg font-black text-gray-900">{tourData.meetingPoint || 'Central Hub'}</p>
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Vibe</p>
@@ -206,7 +194,7 @@ const TourDetailPage = () => {
                             </div>
                         </section>
 
-                        {/* Itinerary - Modern Accordion Style */}
+                        {/* Itinerary */}
                         <section>
                             <h2 className="text-3xl font-black text-gray-900 mb-10 uppercase tracking-tighter flex items-center gap-4">
                                 <div className="w-12 h-12 bg-[#bd9245]/10 rounded-2xl flex items-center justify-center">
@@ -216,7 +204,7 @@ const TourDetailPage = () => {
                             </h2>
 
                             <div className="space-y-6">
-                                {packageData.itinerary?.map((day) => (
+                                {tourData.itinerary?.map((day) => (
                                     <motion.div
                                         key={day.day}
                                         className={cn(
@@ -238,7 +226,7 @@ const TourDetailPage = () => {
                                             </div>
                                             <div className={cn(
                                                 "w-8 h-8 rounded-full border flex items-center justify-center transition-all",
-                                                activeDay === day.day ? "rotate-180 bg-[#bd9245]/10 border-[#bd9245]" : "border-gray-200"
+                                                activeDay === day.day ? "rotate-90 bg-[#bd9245]/10 border-[#bd9245]" : "border-gray-200"
                                             )}>
                                                 <ArrowRight className={cn("h-4 w-4 transition-colors", activeDay === day.day ? "text-[#bd9245]" : "text-gray-400")} />
                                             </div>
@@ -256,10 +244,6 @@ const TourDetailPage = () => {
                                                         <p className="text-gray-500 leading-relaxed font-medium">
                                                             {day.description}
                                                         </p>
-                                                        <div className="flex gap-4 mt-8">
-                                                            <div className="px-4 py-2 bg-gray-50 rounded-xl text-[10px] font-bold text-gray-400 uppercase tracking-widest">Included: Lunch & Entry</div>
-                                                            <div className="px-4 py-2 bg-gray-50 rounded-xl text-[10px] font-bold text-gray-400 uppercase tracking-widest">Private Guide</div>
-                                                        </div>
                                                     </div>
                                                 </motion.div>
                                             )}
@@ -289,7 +273,7 @@ const TourDetailPage = () => {
                                 <p className="text-[#bd9245] text-[10px] font-bold uppercase tracking-[0.4em]">All-Inclusive Experience</p>
                                 <div className="flex items-baseline gap-2">
                                     <h2 className="text-6xl font-black tracking-tighter">
-                                        {formatPrice(packageData.price)}
+                                        {formatPrice(tourData.price)}
                                     </h2>
                                     <span className="text-white/40 font-bold uppercase tracking-widest text-xs">/ Total</span>
                                 </div>
@@ -306,7 +290,7 @@ const TourDetailPage = () => {
                                 </div>
 
                                 <Link
-                                    href={`/contact?packageName=${encodeURIComponent(packageData.title)}&packageType=tour`}
+                                    href={`/contact?packageName=${encodeURIComponent(tourData.title)}&packageType=tour`}
                                     className="block"
                                 >
                                     <Button className="w-full h-20 bg-[#bd9245] hover:bg-[#a07835] text-gray-900 font-black uppercase tracking-[0.2em] rounded-[32px] shadow-2xl transition-all duration-300 group flex items-center justify-center gap-4">
@@ -324,26 +308,27 @@ const TourDetailPage = () => {
                                 </Button>
                             </div>
 
-                            {/* Highlights List */}
+                            {/* Inclusions List */}
                             <div className="pt-10 border-t border-white/10 space-y-6">
-                                <h4 className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em]">What To Expect</h4>
+                                <h4 className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em]">Inclusions</h4>
                                 <ul className="space-y-4">
-                                    <li className="flex items-center gap-3 text-sm font-bold uppercase tracking-tight text-white/80">
-                                        <CheckCircle className="h-4 w-4 text-[#bd9245]" />
-                                        Private Round-trip Transfers
-                                    </li>
-                                    <li className="flex items-center gap-3 text-sm font-bold uppercase tracking-tight text-white/80">
-                                        <CheckCircle className="h-4 w-4 text-[#bd9245]" />
-                                        Entrance Tickets Included
-                                    </li>
-                                    <li className="flex items-center gap-3 text-sm font-bold uppercase tracking-tight text-white/80">
-                                        <CheckCircle className="h-4 w-4 text-[#bd9245]" />
-                                        Professional Local Guide
-                                    </li>
-                                    <li className="flex items-center gap-3 text-sm font-bold uppercase tracking-tight text-white/80">
-                                        <CheckCircle className="h-4 w-4 text-[#bd9245]" />
-                                        Customizable Pace & Stopovers
-                                    </li>
+                                    {tourData.inclusions?.map((inc, i) => (
+                                        <li key={i} className="flex items-center gap-3 text-sm font-bold uppercase tracking-tight text-white/80">
+                                            <CheckCircle className="h-4 w-4 text-[#bd9245]" />
+                                            {inc}
+                                        </li>
+                                    )) || (
+                                            <>
+                                                <li className="flex items-center gap-3 text-sm font-bold uppercase tracking-tight text-white/80">
+                                                    <CheckCircle className="h-4 w-4 text-[#bd9245]" />
+                                                    Professional Local Guide
+                                                </li>
+                                                <li className="flex items-center gap-3 text-sm font-bold uppercase tracking-tight text-white/80">
+                                                    <CheckCircle className="h-4 w-4 text-[#bd9245]" />
+                                                    Entrance Tickets Included
+                                                </li>
+                                            </>
+                                        )}
                                 </ul>
                             </div>
                         </div>

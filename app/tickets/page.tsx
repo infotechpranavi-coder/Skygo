@@ -2,44 +2,41 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Clock, Users, Star, Search, Filter, Calendar, ArrowRight, Plane, Globe, ShieldCheck } from "lucide-react";
+import { MapPin, Search, Plane, Globe, ShieldCheck, ArrowRight } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
-interface Package {
+interface Ticket {
     _id: string;
     title: string;
-    subtitle: string;
-    about: string;
-    services: string[];
-    tourDetails: string;
-    itinerary: Array<{
-        day: number;
-        title: string;
-        description: string;
-    }>;
+    carrier: string;
+    route: string;
     price: number;
-    duration: string;
+    travelClass: string;
+    departureTime: string;
+    arrivalTime: string;
+    luggageAllowance: string;
+    refundPolicy: string;
+    validity: string;
     location: string;
-    capacity: string;
-    packageCategory: string;
     images: Array<{
         url: string;
         alt: string;
     }>;
+    description: string;
+    isAvailable: boolean;
     bookings: number;
-    rating: number;
+    createdAt: string;
+    updatedAt: string;
 }
 
 const TicketsPage = () => {
-    const [packages, setPackages] = useState<Package[]>([]);
-    const [filteredPackages, setFilteredPackages] = useState<Package[]>([]);
+    const [tickets, setTickets] = useState<Ticket[]>([]);
+    const [filteredTickets, setFilteredTickets] = useState<Ticket[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [classFilter, setClassFilter] = useState("all");
@@ -47,19 +44,19 @@ const TicketsPage = () => {
     const router = useRouter();
 
     useEffect(() => {
-        fetchPackages();
+        fetchTickets();
     }, []);
 
     useEffect(() => {
-        filterPackages();
-    }, [packages, searchTerm, classFilter, airlineFilter]);
+        filterTickets();
+    }, [tickets, searchTerm, classFilter, airlineFilter]);
 
-    const fetchPackages = async () => {
+    const fetchTickets = async () => {
         try {
-            const response = await fetch('/api/packages');
+            const response = await fetch('/api/tickets');
             const result = await response.json();
             if (result.success) {
-                setPackages(result.data);
+                setTickets(result.data);
             }
         } catch (error) {
             console.error('Error fetching flights:', error);
@@ -68,26 +65,38 @@ const TicketsPage = () => {
         }
     };
 
-    const filterPackages = () => {
-        let filtered = packages;
+    const filterTickets = () => {
+        let filtered = tickets;
 
         if (searchTerm) {
-            filtered = filtered.filter(pkg =>
-                pkg.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                pkg.subtitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                pkg.location.toLowerCase().includes(searchTerm.toLowerCase())
+            filtered = filtered.filter(t =>
+                t.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                t.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                t.carrier.toLowerCase().includes(searchTerm.toLowerCase())
             );
         }
 
-        setFilteredPackages(filtered);
+        if (classFilter !== "all") {
+            filtered = filtered.filter(t => t.travelClass === classFilter);
+        }
+
+        setFilteredTickets(filtered);
+    };
+
+    const formatPrice = (price: number) => {
+        return new Intl.NumberFormat('en-ZA', {
+            style: 'currency',
+            currency: 'ZAR',
+            maximumFractionDigits: 0,
+        }).format(price);
     };
 
     if (loading) {
         return (
             <div className="min-h-screen bg-white flex items-center justify-center">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p className="text-gray-600">Searching for flights...</p>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#111827] mx-auto mb-4"></div>
+                    <p className="text-gray-600 font-bold uppercase tracking-widest text-[10px]">Searching flights...</p>
                 </div>
             </div>
         );
@@ -172,11 +181,11 @@ const TicketsPage = () => {
                                 <SelectContent>
                                     <SelectItem value="all">All Airlines</SelectItem>
                                     <SelectItem value="South African Airways">South African Airways</SelectItem>
-                                    <SelectItem value="Etihad">Airlink</SelectItem>
-                                    <SelectItem value="Qatar">Safair</SelectItem>
+                                    <SelectItem value="Airlink">Airlink</SelectItem>
+                                    <SelectItem value="Safair">Safair</SelectItem>
                                 </SelectContent>
                             </Select>
-                            <Button className="bg-gray-900 hover:bg-black text-white font-bold h-full rounded-xl">
+                            <Button className="bg-gray-900 hover:bg-black text-white font-bold h-full rounded-xl uppercase tracking-widest text-[10px]">
                                 Check Availability
                             </Button>
                         </div>
@@ -188,11 +197,11 @@ const TicketsPage = () => {
             <section className="py-16 bg-[#faf8f3]">
                 <div className="container mx-auto px-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {filteredPackages.map((pkg, index) => (
+                        {filteredTickets.map((t, index) => (
                             <motion.div
-                                key={pkg._id}
+                                key={t._id}
                                 className="group bg-white rounded-[32px] overflow-hidden shadow-[0_10px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_70px_rgba(0,0,0,0.1)] transition-all duration-700 cursor-pointer flex flex-col border border-gray-100"
-                                onClick={() => router.push(`/tickets/${pkg._id}`)}
+                                onClick={() => router.push(`/tickets/${t._id}`)}
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
@@ -200,8 +209,8 @@ const TicketsPage = () => {
                             >
                                 {/* Header / Image area */}
                                 <div className="relative w-full h-[200px] flex-shrink-0">
-                                    {pkg.images && pkg.images.length > 0 ? (
-                                        <Image src={pkg.images[0].url} alt={pkg.title} fill className="object-cover group-hover:scale-105 transition-transform duration-1000 opacity-90" />
+                                    {t.images && t.images.length > 0 ? (
+                                        <Image src={t.images[0].url} alt={t.title} fill className="object-cover group-hover:scale-105 transition-transform duration-1000 opacity-90" />
                                     ) : (
                                         <div className="w-full h-full bg-gray-50 flex items-center justify-center">
                                             <Plane className="h-10 w-10 text-gray-200" />
@@ -210,13 +219,16 @@ const TicketsPage = () => {
                                     <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
                                     <div className="absolute top-6 left-6">
                                         <Badge className="bg-white/90 backdrop-blur-sm text-amber-600 border-none font-bold px-3 py-1 shadow-sm">
-                                            Available Now
+                                            {t.isAvailable ? 'Available Now' : 'Limited Seats'}
                                         </Badge>
+                                    </div>
+                                    <div className="absolute bottom-4 right-6 text-right">
+                                        <div className="text-2xl font-black text-[#111827]">{formatPrice(t.price)}</div>
+                                        <div className="text-[10px] font-bold text-amber-600 uppercase tracking-widest">Inclusive Fee</div>
                                     </div>
                                 </div>
 
                                 <div className="p-8 pt-2 flex flex-col flex-grow relative">
-                                    {/* Boarding Pass Style Notches */}
                                     <div className="absolute -top-4 left-[-12px] w-6 h-6 rounded-full bg-[#faf8f3]" />
                                     <div className="absolute -top-4 right-[-12px] w-6 h-6 rounded-full bg-[#faf8f3]" />
                                     <div className="absolute -top-1 left-4 right-4 border-t border-dashed border-gray-200" />
@@ -225,7 +237,7 @@ const TicketsPage = () => {
                                         <div className="flex justify-between items-start mb-4">
                                             <div>
                                                 <p className="text-[10px] font-bold text-amber-600 uppercase tracking-[0.2em] mb-1">Destination</p>
-                                                <h3 className="text-2xl font-black text-[#1e1f44] leading-tight uppercase tracking-tighter group-hover:text-gray-900 transition-colors">{pkg.location}</h3>
+                                                <h3 className="text-2xl font-black text-[#1e1f44] leading-tight uppercase tracking-tighter group-hover:text-gray-900 transition-colors truncate max-w-[200px]">{t.location}</h3>
                                             </div>
                                             <div className="text-right">
                                                 <Plane className="h-6 w-6 text-gray-200 ml-auto rotate-45" />
@@ -235,39 +247,39 @@ const TicketsPage = () => {
                                         <div className="grid grid-cols-2 gap-6 py-4 border-y border-gray-50 mb-6">
                                             <div>
                                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Airline</p>
-                                                <p className="text-sm font-bold text-[#1e1f44]">Premium Carrier</p>
+                                                <p className="text-sm font-bold text-[#1e1f44]">{t.carrier}</p>
                                             </div>
                                             <div>
                                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Route</p>
-                                                <p className="text-sm font-bold text-[#1e1f44]">Direct Flight</p>
+                                                <p className="text-sm font-bold text-[#1e1f44]">{t.route}</p>
                                             </div>
                                             <div>
                                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Class</p>
-                                                <p className="text-sm font-bold text-[#1e1f44]">Eco / Biz / First</p>
+                                                <p className="text-sm font-bold text-[#1e1f44]">{t.travelClass}</p>
                                             </div>
                                             <div>
-                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Status</p>
-                                                <p className="text-sm font-bold text-green-600">Active</p>
+                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">ID</p>
+                                                <p className="text-[10px] font-bold text-gray-300">#{t._id.substring(0, 8).toUpperCase()}</p>
                                             </div>
                                         </div>
-
-                                        <p className="text-gray-400 text-sm leading-relaxed mb-6 italic">
-                                            Special seasonal fares and corporate group bookings available upon request.
-                                        </p>
                                     </div>
 
-                                    <div className="mt-auto">
-                                        <Button
-                                            className="w-full bg-gray-900 hover:bg-black text-white font-bold py-6 rounded-2xl transition-all duration-300 shadow-lg flex items-center justify-center gap-3 group/btn"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                router.push(`/tickets/${pkg._id}`);
-                                            }}
-                                        >
-                                            <span>View Flight Details</span>
-                                            <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-                                        </Button>
-                                    </div>
+                                    <p className="text-gray-400 text-xs leading-relaxed mb-6 italic">
+                                        {t.description || "Special seasonal fares and corporate group bookings available upon request."}
+                                    </p>
+                                </div>
+
+                                <div className="mt-auto p-8 pt-0">
+                                    <Button
+                                        className="w-full bg-[#111827] hover:bg-[#bd9245] text-white font-black py-6 rounded-2xl transition-all duration-300 shadow-lg flex items-center justify-center gap-3 group/btn uppercase tracking-widest text-[10px]"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            router.push(`/tickets/${t._id}`);
+                                        }}
+                                    >
+                                        <span>View Flight Details</span>
+                                        <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                                    </Button>
                                 </div>
                             </motion.div>
                         ))}

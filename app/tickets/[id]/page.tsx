@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -16,7 +16,6 @@ import {
     Globe,
     Calendar,
     Users,
-    Briefcase,
     Utensils,
     Wifi,
     Info
@@ -24,37 +23,39 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-
-import { PackageData } from "@/lib/types";
+import { TicketData } from "@/lib/types";
 
 const TicketDetailPage = () => {
     const params = useParams();
     const router = useRouter();
-    const [packageData, setPackageData] = useState<PackageData | null>(null);
+    const [ticketData, setTicketData] = useState<TicketData | null>(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchPackage = async () => {
-            try {
-                const response = await fetch('/api/packages');
-                const result = await response.json();
-                if (result.success) {
-                    const pkg = result.data.find((p: any) => p._id === (params?.id as string));
-                    setPackageData(pkg || null);
-                }
-            } catch (error) {
-                console.error('Error fetching ticket details:', error);
-            } finally {
-                setLoading(false);
+    const fetchTicket = useCallback(async () => {
+        if (!params?.id) return;
+        try {
+            setLoading(true);
+            const response = await fetch(`/api/tickets/${params.id}`);
+            const result = await response.json();
+            if (result.success) {
+                setTicketData(result.data);
+            } else {
+                setTicketData(null);
             }
-        };
-
-        if (params?.id) {
-            fetchPackage();
+        } catch (error) {
+            console.error('Error fetching ticket details:', error);
+            setTicketData(null);
+        } finally {
+            setLoading(false);
         }
     }, [params?.id]);
 
-    const formatPrice = (price: number) => {
+    useEffect(() => {
+        fetchTicket();
+    }, [fetchTicket]);
+
+    const formatPrice = (price?: number) => {
+        if (!price) return 'R 0';
         return new Intl.NumberFormat('en-ZA', {
             style: 'currency',
             currency: 'ZAR',
@@ -70,7 +71,7 @@ const TicketDetailPage = () => {
         );
     }
 
-    if (!packageData) {
+    if (!ticketData) {
         return (
             <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Flight Details Not Found</h2>
@@ -85,10 +86,10 @@ const TicketDetailPage = () => {
         <div className="min-h-screen bg-[#fcfcfc] pb-20">
             {/* Header / Hero */}
             <section className="relative h-[40vh] md:h-[50vh] overflow-hidden">
-                {packageData.images?.[0] ? (
+                {ticketData.images?.[0] ? (
                     <Image
-                        src={packageData.images[0].url}
-                        alt={packageData.title}
+                        src={ticketData.images[0].url}
+                        alt={ticketData.title}
                         fill
                         className="object-cover"
                         priority
@@ -119,17 +120,17 @@ const TicketDetailPage = () => {
                     >
                         <p className="text-amber-400 font-bold uppercase tracking-[0.4em] text-[10px] mb-4">E-Ticket Preview</p>
                         <h1 className="text-5xl md:text-7xl font-[1000] text-white uppercase tracking-tighter mb-4 leading-tight">
-                            {packageData.location}
+                            {ticketData.location}
                         </h1>
                         <div className="flex items-center justify-center gap-4 text-white/80 font-bold uppercase tracking-widest text-xs">
                             <span className="flex items-center gap-2">
                                 <Plane className="h-4 w-4" />
-                                Premium Flight
+                                {ticketData.carrier}
                             </span>
                             <span className="h-1 w-1 bg-white/40 rounded-full" />
                             <span className="flex items-center gap-2">
                                 <Globe className="h-4 w-4" />
-                                Global Network
+                                {ticketData.travelClass} Elite
                             </span>
                         </div>
                     </motion.div>
@@ -158,13 +159,13 @@ const TicketDetailPage = () => {
                                             Confirmed Priority Booking
                                         </Badge>
                                         <h2 className="text-3xl font-[1000] text-white leading-tight uppercase tracking-tighter">
-                                            {packageData.title}
+                                            {ticketData.title}
                                         </h2>
                                     </div>
                                     <div className="flex flex-col items-end">
                                         <p className="text-white/40 font-bold text-[10px] uppercase tracking-[0.4em] mb-3">Carrier</p>
-                                        <div className="bg-white/10 p-4 rounded-3xl backdrop-blur-md border border-white/10 shadow-lg transition-transform group-hover:rotate-12 duration-500">
-                                            <Plane className="h-8 w-8 text-amber-500 rotate-45" />
+                                        <div className="bg-white/10 p-4 rounded-3xl backdrop-blur-md border border-white/10 shadow-lg transition-transform group-hover:rotate-12 duration-500 text-amber-500 text-center">
+                                            <span className="text-xs font-black uppercase">{ticketData.carrier.split(' ')[0]}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -174,8 +175,8 @@ const TicketDetailPage = () => {
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12 py-12 border-b border-dashed border-gray-200">
                                     <div className="space-y-4">
                                         <p className="text-gray-400 font-bold text-[10px] uppercase tracking-[0.4em]">Origin</p>
-                                        <p className="text-5xl font-black text-gray-900 tracking-tighter">CPT</p>
-                                        <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">Yaoundé, Cameroon</p>
+                                        <p className="text-5xl font-black text-gray-900 tracking-tighter">JNB</p>
+                                        <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">Johannesburg, SA</p>
                                     </div>
                                     <div className="flex flex-col items-center justify-center space-y-4">
                                         <div className="w-full flex items-center gap-3">
@@ -186,43 +187,40 @@ const TicketDetailPage = () => {
                                             </div>
                                             <div className="h-2 w-2 bg-gray-200 rounded-full" />
                                         </div>
-                                        <p className="text-[10px] font-bold text-gray-300 uppercase tracking-[0.4em] pt-2">Non-Stop Flight</p>
+                                        <p className="text-[10px] font-bold text-gray-300 uppercase tracking-[0.4em] pt-2">{ticketData.route}</p>
                                     </div>
                                     <div className="space-y-4 text-right">
                                         <p className="text-gray-400 font-bold text-[10px] uppercase tracking-[0.4em]">Destination</p>
                                         <p className="text-5xl font-black text-gray-900 tracking-tighter uppercase">
-                                            {packageData.location.substring(0, 3)}
+                                            {ticketData.location.substring(0, 3)}
                                         </p>
-                                        <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">{packageData.location}</p>
+                                        <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">{ticketData.location}</p>
                                     </div>
                                 </div>
 
                                 <div className="pt-12 grid grid-cols-2 lg:grid-cols-4 gap-8">
                                     <div className="space-y-2">
                                         <p className="text-gray-400 font-bold text-[10px] uppercase tracking-[0.4em]">Travel Class</p>
-                                        <p className="font-black text-gray-900 uppercase tracking-tight">Business Elite</p>
+                                        <p className="font-black text-gray-900 uppercase tracking-tight">{ticketData.travelClass}</p>
                                     </div>
                                     <div className="space-y-2">
-                                        <p className="text-gray-400 font-bold text-[10px] uppercase tracking-[0.4em]">Flight Status</p>
-                                        <div className="flex items-center gap-2">
-                                            <span className="h-2 w-2 bg-green-500 rounded-full" />
-                                            <p className="font-black text-green-600 uppercase tracking-tight">On-Time</p>
-                                        </div>
+                                        <p className="text-gray-400 font-bold text-[10px] uppercase tracking-[0.4em]">Departure</p>
+                                        <p className="font-black text-gray-900 uppercase tracking-tight">{ticketData.departureTime}</p>
                                     </div>
                                     <div className="space-y-2">
-                                        <p className="text-gray-400 font-bold text-[10px] uppercase tracking-[0.4em]">Terminal</p>
-                                        <p className="font-black text-gray-900 uppercase tracking-tight">T1 International</p>
+                                        <p className="text-gray-400 font-bold text-[10px] uppercase tracking-[0.4em]">Arrival</p>
+                                        <p className="font-black text-gray-900 uppercase tracking-tight">{ticketData.arrivalTime}</p>
                                     </div>
                                     <div className="space-y-2">
-                                        <p className="text-gray-400 font-bold text-[10px] uppercase tracking-[0.4em]">Duration</p>
-                                        <p className="font-black text-gray-900 uppercase tracking-tight">{packageData.duration || "Standard"}</p>
+                                        <p className="text-gray-400 font-bold text-[10px] uppercase tracking-[0.4em]">Luggage</p>
+                                        <p className="font-black text-gray-900 uppercase tracking-tight">{ticketData.luggageAllowance}</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="bg-gray-50 p-6 flex items-center justify-center gap-8 border-t border-gray-100">
                                 <div className="flex items-center gap-2 opacity-30 grayscale">
-                                    <span className="text-[8px] font-bold uppercase tracking-widest">Airline Alliance Member</span>
+                                    <span className="text-[8px] font-bold uppercase tracking-widest">Skygo Air Services Member</span>
                                 </div>
                             </div>
                         </motion.div>
@@ -243,11 +241,7 @@ const TicketDetailPage = () => {
                                     </li>
                                     <li className="flex items-center gap-4 text-gray-600 font-bold text-sm uppercase tracking-tight">
                                         <div className="h-2 w-2 bg-amber-500 rounded-full" />
-                                        Pre-order Menu Options
-                                    </li>
-                                    <li className="flex items-center gap-4 text-gray-600 font-bold text-sm uppercase tracking-tight">
-                                        <div className="h-2 w-2 bg-amber-500 rounded-full" />
-                                        Sommelier Wine Selection
+                                        Luxury Refreshments
                                     </li>
                                 </ul>
                             </div>
@@ -256,7 +250,7 @@ const TicketDetailPage = () => {
                                     <div className="p-3 bg-gray-50 rounded-2xl group-hover:bg-blue-50 transition-colors">
                                         <Wifi className="h-6 w-6 text-gray-400 group-hover:text-blue-600" />
                                     </div>
-                                    Full Connectivity
+                                    Connectivity
                                 </h3>
                                 <ul className="space-y-5">
                                     <li className="flex items-center gap-4 text-gray-600 font-bold text-sm uppercase tracking-tight">
@@ -266,10 +260,6 @@ const TicketDetailPage = () => {
                                     <li className="flex items-center gap-4 text-gray-600 font-bold text-sm uppercase tracking-tight">
                                         <div className="h-2 w-2 bg-blue-500 rounded-full" />
                                         In-seat Power Supply
-                                    </li>
-                                    <li className="flex items-center gap-4 text-gray-600 font-bold text-sm uppercase tracking-tight">
-                                        <div className="h-2 w-2 bg-blue-500 rounded-full" />
-                                        Live Global Satellite News
                                     </li>
                                 </ul>
                             </div>
@@ -281,19 +271,19 @@ const TicketDetailPage = () => {
                                 <div className="p-3 bg-gray-50 rounded-2xl">
                                     <Info className="h-6 w-6 text-gray-400" />
                                 </div>
-                                Booking Information
+                                Flight Information
                             </h3>
                             <p className="text-gray-500 leading-relaxed font-bold text-sm uppercase tracking-tight mb-6">
-                                {packageData.about || "Experience world-class air travel with our premium flight services. This itinerary is specifically designed for international travelers seeking efficiency and comfort. We partner with elite carriers to ensure your journey is seamless from check-in to arrival."}
+                                {ticketData.description || "Experience world-class air travel with our premium flight services. This itinerary is specifically designed for international travelers seeking efficiency and comfort. We partner with elite carriers to ensure your journey is seamless from check-in to arrival."}
                             </p>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-gray-50 rounded-3xl border border-gray-100">
                                 <div className="flex items-center gap-3">
                                     <ShieldCheck className="h-5 w-5 text-green-600" />
-                                    <span className="text-xs font-black text-gray-900 uppercase tracking-widest">Fully Refundable*</span>
+                                    <span className="text-xs font-black text-gray-900 uppercase tracking-widest">{ticketData.refundPolicy || 'Flexible Refund Policy'}</span>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <ShieldCheck className="h-5 w-5 text-green-600" />
-                                    <span className="text-xs font-black text-gray-900 uppercase tracking-widest">Flexible Dates</span>
+                                    <span className="text-xs font-black text-gray-900 uppercase tracking-widest">Valid Until: {ticketData.validity || 'End of Season'}</span>
                                 </div>
                             </div>
                         </div>
@@ -307,7 +297,7 @@ const TicketDetailPage = () => {
                                     <p className="text-amber-600 text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Starting From</p>
                                     <div className="flex flex-col items-center gap-1">
                                         <h2 className="text-6xl font-black tracking-tighter text-gray-900">
-                                            {packageData.price > 0 ? formatPrice(packageData.price) : "TBD"}
+                                            {formatPrice(ticketData.price)}
                                         </h2>
                                         <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest mt-2">All Taxes & Fees Included</p>
                                     </div>
@@ -328,7 +318,7 @@ const TicketDetailPage = () => {
                                     </div>
 
                                     <Link
-                                        href={`/contact?packageName=${encodeURIComponent(packageData.title)}&packageType=flight&location=${encodeURIComponent(packageData.location)}`}
+                                        href={`/contact?packageName=${encodeURIComponent(ticketData.title)}&packageType=flight&location=${encodeURIComponent(ticketData.location)}`}
                                         className="block"
                                     >
                                         <Button className="w-full h-20 bg-gray-900 hover:bg-black text-white font-black uppercase tracking-[0.2em] rounded-[32px] shadow-2xl transition-all duration-300 group flex items-center justify-center gap-4">

@@ -159,6 +159,9 @@ const PackageSchema = new mongoose.Schema({
   whyPremiumDubaiTours: [{
     type: String,
   }],
+  whyPremiumSkygoTours: [{
+    type: String,
+  }],
   price: {
     type: Number,
     required: true,

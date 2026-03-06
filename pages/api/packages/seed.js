@@ -405,21 +405,21 @@ const getRegularPackages = () => [
   },
   {
     _id: 'dubai-grand-experience',
-    title: 'Cape Town Grand Experience',
-    subtitle: '6 Nights / 7 Days Cape Town Tour',
-    about: 'The Cape Town Grand Experience – 6 Nights / 7 Days tour is thoughtfully curated for travelers who want to explore Cape Town in depth while maintaining a relaxed and enjoyable pace. This itinerary allows guests to experience the city\'s iconic landmarks, cultural heritage, leisure attractions, and neighboring Johannesburg without feeling rushed.',
-    services: 'Private airport transfers on arrival and departure, Half-day Cape Town city tour covering old and new Cape Town, Table Mountain and Cape Town Waterfront Mall visit, Wildlife Safari Game Drive with BBQ dinner and cultural activities, Full-day Johannesburg city tour with one optional park, Cape Town Frame, Kirstenbosch Botanical Gardens, and Zeitz MOCAA, Dolphin show and V&A Waterfront Artisan Market evening visit, Free day for shopping or optional activities, Choice of 3★, 4★, or 5★ hotel accommodations',
-    tourDetails: 'Abstract\nThe Cape Town Grand Experience – 6 Nights / 7 Days tour is thoughtfully curated for travelers who want to explore Cape Town in depth while maintaining a relaxed and enjoyable pace. This itinerary allows guests to experience the city\'s iconic landmarks, cultural heritage, leisure attractions, and neighboring Johannesburg without feeling rushed.\nBy combining guided sightseeing with free leisure time, this package offers flexibility while ensuring that all major highlights are covered. It is especially suitable for families and travelers who value comfort, structured planning, and dependable local support throughout their journey.',
-    abstract: 'The Cape Town Grand Experience – 6 Nights / 7 Days tour is thoughtfully curated for travelers who want to explore Cape Town in depth while maintaining a relaxed and enjoyable pace. This itinerary allows guests to experience the city\'s iconic landmarks, cultural heritage, leisure attractions, and neighboring Johannesburg without feeling rushed.',
-    tourOverview: 'Cape Town is not a city to be rushed. Its diversity, from ancient trading routes to ultra-modern architecture, requires time to fully appreciate. The Cape Town Grand Experience is designed for travelers who want a more comprehensive understanding of the city and its surroundings.',
+    title: 'Dubai Grand Experience',
+    subtitle: '6 Nights / 7 Days Tour',
+    about: 'The Dubai Grand Experience – 6 Nights / 7 Days tour is thoughtfully curated for travelers who want to explore Dubai in depth while maintaining a relaxed and enjoyable pace. This itinerary allows guests to experience the city\'s iconic landmarks, cultural heritage, leisure attractions, and neighboring Abu Dhabi without feeling rushed.',
+    services: 'Private airport transfers on arrival and departure, Half-day Dubai city tour covering old and new Dubai, Burj Khalifa and Dubai Mall visit, Desert safari with BBQ dinner and cultural activities, Full-day Abu Dhabi city tour with one optional park, Dubai Frame, Miracle Garden, and Museum of the Future, Dolphin show and Global Village evening visit, Free day for shopping or optional activities, Choice of 3★, 4★, or 5★ hotel accommodations',
+    tourDetails: 'Abstract\n\nThe Dubai Grand Experience – 6 Nights / 7 Days tour is thoughtfully curated for travelers who want to explore Dubai in depth while maintaining a relaxed and enjoyable pace. This itinerary allows guests to experience the city\'s iconic landmarks, cultural heritage, leisure attractions, and neighboring Abu Dhabi without feeling rushed.\n\nTour Overview\n\nDubai is not a city to be rushed. Its diversity, from ancient trading routes to ultra-modern architecture, requires time to fully appreciate. The Dubai Grand Experience is designed for travelers who want a more comprehensive understanding of the city and its surroundings.',
+    abstract: 'The Dubai Grand Experience – 6 Nights / 7 Days tour is thoughtfully curated for travelers who want to explore Dubai in depth while maintaining a relaxed and enjoyable pace. This itinerary allows guests to experience the city\'s iconic landmarks, cultural heritage, leisure attractions, and neighboring Abu Dhabi without feeling rushed.',
+    tourOverview: 'Dubai is not a city to be rushed. Its diversity, from ancient trading routes to ultra-modern architecture, requires time to fully appreciate. The Dubai Grand Experience is designed for travelers who want a more comprehensive understanding of the city and its surroundings.',
     keyHighlights: [
       'Private airport transfers on arrival and departure',
-      'Half-day Cape Town city tour covering old and new Cape Town',
-      'Table Mountain and Cape Town Waterfront Mall visit',
-      'Wildlife Safari Game Drive with BBQ dinner and cultural activities',
-      'Full-day Johannesburg city tour with one optional park',
-      'Cape Town Frame, Kirstenbosch Botanical Gardens, and Zeitz MOCAA',
-      'Dolphin show and V&A Waterfront Artisan Market evening visit',
+      'Half-day Dubai city tour covering old and new Dubai',
+      'Burj Khalifa and Dubai Mall visit',
+      'Desert safari with BBQ dinner and cultural activities',
+      'Full-day Abu Dhabi city tour with one optional park',
+      'Dubai Frame, Miracle Garden, and Museum of the Future',
+      'Dolphin show and Global Village evening visit',
       'Free day for shopping or optional activities',
       'Choice of 3★, 4★, or 5★ hotel accommodations'
     ],
@@ -429,7 +429,7 @@ const getRegularPackages = () => [
       'Platinum Package: 5★ hotels, twin sharing, breakfast included'
     ],
     bestTimeToVisit: {
-      yearRound: 'Cape Town can be visited throughout the year.',
+      yearRound: 'Dubai can be visited throughout the year.',
       winter: 'While winter offers pleasant outdoor conditions',
       summer: 'Summer months provide better value with lower accommodation costs. Most sightseeing during summer is scheduled indoors or in the evening for comfort.'
     },
@@ -450,28 +450,28 @@ const getRegularPackages = () => [
     itinerary: [
       {
         day: 1,
-        title: 'Arrival in Cape Town & Hotel Transfer',
-        description: 'Arrive at Cape Town International Airport, where you will be greeted by our representative and transferred privately to your hotel. After check-in, the remainder of the day is free for rest or a short walk around the hotel area. Overnight stay in Cape Town.'
+        title: 'Arrival in Dubai & Hotel Transfer',
+        description: 'Arrive at Dubai International Airport, where you will be greeted by our representative and transferred privately to your hotel. After check-in, the remainder of the day is free for rest or a short walk around the hotel area. Overnight stay in Dubai.'
       },
       {
         day: 2,
-        title: 'Half-Day Cape Town City Tour, Table Mountain & Cape Town Waterfront Mall',
-        description: 'After breakfast, depart for a half-day Cape Town city tour on a shared basis. The tour introduces major cultural and modern landmarks, offering insight into the city\'s transformation. In the afternoon, proceed to Cape Town Waterfront Mall, followed by time at the Table Mountain area. Guests may choose to add observation deck tickets as an optional experience. Return to the hotel for overnight stay.'
+        title: 'Half-Day Dubai City Tour, Burj Khalifa & Dubai Mall',
+        description: 'After breakfast, depart for a half-day Dubai city tour on a shared basis. The tour introduces major cultural and modern landmarks, offering insight into the city\'s transformation. In the afternoon, proceed to Dubai Mall, followed by time at the Burj Khalifa area. Guests may choose to add observation deck tickets as an optional experience. Return to the hotel for overnight stay.'
       },
       {
         day: 3,
-        title: 'Johannesburg City Tour with One Park',
-        description: 'After breakfast, travel to Johannesburg for a full-day city tour on a shared basis. The tour includes major landmarks of the capital and one theme park visit (tickets arranged at actual cost). This day provides a broader understanding of the South Africa\'s culture, governance, and architectural development. Return to Cape Town in the evening. Overnight stay at the hotel.'
+        title: 'Abu Dhabi City Tour with One Park',
+        description: 'After breakfast, travel to Abu Dhabi for a full-day city tour on a shared basis. The tour includes major landmarks of the capital and one theme park visit (tickets arranged at actual cost). This day provides a broader understanding of the UAE\'s culture, governance, and architectural development. Return to Dubai in the evening. Overnight stay at the hotel.'
       },
       {
         day: 4,
-        title: 'Cape Town Frame, Kirstenbosch Botanical Gardens, Zeitz MOCAA & Waterfront Harbour Cruise Dinner',
-        description: 'After breakfast, proceed for a sightseeing tour including Cape Town Frame, Kirstenbosch Botanical Gardens, and the Zeitz MOCAA (entry tickets arranged separately). In the evening, enjoy a Waterfront Harbour Cruise Dinner on a sharing basis. Experience Cape Town Waterfront\'s skyline from the water while enjoying a buffet dinner. Return to the hotel for overnight stay.'
+        title: 'Dubai Frame, Miracle Garden, Museum of the Future & Dhow Cruise Dinner',
+        description: 'After breakfast, proceed for a sightseeing tour including Dubai Frame, Miracle Garden, and the Museum of the Future (entry tickets arranged separately). In the evening, enjoy a Marina Dhow Cruise Dinner on a sharing basis. Experience Dubai Marina\'s skyline from the water while enjoying a buffet dinner. Return to the hotel for overnight stay.'
       },
       {
         day: 5,
-        title: 'Dolphin Show & V&A Waterfront Artisan Market Evening Tour',
-        description: 'After breakfast, the day begins with a visit to a dolphin show, a popular attraction for families and children. In the evening, proceed to V&A Waterfront Artisan Market, a seasonal attraction offering international pavilions, shopping stalls, and live entertainment. Return to the hotel for overnight stay.'
+        title: 'Dolphin Show & Global Village Evening Tour',
+        description: 'After breakfast, the day begins with a visit to a dolphin show, a popular attraction for families and children. In the evening, proceed to Global Village, a seasonal attraction offering international pavilions, shopping stalls, and live entertainment. Return to the hotel for overnight stay.'
       },
       {
         day: 6,
@@ -481,42 +481,45 @@ const getRegularPackages = () => [
       {
         day: 7,
         title: 'Departure',
-        description: 'After breakfast and hotel check-out, you will be transferred privately to Cape Town International Airport for your onward journey.'
+        description: 'After breakfast and hotel check-out, you will be transferred privately to Dubai International Airport for your onward journey.'
       }
     ],
-    price: 0,
+    price: 3499,
     duration: '6 Nights / 7 Days',
-    location: 'Yaoundé, Cameroon',
+    location: 'Dubai, UAE',
     capacity: '2-6 Guests',
     packageType: 'international',
-    place: 'cape-town',
+    place: 'dubai',
     packageCategory: 'regular',
     images: [
-      { public_id: 'dubai-grand-exp-1', url: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Town Skyline' },
-      { public_id: 'dubai-grand-exp-2', url: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Table Mountain' },
-      { public_id: 'dubai-grand-exp-3', url: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Johannesburg' },
-      { public_id: 'dubai-grand-exp-4', url: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Town Waterfront' },
-      { public_id: 'dubai-grand-exp-5', url: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Kruger Safari' }
+      { public_id: 'dubai-grand-exp-1', url: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Dubai Skyline' },
+      { public_id: 'dubai-grand-exp-2', url: 'https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Burj Khalifa' },
+      { public_id: 'dubai-grand-exp-3', url: 'https://images.unsplash.com/photo-1544918877-460635b6d13e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Abu Dhabi Grand Mosque' },
+      { public_id: 'dubai-grand-exp-4', url: 'https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Dubai Desert' },
+      { public_id: 'dubai-grand-exp-5', url: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Dubai Marina' }
     ],
     inclusions: [
       { category: 'Airport Transfers', items: ['Private airport and hotel transfers'] },
       { category: 'Hotel Accommodation', items: ['Hotel accommodation on twin sharing basis'] },
       { category: 'Meals', items: ['Daily breakfast', 'Dinners during desert safari and dhow cruise'] },
-      { category: 'Sightseeing & Tours', items: ['Cape Town and Johannesburg city tours on SIC basis'] },
-      { category: 'Experiences', items: ['Wildlife Safari Game Drive in shared 4x4 vehicle with camp activities', 'Waterfront dhow cruise on sharing basis'] },
+      { category: 'Sightseeing & Tours', items: ['Dubai and Abu Dhabi city tours on SIC basis'] },
+      { category: 'Experiences', items: ['Desert safari in shared 4x4 vehicle with camp activities', 'Marina dhow cruise on sharing basis'] },
       { category: 'Guide & Assistance', items: ['All the tours as per the itinerary', 'English-speaking guide during tours'] },
       { category: 'Taxes', items: ['Government taxes and office expenses'] }
     ],
     exclusions: [
       { category: 'International Airfare', items: ['International airfare'] },
-      { category: 'South Africa Entry Visa', items: ['South Africa entry visa (available on request)'] },
+      { category: 'UAE Entry Visa', items: ['UAE entry visa (available on request)'] },
       { category: 'Personal Expenses', items: ['Personal expenses (shopping, drinks, laundry, tourism dirhams, insurance)'] },
       { category: 'Entry Tickets', items: ['Entry tickets to parks and attractions (arranged at actual cost)'] }
     ],
     transportation: [],
     accommodation: [],
-    reviews: [],
-    bookings: 0,
+    reviews: [
+      { name: 'John Doe', rating: 5, comment: 'Absolutely amazing experience! The Burj Khalifa view was breathtaking.', date: '2024-01-15' },
+      { name: 'Jane Smith', rating: 4, comment: 'Well organized tour, Abu Dhabi city tour was the highlight.', date: '2024-02-10' }
+    ],
+    bookings: 24,
     rating: 4.8
   },
   {

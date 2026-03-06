@@ -155,15 +155,16 @@ const BlogDetailPage = () => {
       </div>
 
       {/* Main Content - Full Width */}
-      <article className="max-w-none w-full font-merriweather">
+      {/* Main Content - Full Width */}
+      <article className="max-w-none w-full">
         {/* Article Header */}
         <header className="max-w-5xl mx-auto px-1 sm:px-2 lg:px-3 pt-12 pb-8">
           <div className="mb-6">
             <Badge className="mb-4">{blog.category}</Badge>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6 font-montserrat">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
               {blog.title}
             </h1>
-            <p className="text-xl md:text-2xl text-gray-600 leading-relaxed mb-8 font-merriweather">
+            <p className="text-xl md:text-2xl text-gray-600 leading-relaxed mb-8">
               {blog.excerpt}
             </p>
           </div>
@@ -181,11 +182,11 @@ const BlogDetailPage = () => {
                 />
               </div>
               <div>
-                <p className="font-semibold text-gray-900 font-montserrat">{blog.author}</p>
-                <p className="text-sm text-gray-500 font-merriweather">{blog.publishDate}</p>
+                <p className="font-semibold text-gray-900">{blog.author}</p>
+                <p className="text-sm text-gray-500">{blog.publishDate}</p>
               </div>
             </div>
-            <div className="flex items-center gap-6 text-sm text-gray-600 font-merriweather">
+            <div className="flex items-center gap-6 text-sm text-gray-600">
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4" />
                 <span>{blog.readTime}</span>
@@ -206,8 +207,8 @@ const BlogDetailPage = () => {
         <div className="max-w-none w-full">
           <div className="prose prose-lg prose-gray max-w-none px-1 sm:px-2 lg:px-3 pb-16">
             {/* Introduction */}
-            <div className="max-w-5xl mx-auto border border-gray-200 rounded-lg p-6 mb-16 font-merriweather">
-              <p className="text-lg md:text-xl text-gray-700 leading-relaxed mb-6 font-merriweather">
+            <div className="max-w-5xl mx-auto border border-gray-200 rounded-lg p-6 mb-16">
+              <p className="text-lg md:text-xl text-gray-700 leading-relaxed mb-6">
                 Long international journeys often come with extended layovers, and for many travelers, those hours feel like lost time, spent waiting inside an airport lounge or watching the clock tick between flights. But if your journey routes through Dubai, a layover doesn't have to be a pause. With the right planning, it can become a highlight of your trip.
               </p>
               <p className="text-lg md:text-xl text-gray-700 leading-relaxed mb-6">
@@ -219,11 +220,11 @@ const BlogDetailPage = () => {
             </div>
 
             {/* What Is a Dubai Stopover */}
-            <section className="max-w-5xl mx-auto mb-16 border border-gray-200 rounded-lg p-6 font-merriweather">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 font-montserrat">
+            <section className="max-w-5xl mx-auto mb-16 border border-gray-200 rounded-lg p-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
                 What Is a Dubai Stopover or Transit Tour?
               </h2>
-              <p className="text-lg text-gray-700 leading-relaxed mb-4 font-merriweather">
+              <p className="text-lg text-gray-700 leading-relaxed mb-4">
                 A Dubai stopover or transit tour is a short-duration sightseeing experience designed specifically for travelers passing through Dubai on an international flight. These tours are carefully structured around flight arrival and departure times, ensuring that travelers can explore the city comfortably and return to the airport without stress.
               </p>
               <p className="text-lg text-gray-700 leading-relaxed mb-4">
@@ -244,56 +245,56 @@ const BlogDetailPage = () => {
             </section>
 
             {/* Why Dubai */}
-            <section className="max-w-5xl mx-auto mb-16 border border-gray-200 rounded-lg p-6 font-merriweather">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 font-montserrat">
+            <section className="max-w-5xl mx-auto mb-16 border border-gray-200 rounded-lg p-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
                 Why Dubai Is One of the Best Cities in the World for Stopover Travel
               </h2>
-              <p className="text-lg text-gray-700 leading-relaxed mb-6 font-merriweather">
+              <p className="text-lg text-gray-700 leading-relaxed mb-6">
                 Not every transit city is suitable for layover exploration. Dubai stands out for several practical and experiential reasons.
               </p>
 
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3 font-montserrat">
+                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3">
                     Strategic Airport Location
                   </h3>
-                  <p className="text-lg text-gray-700 leading-relaxed font-merriweather">
+                  <p className="text-lg text-gray-700 leading-relaxed">
                     Dubai International Airport (DXB) is located just 15–30 minutes from most major attractions. Downtown Dubai, Dubai Marina, Jumeirah Beach, and Old Dubai are all easily accessible, meaning travelers don't lose valuable hours commuting.
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3 font-montserrat">
+                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3">
                     Smooth Immigration and Transit Infrastructure
                   </h3>
-                  <p className="text-lg text-gray-700 leading-relaxed font-merriweather">
+                  <p className="text-lg text-gray-700 leading-relaxed">
                     Dubai has efficient immigration processes, especially for transit passengers. Many nationalities qualify for visa-on-arrival, while others can obtain a Transit Visa Dubai in advance with minimal paperwork.
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3 font-montserrat">
+                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3">
                     Flexible Tourism Hours
                   </h3>
-                  <p className="text-lg text-gray-700 leading-relaxed font-merriweather">
+                  <p className="text-lg text-gray-700 leading-relaxed">
                     Dubai operates on a different rhythm. Attractions, restaurants, malls, and experiences are available throughout the day and late into the night. This makes it ideal for travelers arriving early morning or departing after midnight.
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3 font-montserrat">
+                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3">
                     Safety and Cleanliness
                   </h3>
-                  <p className="text-lg text-gray-700 leading-relaxed font-merriweather">
+                  <p className="text-lg text-gray-700 leading-relaxed">
                     Dubai consistently ranks among the safest cities globally. This gives solo travelers, families, and business passengers confidence to step out during short stays.
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3 font-montserrat">
+                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3">
                     Year-Round Accessibility
                   </h3>
-                  <p className="text-lg text-gray-700 leading-relaxed font-merriweather">
+                  <p className="text-lg text-gray-700 leading-relaxed">
                     Even during the summer months, most Dubai sightseeing in transit is conducted in air-conditioned vehicles, indoor venues, or during evening hours, making stopovers comfortable throughout the year.
                   </p>
                 </div>
@@ -301,45 +302,45 @@ const BlogDetailPage = () => {
             </section>
 
             {/* Best Dubai Stopover Tour Options */}
-            <section className="max-w-5xl mx-auto mb-16 border border-gray-200 rounded-lg p-6 font-merriweather">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 font-montserrat">
+            <section className="max-w-5xl mx-auto mb-16 border border-gray-200 rounded-lg p-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
                 Best Dubai Stopover Tour Options Based on Layover Duration
               </h2>
-              <p className="text-lg text-gray-700 leading-relaxed mb-8 font-merriweather">
+              <p className="text-lg text-gray-700 leading-relaxed mb-8">
                 Choosing the right stopover tour depends largely on how much time you have between flights. Below are realistic options travelers commonly choose.
               </p>
 
               <div className="space-y-8">
                 <div>
-                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-2 font-montserrat">
+                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-2">
                     Dubai Express City Tour (3–5 Hours)
                   </h3>
-                  <p className="text-lg font-medium text-gray-600 mb-3 font-merriweather">
+                  <p className="text-lg font-medium text-gray-600 mb-3">
                     Ideal for travelers with a 6–8 hour layover.
                   </p>
-                  <p className="text-lg text-gray-700 leading-relaxed mb-4 font-merriweather">
+                  <p className="text-lg text-gray-700 leading-relaxed mb-4">
                     This fast-paced Dubai express city tour covers the city's most recognizable landmarks with short stops and panoramic views. Typical highlights include:
                   </p>
-                  <ul className="text-lg text-gray-700 leading-relaxed mb-4 space-y-2 ml-6 list-disc font-merriweather">
+                  <ul className="text-lg text-gray-700 leading-relaxed mb-4 space-y-2 ml-6 list-disc">
                     <li>Burj Khalifa (external view or optional entry)</li>
                     <li>Dubai Mall and Fountain area</li>
                     <li>Burj Al Arab photo stop</li>
                     <li>Palm Jumeirah drive</li>
                     <li>Dubai Marina skyline</li>
                   </ul>
-                  <p className="text-lg text-gray-700 leading-relaxed font-merriweather">
+                  <p className="text-lg text-gray-700 leading-relaxed">
                     This option is perfect for first-time visitors who want a snapshot of modern Dubai without rushing through long visits.
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-2 font-montserrat">
+                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-2">
                     Half-Day Dubai City Tour from Airport (5–7 Hours)
                   </h3>
-                  <p className="text-lg font-medium text-gray-600 mb-3 font-merriweather">
+                  <p className="text-lg font-medium text-gray-600 mb-3">
                     Best suited for layovers of 8–12 hours.
                   </p>
-                  <p className="text-lg text-gray-700 leading-relaxed mb-4 font-merriweather">
+                  <p className="text-lg text-gray-700 leading-relaxed mb-4">
                     This Dubai city tour from airport blends modern attractions with cultural districts. In addition to Downtown and Marina, it often includes:
                   </p>
                   <ul className="text-lg text-gray-700 leading-relaxed mb-4 space-y-2 ml-6 list-disc">
@@ -354,13 +355,13 @@ const BlogDetailPage = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-2 font-montserrat">
+                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-2">
                     Dubai Overnight Stopover (1 Night / 2 Days)
                   </h3>
-                  <p className="text-lg font-medium text-gray-600 mb-3 font-merriweather">
+                  <p className="text-lg font-medium text-gray-600 mb-3">
                     Recommended for layovers of 18–36 hours.
                   </p>
-                  <p className="text-lg text-gray-700 leading-relaxed mb-4 font-merriweather">
+                  <p className="text-lg text-gray-700 leading-relaxed mb-4">
                     A Dubai overnight stopover allows travelers to relax, sleep comfortably, and enjoy the city without watching the clock. These tours typically include:
                   </p>
                   <ul className="text-lg text-gray-700 leading-relaxed mb-4 space-y-2 ml-6 list-disc">
@@ -375,13 +376,13 @@ const BlogDetailPage = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-2 font-montserrat">
+                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-2">
                     Desert Safari as a Transit Experience
                   </h3>
-                  <p className="text-lg font-medium text-gray-600 mb-3 font-merriweather">
+                  <p className="text-lg font-medium text-gray-600 mb-3">
                     Surprisingly popular among transit passengers.
                   </p>
-                  <p className="text-lg text-gray-700 leading-relaxed font-merriweather">
+                  <p className="text-lg text-gray-700 leading-relaxed">
                     If your layover includes an evening window, a desert safari fits well into a Dubai short stay tour. Within an hour from the city, travelers can enjoy dune bashing, sunset photography, cultural performances, and BBQ dinner before returning to the airport or hotel.
                   </p>
                 </div>
@@ -389,14 +390,14 @@ const BlogDetailPage = () => {
             </section>
 
             {/* Top Attractions */}
-            <section className="max-w-5xl mx-auto mb-16 border border-gray-200 rounded-lg p-6 font-merriweather">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 font-montserrat">
+            <section className="max-w-5xl mx-auto mb-16 border border-gray-200 rounded-lg p-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
                 Top Attractions Covered During a Dubai Layover Tour
               </h2>
-              <p className="text-lg text-gray-700 leading-relaxed mb-6 font-merriweather">
+              <p className="text-lg text-gray-700 leading-relaxed mb-6">
                 A successful layover tour Dubai focuses on attractions that offer high impact without long travel times.
               </p>
-              <ul className="text-lg text-gray-700 leading-relaxed space-y-3 ml-6 list-disc font-merriweather">
+              <ul className="text-lg text-gray-700 leading-relaxed space-y-3 ml-6 list-disc">
                 <li><strong>Burj Khalifa and Downtown Dubai</strong> – The heart of modern Dubai. Even without going up the tower, the surrounding area provides impressive architecture, fountains, and dining options.</li>
                 <li><strong>Dubai Marina</strong> – A waterfront district known for its skyline and relaxed atmosphere. Evening visits or dhow cruises are especially popular during transit tours.</li>
                 <li><strong>Palm Jumeirah</strong> – An engineering marvel offering scenic drives and iconic views of Atlantis The Palm.</li>
@@ -406,14 +407,14 @@ const BlogDetailPage = () => {
             </section>
 
             {/* Sample Itinerary */}
-            <section className="max-w-5xl mx-auto mb-16 border border-gray-200 rounded-lg p-6 font-merriweather">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 font-montserrat">
+            <section className="max-w-5xl mx-auto mb-16 border border-gray-200 rounded-lg p-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
                 Sample Dubai Stopover Itinerary (12–14 Hour Layover)
               </h2>
-              <p className="text-lg text-gray-700 leading-relaxed mb-6 font-merriweather">
+              <p className="text-lg text-gray-700 leading-relaxed mb-6">
                 Here's a practical example for travelers landing in Dubai in the morning and departing late at night.
               </p>
-              <ol className="text-lg text-gray-700 leading-relaxed space-y-4 ml-6 list-decimal font-merriweather">
+              <ol className="text-lg text-gray-700 leading-relaxed space-y-4 ml-6 list-decimal">
                 <li><strong>Arrival at Dubai Airport</strong> – Immigration and baggage clearance.</li>
                 <li><strong>Airport Pickup and City Tour Start</strong> – Drive towards Old Dubai.</li>
                 <li><strong>Dubai Creek and Heritage Walk</strong> – Explore Al Fahidi, take an abra ride.</li>
@@ -421,20 +422,20 @@ const BlogDetailPage = () => {
                 <li><strong>Palm Jumeirah and Marina Drive</strong> – Short walk and skyline views.</li>
                 <li><strong>Return to Airport</strong> – Drop-off for onward flight.</li>
               </ol>
-              <p className="text-lg text-gray-700 leading-relaxed mt-6 font-semibold font-merriweather">
+              <p className="text-lg text-gray-700 leading-relaxed mt-6 font-semibold">
                 Furthermore, here are our offers! Select your perfect Day Tours and Tickets options!
               </p>
             </section>
 
             {/* Who Should Book */}
-            <section className="max-w-5xl mx-auto mb-16 border border-gray-200 rounded-lg p-6 font-merriweather">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 font-montserrat">
+            <section className="max-w-5xl mx-auto mb-16 border border-gray-200 rounded-lg p-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
                 Who Should Book a Dubai Stopover Tour?
               </h2>
-              <p className="text-lg text-gray-700 leading-relaxed mb-4 font-merriweather">
+              <p className="text-lg text-gray-700 leading-relaxed mb-4">
                 A Dubai stopover tour is ideal for:
               </p>
-              <ul className="text-lg text-gray-700 leading-relaxed space-y-2 ml-6 list-disc mb-4 font-merriweather">
+              <ul className="text-lg text-gray-700 leading-relaxed space-y-2 ml-6 list-disc mb-4">
                 <li>International transit passengers with 6+ hour layovers</li>
                 <li>Business travelers seeking productive breaks</li>
                 <li>First-time Dubai visitors, but has a minimum time</li>
@@ -442,63 +443,63 @@ const BlogDetailPage = () => {
                 <li>Solo travelers avoiding navigation challenges</li>
                 <li>Couples on long-haul routes</li>
               </ul>
-              <p className="text-lg text-gray-700 leading-relaxed font-merriweather">
+              <p className="text-lg text-gray-700 leading-relaxed">
                 It is especially helpful for travelers unfamiliar with local transport or visa procedures.
               </p>
             </section>
 
             {/* Practical Tips */}
-            <section className="max-w-5xl mx-auto mb-16 border border-gray-200 rounded-lg p-6 font-merriweather">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 font-montserrat">
+            <section className="max-w-5xl mx-auto mb-16 border border-gray-200 rounded-lg p-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
                 Practical Tips for Planning a Dubai Layover Tour
               </h2>
 
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3 font-montserrat">
+                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3">
                     Check Visa Requirements Early
                   </h3>
-                  <p className="text-lg text-gray-700 leading-relaxed font-merriweather">
+                  <p className="text-lg text-gray-700 leading-relaxed">
                     Many travelers qualify for a visa-on-arrival. If not, arrange a Transit Visa Dubai in advance to avoid delays. A free consultation is available! Contact us.
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3 font-montserrat">
+                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3">
                     Choose the Right Layover Length
                   </h3>
-                  <p className="text-lg text-gray-700 leading-relaxed mb-2 font-merriweather">
+                  <p className="text-lg text-gray-700 leading-relaxed mb-2">
                     For comfort and safety:
                   </p>
-                  <ul className="text-lg text-gray-700 leading-relaxed space-y-1 ml-6 list-disc font-merriweather">
+                  <ul className="text-lg text-gray-700 leading-relaxed space-y-1 ml-6 list-disc">
                     <li>Minimum recommended layover: 6–7 hours</li>
                     <li>Ideal duration: 8–24 hours</li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3 font-montserrat">
+                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3">
                     Always Allow Time Buffers
                   </h3>
-                  <p className="text-lg text-gray-700 leading-relaxed font-merriweather">
+                  <p className="text-lg text-gray-700 leading-relaxed">
                     Leave at least 2–3 hours before your onward flight to account for traffic and airport formalities.
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3 font-montserrat">
+                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3">
                     Luggage Handling
                   </h3>
-                  <p className="text-lg text-gray-700 leading-relaxed font-merriweather">
+                  <p className="text-lg text-gray-700 leading-relaxed">
                     Most tours provide secure storage in vehicles or coordinate airport luggage facilities.
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3 font-montserrat">
+                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3">
                     Best Time of Day for Stopovers
                   </h3>
-                  <ul className="text-lg text-gray-700 leading-relaxed space-y-1 ml-6 list-disc font-merriweather">
+                  <ul className="text-lg text-gray-700 leading-relaxed space-y-1 ml-6 list-disc">
                     <li><strong>Morning arrivals:</strong> City and cultural tours</li>
                     <li><strong>Evening arrivals:</strong> Marina, dhow cruise, desert safari</li>
                   </ul>
@@ -507,52 +508,52 @@ const BlogDetailPage = () => {
             </section>
 
             {/* FAQs */}
-            <section className="max-w-5xl mx-auto mb-16 border border-gray-200 rounded-lg p-6 font-merriweather">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 font-montserrat">
+            <section className="max-w-5xl mx-auto mb-16 border border-gray-200 rounded-lg p-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
                 Frequently Asked Questions (FAQs)
               </h2>
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2 font-montserrat">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     Is a Dubai stopover tour worth it?
                   </h3>
-                  <p className="text-lg text-gray-700 leading-relaxed font-merriweather">
+                  <p className="text-lg text-gray-700 leading-relaxed">
                     Yes. Dubai's proximity to the airport makes sightseeing efficient and stress-free, even during short layovers.
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2 font-montserrat">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     How long should my layover be for a Dubai transit tour?
                   </h3>
-                  <p className="text-lg text-gray-700 leading-relaxed font-merriweather">
+                  <p className="text-lg text-gray-700 leading-relaxed">
                     Ideally 8–12 hours, though express tours can work with shorter durations.
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2 font-montserrat">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     Do I need a visa for a Dubai layover tour?
                   </h3>
-                  <p className="text-lg text-gray-700 leading-relaxed font-merriweather">
+                  <p className="text-lg text-gray-700 leading-relaxed">
                     Visa requirements depend on nationality. Many travelers are eligible for visa-on-arrival or transit visas.
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2 font-montserrat">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     Can I explore Dubai at night during a layover?
                   </h3>
-                  <p className="text-lg text-gray-700 leading-relaxed font-merriweather">
+                  <p className="text-lg text-gray-700 leading-relaxed">
                     Yes. Many attractions operate late, making night tours very popular.
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2 font-montserrat">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     Is it safe to travel alone during a Dubai stopover?
                   </h3>
-                  <p className="text-lg text-gray-700 leading-relaxed font-merriweather">
+                  <p className="text-lg text-gray-700 leading-relaxed">
                     Dubai is one of the safest cities globally and well-suited for solo travelers.
                   </p>
                 </div>
@@ -560,14 +561,14 @@ const BlogDetailPage = () => {
             </section>
 
             {/* Conclusion */}
-            <section className="max-w-5xl mx-auto mb-16 border border-gray-200 rounded-lg p-6 font-merriweather">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 font-montserrat">
+            <section className="max-w-5xl mx-auto mb-16 border border-gray-200 rounded-lg p-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
                 Turn Your Transit into a Travel Experience
               </h2>
-              <p className="text-lg md:text-xl text-gray-700 leading-relaxed mb-4 font-merriweather">
+              <p className="text-lg md:text-xl text-gray-700 leading-relaxed mb-4">
                 A layover in Dubai is not just a break between flights; it's an opportunity. With careful planning, a Dubai stopover tour allows travelers to experience a city known for innovation, culture, and hospitality without committing to a full holiday.
               </p>
-              <p className="text-lg md:text-xl text-gray-700 leading-relaxed font-merriweather">
+              <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
                 From express city tours to overnight stopovers and evening desert safaris, Dubai offers unmatched flexibility for transit travelers. Instead of waiting inside the terminal, step out and experience one of the world's most fascinating cities, even if only for a few hours.
               </p>
             </section>
