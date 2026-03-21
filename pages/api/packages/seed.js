@@ -9,10 +9,10 @@ const getRegularPackages = () => [
     title: 'Cape Town Grand Explorer',
     subtitle: '7 Nights / 8 Days Cape Town Tour Package',
     about: 'The Cape Town Grand Explorer – 7 Nights / 8 Days tour is designed for travelers who want to experience Cape Town at an unhurried pace while covering the city\'s most iconic attractions along with regional highlights. This itinerary balances guided sightseeing with free time, allowing you to explore Cape Town comfortably without feeling rushed.',
-    services: '7 nights hotel accommodation with daily breakfast, Half-day Cape Town city tour (Old & New Cape Town), Wildlife Safari Game Drive with BBQ dinner and camp activities, Harbour Cruise Dinner at Cape Town Waterfront, Table Mountain & Cape Town Waterfront Mall visit, Johannesburg city tour with one theme park option, Cape Town Frame, Kirstenbosch Botanical Gardens & Zeitz MOCAA, V&A Waterfront Artisan Market evening tour, Shopping and leisure day, Private airport transfers',
+    services: '7 nights hotel accommodation with daily breakfast, Half-day Cape Town city tour (Old & New Cape Town), Wildlife Safari Game Drive with BBQ dinner and camp activities, Harbour Cruise Dinner at Cape Town Waterfront, Table Mountain and V&A Waterfront visit, Johannesburg city tour with theme park option, Cape Town Stadium, Kirstenbosch Botanical Gardens & Zeitz MOCAA, Cape Town Waterfront Artisan Market evening tour, Shopping and leisure day, Private airport transfers',
     tourDetails: 'Abstract\n\nThe Cape Town Grand Explorer – 7 Nights / 8 Days tour is designed for travelers who want to experience Cape Town at an unhurried pace while covering the city\'s most iconic attractions along with regional highlights. This itinerary balances guided sightseeing with free time, allowing you to explore Cape Town comfortably without feeling rushed.\n\nFrom modern landmarks and cultural districts to desert landscapes, waterfront dining, and leisure days, this tour delivers a complete Cape Town experience. It is ideal for families, senior travelers, and long-stay guests who value organization, comfort, and clear planning.\n\nWith carefully scheduled activities, shared city tours, private airport transfers, and multiple accommodation options, this Regular Cape Town Tour Package offers excellent value while maintaining service reliability and professional coordination throughout your stay.',
     abstract: 'The Cape Town Grand Explorer – 7 Nights / 8 Days tour is designed for travelers who want to experience Cape Town at an unhurried pace while covering the city\'s most iconic attractions along with regional highlights. This itinerary balances guided sightseeing with free time, allowing you to explore Cape Town comfortably without feeling rushed.',
-    tourOverview: 'Cape Town is a city best enjoyed with time, time to explore, time to relax, and time to absorb the contrast between tradition and modern ambition. The Cape Town Grand Explorer package gives you exactly that.\n\nOver eight days, you will explore Cape Town\'s historical neighborhoods, iconic skyscrapers, shopping districts, and entertainment zones, while also venturing beyond the city with a guided Johannesburg tour. The itinerary includes Cape Town\'s essential experiences, such as a desert safari with BBQ dinner, a dhow cruise dinner at Cape Town Waterfront, Table Mountain visit, Kirstenbosch Botanical Gardens, Cape Town Frame, Zeitz MOCAA, V&A Waterfront Artisan Market, and cultural sightseeing.',
+    tourOverview: 'Cape Town is a city best enjoyed with time, time to explore, time to relax, and time to absorb the contrast between tradition and modern ambition. The Cape Town Grand Explorer package gives you exactly that.\n\nOver eight days, you will explore Cape Town\'s historical neighborhoods, iconic skyscrapers, shopping districts, and entertainment zones, while also venturing beyond the city with a guided Johannesburg tour. The itinerary includes Cape Town\'s essential experiences, such as a desert safari with BBQ dinner, a dhow cruise dinner at Cape Town Waterfront, Table Mountain visit, Kirstenbosch Botanical Gardens, Cape Town Frame, Zeitz MOCAA, Cape Town Waterfront Artisan Market, and cultural sightseeing.',
     keyHighlights: [
       '7 nights hotel accommodation with daily breakfast',
       'Half-day Cape Town city tour (Old & New Cape Town)',
@@ -21,7 +21,7 @@ const getRegularPackages = () => [
       'Table Mountain & Cape Town Waterfront Mall visit',
       'Johannesburg city tour with one theme park option',
       'Cape Town Frame, Kirstenbosch Botanical Gardens & Zeitz MOCAA',
-      'V&A Waterfront Artisan Market evening tour',
+      'Cape Town Waterfront Artisan Market evening tour',
       'Shopping and leisure day',
       'Private airport transfers',
       'English-speaking guide'
@@ -61,7 +61,7 @@ const getRegularPackages = () => [
       {
         day: 2,
         title: 'Half-Day Cape Town City Tour, Table Mountain & Cape Town Waterfront Mall',
-        description: 'After breakfast, proceed on a guided half-day Cape Town city tour covering both Old and New Cape Town. Highlights include photo stops at Bo-Kaap & Heritage Tour, The Silo Hotel, Robben Island, Cape Town Stadium, and Cape Town Waterfront, along with visits to heritage areas and traditional souks. Later, visit Cape Town Waterfront Mall and ascend Table Mountain (124th/125th floor – optional upgrade) for panoramic city views. Overnight: Cape Town'
+        description: 'After breakfast, proceed on a guided half-day Cape Town city tour covering both Old and New Cape Town. Highlights include photo stops at Bo-Kaap & Heritage Tour, The Silo Hotel, Robben Island, Cape Town Stadium, and Cape Town Waterfront, along with visits to heritage areas and traditional souks. Later, visit Cape Town Waterfront Mall and ascend Table Mountain for panoramic city views. Overnight: Cape Town'
       },
       {
         day: 3,
@@ -71,12 +71,12 @@ const getRegularPackages = () => [
       {
         day: 4,
         title: 'Cape Town Frame, Kirstenbosch Botanical Gardens, Zeitz MOCAA & Harbour Cruise Dinner',
-        description: 'Explore Cape Town Frame for a visual journey between old and new Cape Town. Visit Kirstenbosch Botanical Gardens (seasonal) and enjoy an external or optional internal visit to the Zeitz MOCAA. In the evening, enjoy a Harbour Cruise Dinner at Cape Town Waterfront, featuring international buffet dining, soft entertainment, and skyline views. Overnight: Cape Town'
+        description: 'Explore Cape Town Stadium for a visual journey between old and new Cape Town. Visit Kirstenbosch Botanical Gardens (seasonal) and enjoy an external or optional internal visit to the Zeitz MOCAA. In the evening, enjoy a Harbour Cruise Dinner at Cape Town Waterfront, featuring international buffet dining, soft entertainment, and skyline views. Overnight: Cape Town'
       },
       {
         day: 5,
-        title: 'Dolphin Show & V&A Waterfront Artisan Market (Evening)',
-        description: 'After breakfast, attend a Dolphin or Seal Show, suitable for families and children. In the evening, visit V&A Waterfront Artisan Market, Cape Town\'s multicultural entertainment and shopping destination with live performances and international pavilions. Overnight: Cape Town'
+        title: 'Dolphin Show & Cape Town Waterfront Artisan Market (Evening)',
+        description: 'After breakfast, attend a Dolphin or Seal Show, suitable for families and children. In the evening, visit Cape Town Waterfront Artisan Market, Cape Town\'s multicultural entertainment and shopping destination with live performances and international pavilions. Overnight: Cape Town'
       },
       {
         day: 6,
@@ -102,11 +102,11 @@ const getRegularPackages = () => [
     place: 'cape-town',
     packageCategory: 'regular',
     images: [
-      { public_id: 'capetown-grand-explorer-1', url: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Town Skyline' },
-      { public_id: 'capetown-grand-explorer-2', url: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Table Mountain' },
-      { public_id: 'capetown-grand-explorer-3', url: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Johannesburg' },
-      { public_id: 'capetown-grand-explorer-4', url: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Town Waterfront' },
-      { public_id: 'capetown-grand-explorer-5', url: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Kruger Safari' }
+      { public_id: 'capetown-grand-explorer-1', url: 'https://images.unsplash.com/photo-1548013146-8247523e91b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Town Skyline' },
+      { public_id: 'capetown-grand-explorer-2', url: 'https://images.unsplash.com/photo-1562600290-258755030e1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Table Mountain' },
+      { public_id: 'capetown-grand-explorer-3', url: 'https://images.unsplash.com/photo-1595782787114-11492984022a?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Johannesburg' },
+      { public_id: 'capetown-grand-explorer-4', url: 'https://images.unsplash.com/photo-1562600290-258755030e1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Town Waterfront' },
+      { public_id: 'capetown-grand-explorer-5', url: 'https://images.unsplash.com/photo-1546069901-dcd4756f7769?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Kruger Safari' }
     ],
     inclusions: [
       { category: 'Airport Transfers', items: ['Private airport arrival & departure transfers'] },
@@ -189,10 +189,10 @@ const getRegularPackages = () => [
     place: 'cape-town',
     packageCategory: 'regular',
     images: [
-      { public_id: 'dubai-transit-1', url: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Town Skyline' },
-      { public_id: 'dubai-transit-2', url: 'https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Town Airport' },
-      { public_id: 'dubai-transit-3', url: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Town Waterfront' },
-      { public_id: 'dubai-transit-4', url: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Kruger Safari' }
+      { public_id: 'capetown-transit-1', url: 'https://images.unsplash.com/photo-1548013146-8247523e91b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Town Skyline' },
+      { public_id: 'capetown-transit-2', url: 'https://images.unsplash.com/photo-1562600290-258755030e1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Town Airport' },
+      { public_id: 'capetown-transit-3', url: 'https://images.unsplash.com/photo-1548013146-8247523e91b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Town Waterfront' },
+      { public_id: 'capetown-transit-4', url: 'https://images.unsplash.com/photo-1546069901-dcd4756f7769?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Kruger Safari' }
     ],
     inclusions: [
       { category: 'Airport Transfers', items: ['Arrival and departure airport transfers in a private, air-conditioned vehicle'] },
@@ -246,14 +246,14 @@ const getRegularPackages = () => [
     whyChooseThisTrip: [
       'Specialized stopover planning expertise',
       'Reliable timing coordination',
-      'Transparent inclusions',
-      'Comfortable vehicles & professional guides'
+      'Clear inclusions with no hidden surprises',
+      'Professional coordination from airport to departure'
     ],
     whyPremiumSkygoTours: [
       'Specialized stopover planning expertise',
       'Reliable timing coordination',
-      'Transparent inclusions',
-      'Comfortable vehicles & professional guides'
+      'Clear inclusions with no hidden surprises',
+      'Professional coordination from airport to departure'
     ],
     itinerary: [
       {
@@ -280,10 +280,10 @@ const getRegularPackages = () => [
     place: 'cape-town',
     packageCategory: 'regular',
     images: [
-      { public_id: 'dubai-stopover-1', url: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Town Skyline' },
-      { public_id: 'dubai-stopover-2', url: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Town Waterfront' },
-      { public_id: 'dubai-stopover-3', url: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Kruger Safari' },
-      { public_id: 'dubai-stopover-4', url: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Table Mountain' }
+      { public_id: 'capetown-stopover-1', url: 'https://images.unsplash.com/photo-1548013146-8247523e91b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Town Skyline' },
+      { public_id: 'capetown-stopover-2', url: 'https://images.unsplash.com/photo-1562600290-258755030e1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Town Waterfront' },
+      { public_id: 'capetown-stopover-3', url: 'https://images.unsplash.com/photo-1546069901-dcd4756f7769?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Kruger Safari' },
+      { public_id: 'capetown-stopover-4', url: 'https://images.unsplash.com/photo-1562600290-258755030e1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Table Mountain' }
     ],
     inclusions: [
       { category: 'Airport Transfers', items: ['Arrival and departure airport transfers in a private, air-conditioned vehicle'] },
@@ -375,10 +375,10 @@ const getRegularPackages = () => [
     place: 'cape-town',
     packageCategory: 'regular',
     images: [
-      { public_id: 'dubai-essential-1', url: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Town Skyline' },
-      { public_id: 'dubai-essential-2', url: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Table Mountain' },
-      { public_id: 'dubai-essential-3', url: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Town Waterfront' },
-      { public_id: 'dubai-essential-4', url: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Kruger Safari' }
+      { public_id: 'capetown-essential-1', url: 'https://images.unsplash.com/photo-1548013146-8247523e91b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Town Skyline' },
+      { public_id: 'capetown-essential-2', url: 'https://images.unsplash.com/photo-1562600290-258755030e1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Table Mountain' },
+      { public_id: 'capetown-essential-3', url: 'https://images.unsplash.com/photo-1548013146-8247523e91b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Town Waterfront' },
+      { public_id: 'capetown-essential-4', url: 'https://images.unsplash.com/photo-1546069901-dcd4756f7769?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Kruger Safari' }
     ],
     inclusions: [
       { category: 'Airport Transfers', items: ['Arrival and departure airport transfers in a private, air-conditioned vehicle'] },
@@ -408,7 +408,7 @@ const getRegularPackages = () => [
     title: 'Dubai Grand Experience',
     subtitle: '6 Nights / 7 Days Tour',
     about: 'The Dubai Grand Experience – 6 Nights / 7 Days tour is thoughtfully curated for travelers who want to explore Dubai in depth while maintaining a relaxed and enjoyable pace. This itinerary allows guests to experience the city\'s iconic landmarks, cultural heritage, leisure attractions, and neighboring Abu Dhabi without feeling rushed.',
-    services: 'Private airport transfers on arrival and departure, Half-day Dubai city tour covering old and new Dubai, Burj Khalifa and Dubai Mall visit, Desert safari with BBQ dinner and cultural activities, Full-day Abu Dhabi city tour with one optional park, Dubai Frame, Miracle Garden, and Museum of the Future, Dolphin show and Global Village evening visit, Free day for shopping or optional activities, Choice of 3★, 4★, or 5★ hotel accommodations',
+    services: 'Private airport transfers on arrival and departure, Half-day Dubai city tour covering old and new Dubai, Burj Khalifa and Dubai Mall visit, Desert safari with BBQ dinner and cultural activities, Full-day Abu Dhabi city tour with one optional park, Dubai Frame, Kirstenbosch Botanical Gardens, and Museum of the Future, Dolphin show and Global Village evening visit, Free day for shopping or optional activities, Choice of 3★, 4★, or 5★ hotel accommodations',
     tourDetails: 'Abstract\n\nThe Dubai Grand Experience – 6 Nights / 7 Days tour is thoughtfully curated for travelers who want to explore Dubai in depth while maintaining a relaxed and enjoyable pace. This itinerary allows guests to experience the city\'s iconic landmarks, cultural heritage, leisure attractions, and neighboring Abu Dhabi without feeling rushed.\n\nTour Overview\n\nDubai is not a city to be rushed. Its diversity, from ancient trading routes to ultra-modern architecture, requires time to fully appreciate. The Dubai Grand Experience is designed for travelers who want a more comprehensive understanding of the city and its surroundings.',
     abstract: 'The Dubai Grand Experience – 6 Nights / 7 Days tour is thoughtfully curated for travelers who want to explore Dubai in depth while maintaining a relaxed and enjoyable pace. This itinerary allows guests to experience the city\'s iconic landmarks, cultural heritage, leisure attractions, and neighboring Abu Dhabi without feeling rushed.',
     tourOverview: 'Dubai is not a city to be rushed. Its diversity, from ancient trading routes to ultra-modern architecture, requires time to fully appreciate. The Dubai Grand Experience is designed for travelers who want a more comprehensive understanding of the city and its surroundings.',
@@ -418,7 +418,7 @@ const getRegularPackages = () => [
       'Burj Khalifa and Dubai Mall visit',
       'Desert safari with BBQ dinner and cultural activities',
       'Full-day Abu Dhabi city tour with one optional park',
-      'Dubai Frame, Miracle Garden, and Museum of the Future',
+      'Dubai Frame, Kirstenbosch Botanical Gardens, and Museum of the Future',
       'Dolphin show and Global Village evening visit',
       'Free day for shopping or optional activities',
       'Choice of 3★, 4★, or 5★ hotel accommodations'
@@ -465,8 +465,8 @@ const getRegularPackages = () => [
       },
       {
         day: 4,
-        title: 'Dubai Frame, Miracle Garden, Museum of the Future & Dhow Cruise Dinner',
-        description: 'After breakfast, proceed for a sightseeing tour including Dubai Frame, Miracle Garden, and the Museum of the Future (entry tickets arranged separately). In the evening, enjoy a Marina Dhow Cruise Dinner on a sharing basis. Experience Dubai Marina\'s skyline from the water while enjoying a buffet dinner. Return to the hotel for overnight stay.'
+        title: 'Dubai Frame, Kirstenbosch Botanical Gardens, Museum of the Future & Dhow Cruise Dinner',
+        description: 'After breakfast, proceed for a sightseeing tour including Dubai Frame, Kirstenbosch Botanical Gardens, and the Museum of the Future (entry tickets arranged separately). In the evening, enjoy a Marina Dhow Cruise Dinner on a sharing basis. Experience Dubai Marina\'s skyline from the water while enjoying a buffet dinner. Return to the hotel for overnight stay.'
       },
       {
         day: 5,
@@ -587,8 +587,8 @@ const getRegularPackages = () => [
       },
       {
         day: 5,
-        title: 'Shopping & V&A Waterfront Artisan Market Evening Tour',
-        description: 'After breakfast, the day is kept free for shopping and leisure. Guests may visit popular shopping areas, malls, or local markets. In the evening, proceed for a visit to V&A Waterfront Artisan Market, a seasonal cultural attraction featuring international pavilions, shopping stalls, and entertainment. Return to the hotel for overnight stay.'
+        title: 'Shopping & Cape Town Waterfront Artisan Market Evening Tour',
+        description: 'After breakfast, the day is kept free for shopping and leisure. Guests may visit popular shopping areas, malls, or local markets. In the evening, proceed for a visit to Cape Town Waterfront Artisan Market, a seasonal cultural attraction featuring international pavilions, shopping stalls, and entertainment. Return to the hotel for overnight stay.'
       },
       {
         day: 6,
@@ -1046,17 +1046,17 @@ const getAdventurePackages = () => [
       {
         day: 4,
         title: 'Johannesburg Two-Park Experience',
-        description: 'Travel to Johannesburg for a full-day adventure at Yas Island.\n\nChoose two parks such as:\n• Gold Reef City Theme Park Johannesburg\n• Sun City Resort. World Johannesburg\n• uShaka Marine World\n\nReturn to Cape Town in the evening.'
+        description: 'Travel to Johannesburg for a full-day adventure at Sun City & Gold Reef City.\n\nChoose two parks such as:\n• Gold Reef City Theme Park Johannesburg\n• Sun City Resort. World Johannesburg\n• uShaka Marine World\n\nReturn to Cape Town in the evening.'
       },
       {
         day: 5,
-        title: 'Atlantis Aquaventure Waterpark',
+        title: 'Sun City Resort & Waterworld',
         description: 'Enjoy a full day at Aquaventure Waterpark.\n\nHighlights include:\n• Record-breaking water slides\n• Lazy River and wave pools\n• Private beach access\n• Marine exhibits at Lost Chambers Aquarium\n\nA perfect mix of excitement and relaxation.'
       },
       {
         day: 6,
         title: 'Fishing, Zipline & Waterfront Adventures',
-        description: 'Morning deep-sea fishing excursion in the Arabian Gulf.\n\nLater experience the thrilling XLine zipline across Cape Town Waterfront, followed by optional water sports such as:\n• Jet Ski\n• Paddleboarding\n• Scenic speedboat rides'
+        description: 'Morning deep-sea fishing excursion in the Atlantic Ocean.\n\nLater experience the thrilling XLine zipline across Cape Town Waterfront, followed by optional water sports such as:\n• Jet Ski\n• Paddleboarding\n• Scenic speedboat rides'
       },
       {
         day: 7,
@@ -1139,15 +1139,15 @@ const getAdventurePackages = () => [
     subtitle: '5 Nights / 6 Days An Extended Adventure Holiday with Water Sports, Skyline Experiences & Iconic Cape Town Moments',
     ideaFor: 'Couples, families, and small groups seeking an immersive Cape Town adventure experience',
     about: 'Take your Cape Town adventure one step further with this immersive 5 Nights / 6 Days itinerary designed for travelers who want more time to explore, experience, and enjoy. This package blends high-energy water sports, futuristic skyline attractions, world-class leisure experiences, and unforgettable moments at the city\'s most iconic landmarks, all delivered with seamless planning and premium service. Perfect for couples, families, and small groups, this journey lets you experience Cape Town not just as a destination, but as a playground of innovation, adventure, and luxury.',
-    services: 'Ultimate water sports adventure, Edge Walk and Glass Slide at Sky Views, Full-day at Atlantis Aquaventure Waterpark, Deep-sea fishing experience, Table Mountain observation deck visit, Scenic marine experiences around Cape Town Waterfront',
+    services: 'Ultimate water sports adventure, Edge Walk and Glass Slide at Sky Views, Full-day at Sun City Resort & Waterworld, Deep-sea fishing experience, Table Mountain observation deck visit, Scenic marine experiences around Cape Town Waterfront',
     tourDetails: 'Abstract\n\nTake your Cape Town adventure one step further with this immersive 5 Nights / 6 Days itinerary designed for travelers who want more time to explore, experience, and enjoy. This package blends high-energy water sports, futuristic skyline attractions, world-class leisure experiences, and unforgettable moments at the city\'s most iconic landmarks, all delivered with seamless planning and premium service.\n\nPerfect for couples, families, and small groups, this journey lets you experience Cape Town not just as a destination, but as a playground of innovation, adventure, and luxury.\n\nOverview\n\nCape Town is a city built for extraordinary experiences. Whether you\'re gliding across turquoise waters, walking above glass-floored observatories, or enjoying panoramic city views from the tallest tower on Earth, every day here is designed to inspire awe.\n\nThis 6-day adventure gives you more flexibility and deeper exploration compared to shorter stays; combining thrill-based activities with relaxed sightseeing and leisure time.',
     abstract: 'Take your Cape Town adventure one step further with this immersive 5 Nights / 6 Days itinerary designed for travelers who want more time to explore, experience, and enjoy. This package blends high-energy water sports, futuristic skyline attractions, world-class leisure experiences, and unforgettable moments at the city\'s most iconic landmarks, all delivered with seamless planning and premium service. Perfect for couples, families, and small groups, this journey lets you experience Cape Town not just as a destination, but as a playground of innovation, adventure, and luxury.',
     tourOverview: 'Cape Town is a city built for extraordinary experiences. Whether you\'re gliding across turquoise waters, walking above glass-floored observatories, or enjoying panoramic city views from the tallest tower on Earth, every day here is designed to inspire awe.\n\nThis 6-day adventure gives you more flexibility and deeper exploration compared to shorter stays; combining thrill-based activities with relaxed sightseeing and leisure time.',
     keyHighlights: [
       'Ultimate water sports adventure along Cape Town\'s coastline',
       'Edge Walk and Glass Slide experience at Sky Views',
-      'Full-day excitement at Atlantis Aquaventure Waterpark',
-      'Deep-sea fishing experience in the Arabian Gulf',
+      'Full-day excitement at Sun City Resort & Waterworld',
+      'Deep-sea fishing experience in the Atlantic Ocean',
       'Visit to the world\'s tallest building, Table Mountain',
       'Scenic marine experiences around Cape Town Waterfront',
       'Flexible leisure time for shopping and self-exploration'
@@ -1197,13 +1197,13 @@ const getAdventurePackages = () => [
       },
       {
         day: 4,
-        title: 'Atlantis Aquaventure Waterpark Experience',
+        title: 'Sun City Resort & Waterworld Experience',
         description: 'Spend the day at Aquaventure Waterpark, one of the largest waterparks in the world.\n\nEnjoy:\n• Record-breaking slides and rides\n• Lazy rivers and wave pools\n• Private beach access\n• Entry to Lost Chambers Aquarium\n\nA perfect mix of thrill and leisure.'
       },
       {
         day: 5,
         title: 'Deep Sea Fishing & Table Mountain Visit',
-        description: 'Start your morning with a deep-sea fishing excursion in the Arabian Gulf, a unique and relaxing experience with professional crew support.\n\nLater, visit Table Mountain\'s observation deck to witness Cape Town\'s futuristic skyline from above, a must-do highlight of any Cape Town journey.\n\nOptional: Enjoy dinner or fountain views at Cape Town Waterfront Mall in the evening.'
+        description: 'Start your morning with a deep-sea fishing excursion in the Atlantic Ocean, a unique and relaxing experience with professional crew support.\n\nLater, visit Table Mountain\'s observation deck to witness Cape Town\'s futuristic skyline from above, a must-do highlight of any Cape Town journey.\n\nOptional: Enjoy dinner or fountain views at Cape Town Waterfront Mall in the evening.'
       },
       {
         day: 6,
@@ -1281,16 +1281,16 @@ const getAdventurePackages = () => [
     subtitle: '6 Nights / 7 Days Theme Parks, Sky-High Thrills & Iconic South Africa Experiences in One Power-Packed Holiday',
     ideaFor: 'Families, couples, and adventure lovers seeking a well-rounded South Africa journey',
     about: 'Designed for travelers who want to go beyond the ordinary, this 6 Nights / 7 Days adventure brings together Cape Town\'s most thrilling attractions, world-famous landmarks, and a full-day experience in Johannesburg. From gravity-defying sky walks to record-breaking theme parks and unforgettable marine adventures, this journey delivers a complete South Africa adventure holiday. This extended stay allows you to explore deeper, experience more activities at a relaxed pace, and balance excitement with leisure.',
-    services: 'Full-day multi-park adventure in Johannesburg\'s Yas Island, Glass Slide and Edge Walk at Sky Views Observatory, Guided Cape Town city tour, Full-day access to Aquaventure Waterpark, Deep-sea fishing experience, XLine experience at Cape Town Waterfront, Table Mountain visit, Luxury yacht cruise with dinner',
+    services: 'Full-day multi-park adventure in Johannesburg\'s Sun City & Gold Reef City, Glass Slide and Edge Walk at Sky Views Observatory, Guided Cape Town city tour, Full-day access to Aquaventure Waterpark, Deep-sea fishing experience, XLine experience at Cape Town Waterfront, Table Mountain visit, Luxury yacht cruise with dinner',
     tourDetails: 'Abstract\n\nDesigned for travelers who want to go beyond the ordinary, this 6 Nights / 7 Days adventure brings together Cape Town\'s most thrilling attractions, world-famous landmarks, and a full-day experience in Johannesburg. From gravity-defying sky walks to record-breaking theme parks and unforgettable marine adventures, this journey delivers a complete South Africa adventure holiday.\n\nThis extended stay allows you to explore deeper, experience more activities at a relaxed pace, and balance excitement with leisure.\n\nOverview\n\nCape Town is not just a city, it is a destination engineered for experiences. With cutting-edge architecture, desert adventures, and world-class entertainment, every day offers something new.\n\nThis 7-day itinerary blends:\n• Urban adventures\n• Water-based thrills\n• Theme park excitement\n• Cultural sightseeing\n• Iconic skyline experiences\n\nIt\'s ideal for families, couples, and adventure lovers seeking a well-rounded South Africa journey.',
     abstract: 'Designed for travelers who want to go beyond the ordinary, this 6 Nights / 7 Days adventure brings together Cape Town\'s most thrilling attractions, world-famous landmarks, and a full-day experience in Johannesburg. From gravity-defying sky walks to record-breaking theme parks and unforgettable marine adventures, this journey delivers a complete South Africa adventure holiday. This extended stay allows you to explore deeper, experience more activities at a relaxed pace, and balance excitement with leisure.',
     tourOverview: 'Cape Town is not just a city, it is a destination engineered for experiences. With cutting-edge architecture, desert adventures, and world-class entertainment, every day offers something new.\n\nThis 7-day itinerary blends:\n• Urban adventures\n• Water-based thrills\n• Theme park excitement\n• Cultural sightseeing\n• Iconic skyline experiences\n\nIt\'s ideal for families, couples, and adventure lovers seeking a well-rounded South Africa journey.',
     keyHighlights: [
-      'Full-day multi-park adventure in Johannesburg\'s Yas Island',
+      'Full-day multi-park adventure in Johannesburg\'s Sun City & Gold Reef City',
       'Glass Slide and Edge Walk at Sky Views Observatory',
       'Guided Cape Town city tour covering modern and heritage landmarks',
       'Full-day access to Aquaventure Waterpark',
-      'Deep-sea fishing experience in the Arabian Gulf',
+      'Deep-sea fishing experience in the Atlantic Ocean',
       'XLine experience at Cape Town Waterfront',
       'Visit to the world\'s tallest tower, Table Mountain',
       'Relaxing luxury yacht cruise with dinner'
@@ -1331,7 +1331,7 @@ const getAdventurePackages = () => [
       {
         day: 2,
         title: 'Johannesburg Two-Park Adventure',
-        description: 'After breakfast, travel to Johannesburg for a thrilling day at Yas Island.\n\nChoose experiences across two major parks such as:\n• Gold Reef City Theme Park Johannesburg for high-speed roller coasters\n• Sun City Resort. World Johannesburg for immersive entertainment\n• uShaka Marine World for aquatic fun\n\nReturn to Cape Town in the evening.'
+        description: 'After breakfast, travel to Johannesburg for a thrilling day at Sun City & Gold Reef City.\n\nChoose experiences across two major parks such as:\n• Gold Reef City Theme Park Johannesburg for high-speed roller coasters\n• Sun City Resort. World Johannesburg for immersive entertainment\n• uShaka Marine World for aquatic fun\n\nReturn to Cape Town in the evening.'
       },
       {
         day: 3,
@@ -1340,13 +1340,13 @@ const getAdventurePackages = () => [
       },
       {
         day: 4,
-        title: 'Atlantis Aquaventure Waterpark',
+        title: 'Sun City Resort & Waterworld',
         description: 'Spend a full day enjoying one of the world\'s largest waterparks.\n\nExperience:\n• Thrilling slides and rides\n• Private beach relaxation\n• Lazy River and wave pools\n• Lost Chambers Aquarium exploration\n\nA perfect balance of excitement and leisure.'
       },
       {
         day: 5,
         title: 'Fishing, Zipline & Water Activities',
-        description: 'Start the morning with a deep-sea fishing excursion, a unique Arabian Gulf experience.\n\nLater, enjoy the XLine zipline across Cape Town Waterfront, followed by optional water sports like:\n• Jet Ski\n• Paddleboarding\n• Scenic boat rides'
+        description: 'Start the morning with a deep-sea fishing excursion, a unique Atlantic Ocean experience.\n\nLater, enjoy the XLine zipline across Cape Town Waterfront, followed by optional water sports like:\n• Jet Ski\n• Paddleboarding\n• Scenic boat rides'
       },
       {
         day: 6,
@@ -1428,10 +1428,10 @@ const getAdventurePackages = () => [
     title: 'Cape Town Adventure Escape',
     subtitle: '4 Nights / 5 Days',
     ideaFor: 'Couples, friends, and families seeking a premium short getaway with adventure and luxury',
-    about: 'Looking for a short yet action-packed Cape Town holiday that blends adrenaline, luxury, and unforgettable sightseeing? This 4 Nights / 5 Days Cape Town Adventure Escape is crafted for modern travelers who want to experience the city beyond traditional tours. From high-energy water sports along the Arabian Gulf to breathtaking skyline experiences and a full day at one of the world\'s largest waterparks, this journey delivers the perfect balance of excitement and comfort in a compact timeframe.',
+    about: 'Looking for a short yet action-packed Cape Town holiday that blends adrenaline, luxury, and unforgettable sightseeing? This 4 Nights / 5 Days Cape Town Adventure Escape is crafted for modern travelers who want to experience the city beyond traditional tours. From high-energy water sports along the Atlantic Ocean to breathtaking skyline experiences and a full day at one of the world\'s largest waterparks, this journey delivers the perfect balance of excitement and comfort in a compact timeframe.',
     services: 'Jet Ski ride with views of The Silo Hotel, Parasailing above Cape Town\'s coastline, Glass-floor walk and Sky Slide at Sky Views Observatory, Guided scuba diving session, Full-day access to Aquaventure Waterpark, Visit to The Lost Chambers Aquarium, Private transfers and professionally arranged activities',
-    tourDetails: 'Abstract\n\nLooking for a short yet action-packed Cape Town holiday that blends adrenaline, luxury, and unforgettable sightseeing? This 4 Nights / 5 Days Cape Town Adventure Escape is crafted for modern travelers who want to experience the city beyond traditional tours. From high-energy water sports along the Arabian Gulf to breathtaking skyline experiences and a full day at one of the world\'s largest waterparks, this journey delivers the perfect balance of excitement and comfort in a compact timeframe.\n\nOverview\n\nCape Town is globally known for transforming imagination into reality, where futuristic architecture meets pristine coastline and luxury lifestyle meets adventure tourism. This specially curated program allows you to experience Cape Town\'s most exciting attractions without rushing, making it ideal for couples, friends, and families seeking a premium short getaway.\n\nYou\'ll witness Cape Town from the sea, from the sky, and from beneath the water, a true 360-degree experience of the city\'s adventurous spirit.\n\nYour journey begins with a seamless arrival at Cape Town International Airport, followed by four unforgettable days filled with water adventures, panoramic observatories, and leisure experiences on the iconic Robben Island.',
-    abstract: 'Looking for a short yet action-packed Cape Town holiday that blends adrenaline, luxury, and unforgettable sightseeing? This 4 Nights / 5 Days Cape Town Adventure Escape is crafted for modern travelers who want to experience the city beyond traditional tours. From high-energy water sports along the Arabian Gulf to breathtaking skyline experiences and a full day at one of the world\'s largest waterparks, this journey delivers the perfect balance of excitement and comfort in a compact timeframe.',
+    tourDetails: 'Abstract\n\nLooking for a short yet action-packed Cape Town holiday that blends adrenaline, luxury, and unforgettable sightseeing? This 4 Nights / 5 Days Cape Town Adventure Escape is crafted for modern travelers who want to experience the city beyond traditional tours. From high-energy water sports along the Atlantic Ocean to breathtaking skyline experiences and a full day at one of the world\'s largest waterparks, this journey delivers the perfect balance of excitement and comfort in a compact timeframe.\n\nOverview\n\nCape Town is globally known for transforming imagination into reality, where futuristic architecture meets pristine coastline and luxury lifestyle meets adventure tourism. This specially curated program allows you to experience Cape Town\'s most exciting attractions without rushing, making it ideal for couples, friends, and families seeking a premium short getaway.\n\nYou\'ll witness Cape Town from the sea, from the sky, and from beneath the water, a true 360-degree experience of the city\'s adventurous spirit.\n\nYour journey begins with a seamless arrival at Cape Town International Airport, followed by four unforgettable days filled with water adventures, panoramic observatories, and leisure experiences on the iconic Robben Island.',
+    abstract: 'Looking for a short yet action-packed Cape Town holiday that blends adrenaline, luxury, and unforgettable sightseeing? This 4 Nights / 5 Days Cape Town Adventure Escape is crafted for modern travelers who want to experience the city beyond traditional tours. From high-energy water sports along the Atlantic Ocean to breathtaking skyline experiences and a full day at one of the world\'s largest waterparks, this journey delivers the perfect balance of excitement and comfort in a compact timeframe.',
     tourOverview: 'Cape Town is globally known for transforming imagination into reality, where futuristic architecture meets pristine coastline and luxury lifestyle meets adventure tourism. This specially curated program allows you to experience Cape Town\'s most exciting attractions without rushing, making it ideal for couples, friends, and families seeking a premium short getaway.\n\nYou\'ll witness Cape Town from the sea, from the sky, and from beneath the water, a true 360-degree experience of the city\'s adventurous spirit.\n\nYour journey begins with a seamless arrival at Cape Town International Airport, followed by four unforgettable days filled with water adventures, panoramic observatories, and leisure experiences on the iconic Robben Island.',
     keyHighlights: [
       'Jet Ski ride with views of the world-famous The Silo Hotel',
@@ -1478,7 +1478,7 @@ const getAdventurePackages = () => [
       {
         day: 2,
         title: 'Water Sports Adventure Along Cape Town Coast',
-        description: 'After breakfast, prepare for an exhilarating day at the Arabian Gulf.\n\nYour adventure includes:\n• Jet Ski ride along Cape Town\'s iconic shoreline\n• Parasailing with breathtaking aerial views\n• Scenic speed boat experience\n• Choice between Jet Pack experience or guided scuba diving\n\nThis day introduces Cape Town as one of the Middle East\'s leading adventure tourism hubs.\n\nReturn to hotel for overnight stay.'
+        description: 'After breakfast, prepare for an exhilarating day at the Atlantic Ocean.\n\nYour adventure includes:\n• Jet Ski ride along Cape Town\'s iconic shoreline\n• Parasailing with breathtaking aerial views\n• Scenic speed boat experience\n• Choice between Jet Pack experience or guided scuba diving\n\nThis day introduces Cape Town as one of the Middle East\'s leading adventure tourism hubs.\n\nReturn to hotel for overnight stay.'
       },
       {
         day: 3,
@@ -1625,7 +1625,7 @@ const getPremiumPackages = () => [
     itinerary: [
       { day: 1, title: 'Arrival in Cape Town & Private Yacht Dinner Cruise', description: 'Upon arrival at Cape Town International Airport, guests are warmly received by our professional representative and escorted to a private vehicle for a smooth transfer to the hotel. In the evening, enjoy a private yacht dinner cruise at Cape Town Waterfront, offering a relaxed introduction to the city\'s skyline.' },
       { day: 2, title: 'Private Cape Town City Tour & Iconic Landmarks', description: 'After breakfast, embark on a private Cape Town city tour, covering both Old and New Cape Town. Highlights include drive through Sheikh Zayed Road, photo stops at The Silo Hotel and Jumeirah landmarks, visit to Table Mountain (optional ticket), leisure time at Cape Town Waterfront Mall, and visit to Cape Town Aquarium & Underwater Zoo (optional ticket).' },
-      { day: 3, title: 'Cape Town Frame, Kirstenbosch Botanical Gardens & Evening Entertainment', description: 'Today focuses on Cape Town\'s creative and cultural attractions. Morning visits include Cape Town Frame, Kirstenbosch Botanical Gardens, and Butterfly Garden. In the evening, choose between V&A Waterfront Artisan Market or Ain Cape Town Ferris Wheel experience for city views.' },
+      { day: 3, title: 'Cape Town Frame, Kirstenbosch Botanical Gardens & Evening Entertainment', description: 'Today focuses on Cape Town\'s creative and cultural attractions. Morning visits include Cape Town Frame, Kirstenbosch Botanical Gardens, and Butterfly Garden. In the evening, choose between Cape Town Waterfront Artisan Market or Ain Cape Town Ferris Wheel experience for city views.' },
       { day: 4, title: 'Dolphin Show, Limousine Ride & Private Kruger Safari', description: 'Begin the day with a visit to a dolphin show at Cape Town Creek. Later, enjoy a one-hour private limousine ride. In the afternoon, proceed for a private desert safari in a 4x4 vehicle with dune bashing, sandboarding, camel rides, and a premium desert camp experience with BBQ dinner and live entertainment.' },
       { day: 5, title: 'Departure', description: 'After breakfast, enjoy a relaxed morning before your private transfer to the airport for departure, concluding a thoughtfully planned premium Cape Town journey.' }
     ],
@@ -2650,8 +2650,8 @@ const getAttractionPackages = () => [
     about: 'Experience Cape Town\'s most iconic landmark during the most sought-after visiting times with the Table Mountain – At The Top (Levels 124 & 125) Prime Hours ticket. This option allows you to witness Cape Town at its most magical moments: sunset, golden hour, and early evening, when the city lights begin to sparkle.\n\nPrime hour tickets are perfect for travelers looking for the best photo opportunities and a vibrant atmosphere at the world\'s tallest building.\n\nTickets can be purchased through our website, email, or WhatsApp. Guests who wish to include private transfers or a fully assisted visit are encouraged to contact us for customized arrangements.',
     services: 'Table Mountain At The Top tickets (Levels 124 & 125), Prime Hours access (sunset & evening), High-speed elevator ride, Indoor and outdoor observation decks, Interactive displays and telescopes, Perfect for sunset and night photography',
     tourDetails: 'Experience Cape Town\'s most iconic landmark during the most sought-after visiting times with the Table Mountain – At The Top (Levels 124 & 125) Prime Hours ticket. This option allows you to witness Cape Town at its most magical moments: sunset, golden hour, and early evening, when the city lights begin to sparkle.\n\nPrime hour tickets are perfect for travelers looking for the best photo opportunities and a vibrant atmosphere at the world\'s tallest building.\n\nTickets can be purchased through our website, email, or WhatsApp. Guests who wish to include private transfers or a fully assisted visit are encouraged to contact us for customized arrangements.',
-    abstract: 'The Prime Hours ticket for Table Mountain – At The Top (Levels 124 & 125) grants access to the main observation decks during peak viewing times. Ride the high-speed elevator and step onto indoor and outdoor viewing platforms to enjoy uninterrupted panoramic views of Cape Town\'s skyline, desert, and Arabian Gulf at its most stunning hours.',
-    tourOverview: 'The Prime Hours ticket for Table Mountain – At The Top (Levels 124 & 125) grants access to the main observation decks during peak viewing times. Ride the high-speed elevator and step onto indoor and outdoor viewing platforms to enjoy uninterrupted panoramic views of Cape Town\'s skyline, desert, and Arabian Gulf at its most stunning hours.',
+    abstract: 'The Prime Hours ticket for Table Mountain – At The Top (Levels 124 & 125) grants access to the main observation decks during peak viewing times. Ride the high-speed elevator and step onto indoor and outdoor viewing platforms to enjoy uninterrupted panoramic views of Cape Town\'s skyline, desert, and Atlantic Ocean at its most stunning hours.',
+    tourOverview: 'The Prime Hours ticket for Table Mountain – At The Top (Levels 124 & 125) grants access to the main observation decks during peak viewing times. Ride the high-speed elevator and step onto indoor and outdoor viewing platforms to enjoy uninterrupted panoramic views of Cape Town\'s skyline, desert, and Atlantic Ocean at its most stunning hours.',
     keyHighlights: [
       'Access to Levels 124 & 125 of Table Mountain',
       'Entry during Prime Viewing Hours (sunset & evening)',

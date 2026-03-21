@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { upcomingTrips } from "@/data/homeData";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const UpcomingTrips = () => {
   const router = useRouter();
@@ -56,10 +57,12 @@ const UpcomingTrips = () => {
                 }}
               >
                 <div className="absolute inset-0">
-                  <img
+                  <Image
                     src={trip.image}
                     alt={trip.title}
-                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                    fill
+                    className="object-cover transform group-hover:scale-110 transition-transform duration-700"
+                    sizes="380px"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
                 </div>
@@ -93,7 +96,7 @@ const UpcomingTrips = () => {
           .animate-marquee {
             display: flex;
             width: fit-content;
-            animation: marquee 50s linear infinite;
+            animation: marquee 30s linear infinite;
           }
           .hover\:pause-marquee:hover {
             animation-play-state: paused;

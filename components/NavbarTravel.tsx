@@ -129,8 +129,6 @@ const NavbarTravel = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center relative z-50">
-            {/* White Rectangle behind logo */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] h-14 md:h-16 bg-white rounded-full shadow-sm border border-gray-100/50 z-0"></div>
             {/* Logo */}
             <div className="relative w-24 h-24 md:w-32 md:h-32 z-10">
               <Image

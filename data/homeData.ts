@@ -67,26 +67,26 @@ export const destinations: Destination[] = [
 export const upcomingTrips: Trip[] = [
   {
     id: '1',
-    title: 'Kruger Safari Adventure',
-    location: 'Mpumalanga',
+    title: 'Cape Town coastal drive',
+    location: 'Western Cape',
     price: 'from R2,999',
-    image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: '/coast , south afirca.webp',
     link: '/packages'
   },
   {
     id: '2',
-    title: 'Table Mountain Experience',
+    title: 'Table Mountain Views',
     location: 'Cape Town',
     price: 'from R1,299',
-    image: 'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: '/cape town,south africa.webp',
     link: '/packages'
   },
   {
     id: '3',
-    title: 'Durban Beach Holiday',
-    location: 'KwaZulu-Natal',
+    title: 'Cape Town City Lights',
+    location: 'Cape Town',
     price: 'from R1,999',
-    image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: '/cape town.webp',
     link: '/packages'
   }
 ];
@@ -121,20 +121,20 @@ export const popularPackages: Package[] = [
   },
   {
     id: '4',
-    title: 'Garden Route Wonders',
-    subtitle: 'Pristine beaches and forest tracks',
+    title: 'Johannesburg Heritage',
+    subtitle: 'Experience the City of Gold',
     duration: '6 Days',
     price: 'R18,999',
-    image: 'https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1549417229-aa67d3263c09?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     link: '/packages'
   },
   {
     id: '5',
-    title: 'Cape Town City Lights',
+    title: 'Table Mountain Explorer',
     subtitle: 'Urban culture and coastal beauty',
     duration: '5 Days',
     price: 'R11,499',
-    image: 'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: '/cape town,south africa.webp',
     link: '/packages'
   }
 ];

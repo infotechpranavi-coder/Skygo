@@ -39,6 +39,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useInquiryForm } from "@/contexts/InquiryFormContext";
 
 // Utility function to render text with bold formatting
 const renderBoldText = (text: string) => {
@@ -115,6 +116,7 @@ interface Package {
 const PackageDetailPage = () => {
   const params = useParams();
   const router = useRouter();
+  const { openForm } = useInquiryForm();
   const [packageData, setPackageData] = useState<Package | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -3220,11 +3222,13 @@ Key Highlights`,
                           </div>
                         </div>
                       </div>
-                      <Link href={`/contact?packageName=${encodeURIComponent(packageData.title)}&packageType=${encodeURIComponent(packageData.packageCategory || 'attraction')}`} className="block">
-                        <Button className="w-full h-14 bg-gray-900 hover:bg-black text-white font-bold uppercase tracking-widest rounded-2xl transition-all duration-300">
+                      <div className="block">
+                        <Button
+                          onClick={() => openForm({ title: packageData.title, type: isAttractionPackage ? 'Ticket' : 'Package' })}
+                          className="w-full h-14 bg-gray-900 hover:bg-black text-white font-bold uppercase tracking-widest rounded-2xl transition-all duration-300">
                           Contact Us to Book
                         </Button>
-                      </Link>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -3300,7 +3304,7 @@ Key Highlights`,
                     <div className="space-y-4">
                       <Button
                         className="w-full h-16 bg-gray-900 hover:bg-black text-white font-bold uppercase tracking-widest rounded-2xl shadow-lg group transition-all duration-300"
-                        onClick={() => router.push(`/contact?packageName=${encodeURIComponent(packageData.title)}&packageType=${encodeURIComponent(packageData.packageCategory || 'general')}`)}
+                        onClick={() => openForm({ title: packageData.title, type: 'Package' })}
                       >
                         <span className="flex items-center gap-3">
                           Enquire Now
@@ -3310,7 +3314,7 @@ Key Highlights`,
                       <Button
                         variant="outline"
                         className="w-full h-16 border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white font-bold uppercase tracking-widest rounded-2xl transition-all duration-300"
-                        onClick={() => router.push(`/contact?packageName=${encodeURIComponent(packageData.title)}&packageType=${encodeURIComponent(packageData.packageCategory || 'general')}&subject=Expert Advice Needed`)}
+                        onClick={() => openForm({ title: packageData.title, type: 'Package' })}
                       >
                         <Phone className="h-4 w-4 mr-2" />
                         Expert Consultation

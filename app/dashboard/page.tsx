@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card";
@@ -19,6 +19,8 @@ import PackageDetailModal from "../../components/PackageDetailModal";
 import EditPackageModal from "../../components/EditPackageModal";
 import CreateBannerModal from "../../components/CreateBannerModal";
 import EditBannerModal from "../../components/EditBannerModal";
+import CreateTestimonialModal from "../../components/CreateTestimonialModal";
+import ReplyEnquiryModal from "../../components/ReplyEnquiryModal";
 import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType, HeadingLevel, ImageRun } from 'docx';
 import { saveAs } from 'file-saver';
 import axios from 'axios';
@@ -53,7 +55,7 @@ import { cn } from "../../lib/utils";
 
 import { PackageData, TourData, TicketData, BannerData } from "@/lib/types";
 
-type DashboardView = 'packages' | 'tours' | 'tickets' | 'banners' | 'testimonials' | 'blogs';
+type DashboardView = 'packages' | 'tours' | 'tickets' | 'banners' | 'testimonials' | 'blogs' | 'enquiries' | 'reports';
 
 export default function DashboardPage() {
   const [activeView, setActiveView] = useState<DashboardView>('packages');
@@ -67,6 +69,9 @@ export default function DashboardPage() {
   const [isEditTicketModalOpen, setIsEditTicketModalOpen] = useState(false);
   const [isCreateBannerModalOpen, setIsCreateBannerModalOpen] = useState(false);
   const [isEditBannerModalOpen, setIsEditBannerModalOpen] = useState(false);
+  const [isCreateTestimonialModalOpen, setIsCreateTestimonialModalOpen] = useState(false);
+  const [isReplyModalOpen, setIsReplyModalOpen] = useState(false);
+  const [selectedEnquiry, setSelectedEnquiry] = useState<any | null>(null);
   const [selectedPackage, setSelectedPackage] = useState<PackageData | null>(null);
   const [selectedTour, setSelectedTour] = useState<TourData | null>(null);
   const [selectedTicket, setSelectedTicket] = useState<TicketData | null>(null);
@@ -75,12 +80,15 @@ export default function DashboardPage() {
   const [tours, setTours] = useState<TourData[]>([]);
   const [tickets, setTickets] = useState<TicketData[]>([]);
   const [banners, setBanners] = useState<BannerData[]>([]);
+  const [testimonials, setTestimonials] = useState<any[]>([]);
+  const [enquiries, setEnquiries] = useState<any[]>([]);
   const [filteredPackages, setFilteredPackages] = useState<PackageData[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [packageTypeFilter, setPackageTypeFilter] = useState("all");
   const [placeFilter, setPlaceFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [reportModule, setReportModule] = useState<DashboardView>('packages');
 
   const fetchPackages = async () => {
     try {
@@ -146,11 +154,33 @@ export default function DashboardPage() {
     }
   };
 
+  const fetchEnquiries = async () => {
+    try {
+      const response = await fetch('/api/enquiries');
+      const data = await response.json();
+      if (data.success) setEnquiries(data.data);
+    } catch (error) {
+      console.error('Error fetching enquiries:', error);
+    }
+  };
+
+  const fetchTestimonials = async () => {
+    try {
+      const response = await fetch('/api/testimonials');
+      const data = await response.json();
+      if (data.success) setTestimonials(data.data);
+    } catch (error) {
+      console.error('Error fetching testimonials:', error);
+    }
+  };
+
   useEffect(() => {
     fetchPackages();
     fetchTours();
     fetchTickets();
     fetchBanners();
+    fetchEnquiries();
+    fetchTestimonials();
   }, []);
 
   useEffect(() => {
@@ -220,6 +250,11 @@ export default function DashboardPage() {
   const handleBannerCreated = (newBanner: BannerData) => {
     setBanners(prev => [newBanner, ...prev]);
     setIsCreateBannerModalOpen(false);
+  };
+
+  const handleTestimonialCreated = (newTestimonial: any) => {
+    setTestimonials(prev => [newTestimonial, ...prev]);
+    setIsCreateTestimonialModalOpen(false);
   };
 
   const handleDeleteTour = async (tour: TourData) => {
@@ -1075,11 +1110,21 @@ export default function DashboardPage() {
       id: 'blogs' as DashboardView,
       label: 'Blogs',
       icon: FileText,
+    },
+    {
+      id: 'enquiries' as DashboardView,
+      label: 'Customer Enquiries',
+      icon: MessageSquare,
+    },
+    {
+      id: 'reports' as DashboardView,
+      label: 'Reports',
+      icon: TrendingUp,
     }
   ];
 
   return (
-    <div className="min-h-screen bg-[#faf8f3] flex font-inter overflow-hidden relative">
+    <div className="h-screen bg-[#faf8f3] flex font-inter overflow-hidden relative">
       {/* Sidebar */}
       <aside
         className={cn(
@@ -1091,7 +1136,7 @@ export default function DashboardPage() {
         {/* Sidebar Background */}
         <div className="w-72 h-full absolute inset-0 bg-[#111827] z-0 shadow-2xl"></div>
 
-        <div className="relative h-full flex flex-col z-10">
+        <div className="relative h-full flex flex-col z-10 w-72">
           {/* Sidebar Header */}
           <div className="p-8 border-b border-white/10">
             <div className="flex items-center justify-between">
@@ -1116,7 +1161,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Navigation Items */}
-          <nav className="flex-1 p-6 space-y-3">
+          <nav className="flex-1 overflow-y-auto p-6 space-y-3 scrollbar-hide">
             {sidebarItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeView === item.id;
@@ -1173,7 +1218,7 @@ export default function DashboardPage() {
       )}
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto scrollbar-hide">
         {/* Header */}
         <div className="bg-white/50 backdrop-blur-md sticky top-0 z-40 border-b border-gray-200/50">
           <div className="px-8 py-6">
@@ -1263,17 +1308,6 @@ export default function DashboardPage() {
                     <div>
                       <CardTitle className="text-2xl font-black text-[#111827] tracking-tight uppercase">EXPERIENCE INVENTORY</CardTitle>
                       <CardDescription className="text-sm font-medium text-gray-400">Total catalog of curated domestic and international packages</CardDescription>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={handleExportToWord}
-                        className="rounded-2xl border-gray-100 hover:bg-[#bd9245] hover:text-white font-bold h-12 px-6"
-                      >
-                        <Download className="h-4 w-4 mr-2" />
-                        Generate Report
-                      </Button>
                     </div>
                   </div>
                 </CardHeader>
@@ -1374,7 +1408,6 @@ export default function DashboardPage() {
                           <th className="text-left p-3">Category</th>
                           <th className="text-left p-3">Place</th>
                           <th className="text-left p-3">Duration</th>
-                          <th className="text-left p-3">Location</th>
                           <th className="text-left p-3">Price</th>
                           <th className="text-left p-3">Rating</th>
                           <th className="text-left p-3">Actions</th>
@@ -1616,7 +1649,13 @@ export default function DashboardPage() {
                           <tr key={ticket._id} className="group hover:bg-[#faf8f3] transition-colors border-b border-gray-50 last:border-0">
                             <td className="p-4">
                               <div className="flex items-center space-x-3">
-                                <Plane className="h-5 w-5 text-[#bd9245]" />
+                                {ticket.images?.[0] ? (
+                                  <img src={ticket.images[0].url} className="w-10 h-10 rounded-xl object-cover" alt="" />
+                                ) : (
+                                  <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center">
+                                    <Plane className="h-5 w-5 text-[#bd9245]" />
+                                  </div>
+                                )}
                                 <div className="font-bold text-sm text-[#111827]">{ticket.title}</div>
                               </div>
                             </td>
@@ -1702,20 +1741,78 @@ export default function DashboardPage() {
           )}
 
           {activeView === 'testimonials' && (
-            <div className="container mx-auto px-8 py-12">
-              <Card className="rounded-[40px] border-white shadow-sm overflow-hidden p-12">
-                <div className="max-w-md mx-auto text-center space-y-6">
-                  <div className="w-24 h-24 bg-[#bd9245]/10 rounded-[32px] flex items-center justify-center mx-auto shadow-inner">
-                    <MessageSquare className="h-10 w-10 text-[#bd9245]" />
+            <div className="container mx-auto px-8 py-10 space-y-10">
+              <Card className="rounded-[40px] border-white shadow-sm overflow-hidden">
+                <CardHeader className="p-8 pb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                    <div>
+                      <CardTitle className="text-2xl font-black text-[#111827] tracking-tight uppercase">Guest Feedback</CardTitle>
+                      <CardDescription className="text-sm font-medium text-gray-400">Manage client testimonials shown on the homepage</CardDescription>
+                    </div>
+                    <Button onClick={() => setIsCreateTestimonialModalOpen(true)} className="bg-[#111827] hover:bg-[#bd9245] text-white rounded-2xl px-6 h-12 font-black uppercase tracking-widest text-xs transition-all shadow-xl shadow-[#111827]/10 flex items-center gap-2">
+                      <Plus className="h-4 w-4" />
+                      Add Feedback
+                    </Button>
                   </div>
-                  <div>
-                    <h3 className="text-3xl font-black text-[#111827] tracking-tight uppercase">Guest Feedback</h3>
-                    <p className="text-gray-400 font-medium text-sm mt-2">The satisfaction monitoring node is currently undergoing maintenance. Coming soon as part of the v2.2 update.</p>
+                </CardHeader>
+                <CardContent className="p-8 pt-4">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b">
+                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Client Info</th>
+                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Rating</th>
+                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Feedback</th>
+                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {testimonials.length > 0 ? (
+                          testimonials.map((testimonial) => (
+                            <tr key={testimonial._id} className="group hover:bg-[#faf8f3] transition-colors border-b border-gray-50 last:border-0">
+                               <td className="p-4">
+                                  <div className="flex items-center gap-4">
+                                     {testimonial.image?.url ? (
+                                        <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-sm flex-shrink-0">
+                                           <img src={testimonial.image.url} alt={testimonial.name} className="w-full h-full object-cover" />
+                                        </div>
+                                     ) : (
+                                        <div className="w-12 h-12 rounded-full border-2 border-white bg-gray-50 flex items-center justify-center shadow-sm flex-shrink-0">
+                                           <MessageSquare className="h-5 w-5 text-gray-400" />
+                                        </div>
+                                     )}
+                                     <div>
+                                        <div className="font-bold text-sm text-[#111827]">{testimonial.name}</div>
+                                        <div className="text-xs text-gray-500 uppercase">{testimonial.role}</div>
+                                     </div>
+                                  </div>
+                               </td>
+                               <td className="p-4">
+                                  <div className="flex items-center gap-1.5 bg-orange-50 px-3 py-1.5 rounded-xl w-fit">
+                                    <Star className="h-3.5 w-3.5 text-orange-500 fill-current" />
+                                    <span className="text-xs font-black text-orange-600">{testimonial.rating}</span>
+                                  </div>
+                               </td>
+                               <td className="p-4">
+                                  <p className="text-xs text-gray-600 line-clamp-2 max-w-[400px]">{testimonial.content}</p>
+                               </td>
+                               <td className="p-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest whitespace-nowrap">
+                                  {new Date(testimonial.createdAt).toLocaleDateString()}
+                               </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={4} className="p-8 text-center text-gray-500">
+                              <MessageSquare className="h-10 w-10 text-gray-300 mx-auto mb-2" />
+                              <p className="font-bold text-sm">No testimonials found</p>
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
                   </div>
-                  <Button className="bg-[#111827] hover:bg-[#bd9245] text-white font-black px-10 py-6 rounded-2xl shadow-xl transition-all uppercase text-xs tracking-widest">
-                    Notify Me on Launch
-                  </Button>
-                </div>
+                </CardContent>
               </Card>
             </div>
           )}
@@ -1735,6 +1832,241 @@ export default function DashboardPage() {
                     View Published Content
                   </Button>
                 </div>
+              </Card>
+            </div>
+          )}
+
+          {activeView === 'reports' && (
+            <div className="container mx-auto px-8 py-10 space-y-10">
+              <Card className="rounded-[40px] border-white shadow-sm overflow-hidden">
+                <CardHeader className="p-8 pb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                    <div>
+                      <CardTitle className="text-2xl font-black text-[#111827] tracking-tight uppercase">System Reports</CardTitle>
+                      <CardDescription className="text-sm font-medium text-gray-400">Preview and generate data insights across all modules</CardDescription>
+                    </div>
+                    <div className="flex flex-col sm:flex-row items-center gap-4">
+                      <Select value={reportModule} onValueChange={(val: DashboardView) => setReportModule(val)}>
+                        <SelectTrigger className="w-full sm:w-[220px] h-12 rounded-2xl border-gray-100 shadow-sm font-bold bg-white text-[#111827]">
+                          <SelectValue placeholder="Select Module" />
+                        </SelectTrigger>
+                        <SelectContent className="rounded-2xl border-gray-100 shadow-xl">
+                          {sidebarItems.filter(item => item.id !== 'reports').map(item => (
+                            <SelectItem key={item.id} value={item.id} className="font-bold cursor-pointer">
+                              {item.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      
+                      <Button 
+                        onClick={reportModule === 'packages' ? handleExportToWord : undefined} 
+                        disabled={reportModule !== 'packages'}
+                        className="w-full sm:w-auto bg-[#111827] hover:bg-[#bd9245] text-white font-black h-12 px-6 rounded-2xl shadow-xl shadow-[#111827]/10 transition-all uppercase text-xs tracking-widest disabled:opacity-50"
+                      >
+                        <Download className="h-4 w-4 mr-2" />
+                        Export {sidebarItems.find(i => i.id === reportModule)?.label}
+                      </Button>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-8 pt-4">
+                  <div className="overflow-x-auto rounded-[24px] border border-gray-100 bg-gray-50/30">
+                    <table className="w-full text-left">
+                      <thead>
+                        <tr className="border-b border-gray-200">
+                          {reportModule === 'packages' && (
+                            <>
+                              <th className="p-4 text-xs font-black uppercase tracking-widest text-gray-500 whitespace-nowrap">Package Title</th>
+                              <th className="p-4 text-xs font-black uppercase tracking-widest text-gray-500 whitespace-nowrap">Type</th>
+                              <th className="p-4 text-xs font-black uppercase tracking-widest text-gray-500 whitespace-nowrap">Region</th>
+                              <th className="p-4 text-xs font-black uppercase tracking-widest text-gray-500 whitespace-nowrap">Price</th>
+                            </>
+                          )}
+                          {reportModule === 'tours' && (
+                            <>
+                              <th className="p-4 text-xs font-black uppercase tracking-widest text-gray-500 whitespace-nowrap">Tour Title</th>
+                              <th className="p-4 text-xs font-black uppercase tracking-widest text-gray-500 whitespace-nowrap">Duration</th>
+                              <th className="p-4 text-xs font-black uppercase tracking-widest text-gray-500 whitespace-nowrap">Price</th>
+                            </>
+                          )}
+                          {reportModule === 'tickets' && (
+                            <>
+                              <th className="p-4 text-xs font-black uppercase tracking-widest text-gray-500 whitespace-nowrap">Flight Route</th>
+                              <th className="p-4 text-xs font-black uppercase tracking-widest text-gray-500 whitespace-nowrap">Class</th>
+                              <th className="p-4 text-xs font-black uppercase tracking-widest text-gray-500 whitespace-nowrap">Price</th>
+                            </>
+                          )}
+                          {reportModule === 'banners' && (
+                            <>
+                              <th className="p-4 text-xs font-black uppercase tracking-widest text-gray-500 whitespace-nowrap">Banner Title</th>
+                              <th className="p-4 text-xs font-black uppercase tracking-widest text-gray-500 whitespace-nowrap">Status</th>
+                            </>
+                          )}
+                          {reportModule === 'enquiries' && (
+                            <>
+                              <th className="p-4 text-xs font-black uppercase tracking-widest text-gray-500 whitespace-nowrap">Date/Time</th>
+                              <th className="p-4 text-xs font-black uppercase tracking-widest text-gray-500 whitespace-nowrap">Customer Info</th>
+                              <th className="p-4 text-xs font-black uppercase tracking-widest text-gray-500 whitespace-nowrap">Package Interest</th>
+                              <th className="p-4 text-xs font-black uppercase tracking-widest text-gray-500 whitespace-nowrap">Subject</th>
+                            </>
+                          )}
+                          {['testimonials', 'blogs'].includes(reportModule) && (
+                            <th className="p-4 text-xs font-black uppercase tracking-widest text-gray-500 whitespace-nowrap">Status</th>
+                          )}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {reportModule === 'packages' && packages.map((pkg) => (
+                           <tr key={pkg._id} className="border-b border-gray-100 last:border-0 hover:bg-white transition-colors">
+                             <td className="p-4 font-bold text-sm text-[#111827]">{pkg.title}</td>
+                             <td className="p-4 text-xs font-medium text-gray-500 uppercase">{pkg.packageType}</td>
+                             <td className="p-4 text-xs font-medium text-gray-500 uppercase">{pkg.place}</td>
+                             <td className="p-4 text-xs font-black text-[#111827]">R {pkg.price}</td>
+                           </tr>
+                        ))}
+                        {reportModule === 'tours' && tours.map((tour) => (
+                           <tr key={tour._id} className="border-b border-gray-100 last:border-0 hover:bg-white transition-colors">
+                             <td className="p-4 font-bold text-sm text-[#111827]">{tour.title}</td>
+                             <td className="p-4 text-xs font-medium text-gray-500">{tour.duration}</td>
+                             <td className="p-4 text-xs font-black text-[#111827]">R {tour.price}</td>
+                           </tr>
+                        ))}
+                        {reportModule === 'tickets' && tickets.map((ticket) => (
+                           <tr key={ticket._id} className="border-b border-gray-100 last:border-0 hover:bg-white transition-colors">
+                             <td className="p-4 font-bold text-sm text-[#111827]">{ticket.title}</td>
+                             <td className="p-4 text-xs font-medium text-gray-500">{(ticket as any).classType || 'Economy'}</td>
+                             <td className="p-4 text-xs font-black text-[#111827]">R {ticket.price}</td>
+                           </tr>
+                        ))}
+                        {reportModule === 'banners' && banners.map((banner) => (
+                           <tr key={banner._id} className="border-b border-gray-100 last:border-0 hover:bg-white transition-colors">
+                             <td className="p-4 font-bold text-sm text-[#111827]">{banner.title}</td>
+                             <td className="p-4 text-xs font-medium text-[#bd9245] uppercase">{banner.isActive ? 'Active' : 'Inactive'}</td>
+                           </tr>
+                        ))}
+                        {reportModule === 'enquiries' && enquiries.map((enq) => (
+                           <tr key={enq._id} className="border-b border-gray-100 last:border-0 hover:bg-white transition-colors">
+                              <td className="p-4 text-xs font-bold text-gray-500 uppercase">
+                                {new Date(enq.createdAt).toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' })}
+                              </td>
+                              <td className="p-4">
+                                <div className="font-bold text-sm text-[#111827]">{enq.name}</div>
+                                <div className="text-xs text-gray-500">{enq.email}</div>
+                              </td>
+                              <td className="p-4 align-top">
+                                <div className="text-xs font-bold text-gray-700 uppercase">{enq.packageType || 'General'}</div>
+                                {enq.packageName && <div className="text-[10px] text-gray-500 font-bold mb-1">{enq.packageName}</div>}
+                                {enq.destination && <div className="text-[10px] text-gray-500">📍 {enq.destination}</div>}
+                                {enq.travelDate && <div className="text-[10px] text-gray-500">📅 {enq.travelDate}</div>}
+                                {enq.travelers && <div className="text-[10px] text-gray-500">👥 {enq.travelers} Guests</div>}
+                                {enq.budget && <div className="text-[10px] text-gray-500">💰 {enq.budget}</div>}
+                              </td>
+                              <td className="p-4 text-xs font-bold text-gray-700">{enq.subject}</td>
+                           </tr>
+                        ))}
+                        {['testimonials', 'blogs'].includes(reportModule) && (
+                          <tr>
+                            <td className="p-12 text-center text-sm font-bold text-gray-400">
+                              Module coming in v2.2
+                            </td>
+                          </tr>
+                        )}
+                        {!['testimonials', 'blogs'].includes(reportModule) && 
+                         ((reportModule === 'packages' && packages.length === 0) ||
+                          (reportModule === 'tours' && tours.length === 0) ||
+                          (reportModule === 'tickets' && tickets.length === 0) ||
+                          (reportModule === 'banners' && banners.length === 0) ||
+                          (reportModule === 'enquiries' && enquiries.length === 0)) && (
+                          <tr>
+                            <td colSpan={4} className="p-12 text-center text-sm font-bold text-gray-400">
+                              No data available
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {activeView === 'enquiries' && (
+            <div className="container mx-auto px-8 py-10 space-y-10">
+              <Card className="rounded-[40px] border-white shadow-sm overflow-hidden">
+                <CardHeader className="p-8 pb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                    <div>
+                      <CardTitle className="text-2xl font-black text-[#111827] tracking-tight uppercase">Customer Enquiries</CardTitle>
+                      <CardDescription className="text-sm font-medium text-gray-400">Manage incoming requests from the website contact form</CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-8 pt-4">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b">
+                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Date/Time</th>
+                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Customer Info</th>
+                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Interest / Travel Info</th>
+                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Subject</th>
+                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Message / Req.</th>
+                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {enquiries.length > 0 ? (
+                          enquiries.map((enq) => (
+                            <tr key={enq._id} className="group hover:bg-[#faf8f3] transition-colors border-b border-gray-50 last:border-0">
+                              <td className="p-4 text-[10px] font-bold text-gray-500 uppercase">
+                                {new Date(enq.createdAt).toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' })}
+                              </td>
+                              <td className="p-4">
+                                <div className="font-bold text-sm text-[#111827]">{enq.name}</div>
+                                <div className="text-xs text-gray-500">{enq.email}</div>
+                                <div className="text-xs text-gray-500">{enq.phone}</div>
+                              </td>
+                              <td className="p-4 align-top">
+                                <div className="text-xs font-bold text-gray-700 uppercase">{enq.packageType || 'General'}</div>
+                                {enq.packageName && <div className="text-[10px] text-gray-500 font-bold mb-1">{enq.packageName}</div>}
+                                {enq.destination && <div className="text-[10px] text-gray-500">📍 {enq.destination}</div>}
+                                {enq.travelDate && <div className="text-[10px] text-gray-500">📅 {enq.travelDate}</div>}
+                                {enq.travelers && <div className="text-[10px] text-gray-500">👥 {enq.travelers} Guests</div>}
+                                {enq.budget && <div className="text-[10px] text-gray-500">💰 {enq.budget}</div>}
+                              </td>
+                              <td className="p-4 text-xs font-bold text-gray-700 align-top">{enq.subject}</td>
+                              <td className="p-4 align-top">
+                                <p className="text-xs text-gray-600 line-clamp-4 max-w-[300px]" title={enq.message}>{enq.message}</p>
+                              </td>
+                              <td className="p-4 align-top">
+                                <Button 
+                                  size="sm" 
+                                  variant="outline"
+                                  onClick={() => {
+                                    setSelectedEnquiry(enq);
+                                    setIsReplyModalOpen(true);
+                                  }}
+                                  className="text-[10px] font-black uppercase tracking-widest text-[#111827] border-gray-200 hover:bg-gray-50 h-8 rounded-xl"
+                                >
+                                  Reply
+                                </Button>
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={5} className="p-8 text-center text-gray-500">
+                              <MessageSquare className="h-10 w-10 text-gray-300 mx-auto mb-2" />
+                              <p className="font-bold text-sm">No enquiries found</p>
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
               </Card>
             </div>
           )}
@@ -1815,6 +2147,21 @@ export default function DashboardPage() {
         }}
         banner={selectedBanner}
         onBannerUpdated={handleBannerUpdated}
+      />
+
+      <CreateTestimonialModal
+        isOpen={isCreateTestimonialModalOpen}
+        onClose={() => setIsCreateTestimonialModalOpen(false)}
+        onTestimonialCreated={handleTestimonialCreated}
+      />
+      
+      <ReplyEnquiryModal
+        isOpen={isReplyModalOpen}
+        onClose={() => {
+          setIsReplyModalOpen(false);
+          setSelectedEnquiry(null);
+        }}
+        enquiryData={selectedEnquiry}
       />
     </div>
   );

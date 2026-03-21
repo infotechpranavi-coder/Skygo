@@ -6,18 +6,21 @@ import { useInquiryForm } from "../contexts/InquiryFormContext";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BannerData } from "@/lib/types";
+import Image from "next/image";
 
-const HeroExplore = () => {
+interface HeroExploreProps {
+  initialBanners?: BannerData[];
+}
+
+const HeroExplore = ({ initialBanners }: HeroExploreProps) => {
   const router = useRouter();
   const { openForm } = useInquiryForm();
   const sectionRef = useRef<HTMLElement>(null);
-  const [banners, setBanners] = useState<BannerData[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  // Fallback banner if none are uploaded
+  
+  // Fallback banner if none are provided or uploaded
   const defaultBanner: BannerData = {
     _id: 'default',
-    title: "TRAVEL MORE",
+    title: "TRAVEL\nMORE",
     subtitle: "WORRY LESS",
     image: {
       url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
@@ -30,7 +33,36 @@ const HeroExplore = () => {
     updatedAt: new Date().toISOString()
   };
 
+  const [banners, setBanners] = useState<BannerData[]>(initialBanners || []);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const renderTitle = (title: string) => {
+    if (title.includes('\n')) {
+      return title.split('\n').map((line, index) => (
+        <span key={index} className={index === 0 ? "text-white block" : "text-amber-500 block"}>
+          {line}
+        </span>
+      ));
+    }
+    const words = title.split(' ');
+    if (words.length > 1) {
+      return (
+        <>
+          {words.slice(0, -1).join(' ')}
+          <br />
+          <span className="text-amber-500 text-bold font-black">{words.slice(-1)}</span>
+        </>
+      );
+    }
+    return title;
+  };
+
   useEffect(() => {
+    // Only fetch if not provided via props
+    if (initialBanners && initialBanners.length > 0) {
+      return;
+    }
+
     const fetchBanners = async () => {
       try {
         const res = await fetch('/api/banners?activeOnly=true');
@@ -46,7 +78,7 @@ const HeroExplore = () => {
       }
     };
     fetchBanners();
-  }, []);
+  }, [initialBanners]);
 
   useEffect(() => {
     if (banners.length <= 1) return;
@@ -58,81 +90,85 @@ const HeroExplore = () => {
     return () => clearInterval(interval);
   }, [banners]);
 
-
   const currentBanner = banners[currentIndex] || defaultBanner;
 
   return (
     <section
       id="hero"
       ref={sectionRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-[#faf8f3]"
     >
       {/* Background Images with AnimatePresence */}
       <div className="absolute inset-0 z-0">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentBanner._id}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1.5, ease: "easeInOut" }}
             className="absolute inset-0"
           >
             <div className="absolute inset-0">
-              <img
+              <Image
                 src={currentBanner.image.url}
                 alt={currentBanner.image.alt || currentBanner.title}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                priority={currentIndex === 0}
+                sizes="100vw"
+                quality={90}
               />
+              {/* Overlay for readability */}
+              <div className="absolute inset-0 bg-black/40"></div>
+              {/* Vertical Gradient for depth */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"></div>
             </div>
           </motion.div>
         </AnimatePresence>
 
-        {/* Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-orange-300/5 to-transparent"></div>
-        <div className="absolute inset-0 bg-white/5 backdrop-blur-[0.5px]"></div>
-        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-white/20 to-transparent"></div>
+        {/* Bottom fade into page background for smooth section transition */}
+        <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-[#faf8f3] via-[#faf8f3]/70 to-transparent z-10 pointer-events-none" />
       </div>
 
-      {/* Giant "EXPLORE" Background Text */}
-      <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
-        <h1 className="text-[20rem] sm:text-[25rem] md:text-[30rem] font-black text-white/5 select-none uppercase tracking-tighter">
-          EXPLORE
-        </h1>
-      </div>
+
 
       {/* Content with AnimatePresence */}
-      <div className="relative z-20 container mx-auto px-4 text-center">
+      <div className="relative z-20 container mx-auto px-4 text-center pt-24 md:pt-32">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentIndex}
             className="max-w-5xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            exit={{ opacity: 0, y: -30 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <h2 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-[1000] text-white mb-6 leading-[0.9] tracking-tighter uppercase drop-shadow-2xl">
-              {currentBanner.title.split(' ').slice(0, -1).join(' ')}
-              <br />
-              <span className="text-[#bd9245]">
-                {currentBanner.title.split(' ').slice(-1)}
-              </span>
+            <p className="text-amber-500 font-black uppercase tracking-[0.5em] text-xs sm:text-sm mb-6 drop-shadow-[0_2px_12px_rgba(0,0,0,1)]">
+              PREMIUM EXPERIENCES
+            </p>
+            
+            <h2 className="text-6xl sm:text-7xl md:text-8xl lg:text-[140px] font-[1000] leading-[0.85] tracking-tighter uppercase drop-shadow-[0_10px_40px_rgba(0,0,0,1)] mb-8">
+              {renderTitle(currentBanner.title)}
             </h2>
 
-            <p className="text-xl sm:text-2xl font-black text-white/90 mb-10 max-w-2xl mx-auto uppercase tracking-widest drop-shadow-lg">
-              {currentBanner.subtitle}
+            <p className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-12 max-w-3xl mx-auto tracking-widest drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)] uppercase">
+              {currentBanner.subtitle.split('\n').filter(l => l.trim()).map((line, i) => (
+                <span key={i} className="block">{line}</span>
+              ))}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <Button
                 onClick={() => currentBanner.link ? router.push(currentBanner.link) : openForm()}
                 size="lg"
-                className="bg-[#bd9245] hover:bg-[#111827] text-white font-black px-12 py-8 text-xs rounded-2xl shadow-2xl transition-all uppercase tracking-widest border border-white/10"
+                className="bg-amber-500 hover:bg-white hover:text-gray-900 text-gray-900 font-black px-12 py-8 text-xs rounded-2xl shadow-2xl transition-all uppercase tracking-widest border-none"
               >
-                {currentBanner.link ? 'View Details' : 'Start Your Adventure'}
+                {currentBanner.link ? 'View Details' : 'Start With Sky Go'}
               </Button>
             </div>
+            
+
           </motion.div>
         </AnimatePresence>
       </div>

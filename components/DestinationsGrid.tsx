@@ -2,8 +2,9 @@
 
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { destinations } from "@/data/homeData";
+import { destinations as defaultDestinations, Destination } from "@/data/homeData";
 import { useRouter } from "next/navigation";
+import { PackageData } from "@/lib/types";
 import { motion } from "framer-motion";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useState, useEffect } from "react";
@@ -13,23 +14,51 @@ const DestinationsGrid = () => {
   const { ref, isVisible } = useScrollReveal({ threshold: 0.1 });
   const [hoveredCardImage, setHoveredCardImage] = useState<string | null>(null);
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
+  const [displayDestinations, setDisplayDestinations] = useState<Destination[]>(defaultDestinations);
+
+  useEffect(() => {
+    const fetchFeaturedPackages = async () => {
+      try {
+        const res = await fetch('/api/packages?featured=true');
+        const result = await res.json();
+        
+        if (result.success && result.data) {
+          const featured = (result.data as PackageData[])
+            .map(pkg => ({
+              id: pkg._id,
+              title: pkg.title,
+              subtitle: pkg.subtitle,
+              image: pkg.images[0]?.url || defaultDestinations[0].image,
+              link: `/packages/${pkg._id}`
+            }));
+
+          if (featured.length > 0) {
+            // Combine with defaults if less than 4
+            const combined = [...featured, ...defaultDestinations].slice(0, 4);
+            setDisplayDestinations(combined);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching destinations:', error);
+      }
+    };
+
+    fetchFeaturedPackages();
+  }, []);
 
   // Preload all destination images
   useEffect(() => {
     const preloadImages = () => {
-      destinations.forEach((destination) => {
+      displayDestinations.forEach((destination) => {
         const img = new window.Image();
         img.src = destination.image;
         img.onload = () => {
           setLoadedImages((prev) => new Set(prev).add(destination.image));
         };
-        img.onerror = () => {
-          // Silently handle preload errors
-        };
       });
     };
     preloadImages();
-  }, []);
+  }, [displayDestinations]);
 
   return (
     <section
@@ -52,7 +81,7 @@ const DestinationsGrid = () => {
       </div>
 
       {/* All destination images pre-rendered, toggled via opacity for instant transitions */}
-      {destinations.map((destination) => (
+      {displayDestinations.map((destination) => (
         <div
           key={destination.id}
           className="absolute inset-0 z-[1] pointer-events-none"
@@ -95,11 +124,11 @@ const DestinationsGrid = () => {
 
           {/* Right Grid - 2x2 */}
           <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 lg:mt-12">
-            {destinations.map((destination, index) => (
+            {displayDestinations.map((destination, index) => (
               <motion.div
                 key={destination.id}
                 className="group relative rounded-2xl overflow-hidden cursor-pointer h-64 card-hover z-10"
-                onClick={() => router.push(`/packages?search=${encodeURIComponent(destination.title)}`)}
+                onClick={() => router.push(destination.link.startsWith('/packages/') ? destination.link : `/packages?search=${encodeURIComponent(destination.title)}`)}
                 onMouseEnter={() => setHoveredCardImage(destination.image)}
                 onMouseLeave={() => setHoveredCardImage(null)}
                 initial={{ opacity: 0, y: 40 }}

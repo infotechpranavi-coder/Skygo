@@ -16,6 +16,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { TourData } from "@/lib/types";
+import { useInquiryForm } from "@/contexts/InquiryFormContext";
 
 const playfair = Playfair_Display({
     subsets: ['latin'],
@@ -30,6 +31,7 @@ const inter = Inter({
 const TourDetailPage = () => {
     const params = useParams();
     const router = useRouter();
+    const { openForm } = useInquiryForm();
     const [tourData, setTourData] = useState<TourData | null>(null);
     const [loading, setLoading] = useState(true);
     const [activeDay, setActiveDay] = useState(1);
@@ -289,15 +291,14 @@ const TourDetailPage = () => {
                                     </div>
                                 </div>
 
-                                <Link
-                                    href={`/contact?packageName=${encodeURIComponent(tourData.title)}&packageType=tour`}
-                                    className="block"
-                                >
-                                    <Button className="w-full h-20 bg-[#bd9245] hover:bg-[#a07835] text-gray-900 font-black uppercase tracking-[0.2em] rounded-[32px] shadow-2xl transition-all duration-300 group flex items-center justify-center gap-4">
+                                <div className="block">
+                                    <Button
+                                        onClick={() => openForm({ title: tourData.title, type: 'Tour' })}
+                                        className="w-full h-20 bg-[#bd9245] hover:bg-[#a07835] text-gray-900 font-black uppercase tracking-[0.2em] rounded-[32px] shadow-2xl transition-all duration-300 group flex items-center justify-center gap-4">
                                         Request Tour Quote
                                         <ArrowRight className="h-6 w-6 transition-transform group-hover:translate-x-2" />
                                     </Button>
-                                </Link>
+                                </div>
 
                                 <Button
                                     variant="outline"

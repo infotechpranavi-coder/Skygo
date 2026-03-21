@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect, Suspense } from "react";
 import { Button } from "@/components/ui/button";
@@ -56,6 +56,28 @@ const ContactForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    try {
+      // Save enquiry to database
+      await fetch('/api/enquiries', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          packageType: formData.packageType,
+          packageName: formData.packageName,
+          packageDuration: formData.packageDuration,
+          subject: formData.subject,
+          message: formData.message,
+        }),
+      });
+    } catch (error) {
+      console.error('Error submitting enquiry:', error);
+    }
 
     // Create WhatsApp message with form data
     const whatsappMessage = `Hello! I'm interested in booking a trip with Sky Go.

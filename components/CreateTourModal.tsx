@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 import { Plus, Minus, X, Upload } from "lucide-react";
 
 interface ItineraryDay {
@@ -43,11 +44,20 @@ const CreateTourModal = ({ isOpen, onClose, onTourCreated }: CreateTourModalProp
     const [inclusions, setInclusions] = useState<string[]>([""]);
     const [exclusions, setExclusions] = useState<string[]>([""]);
     const [images, setImages] = useState<File[]>([]);
+    const [externalImageUrls, setExternalImageUrls] = useState<string[]>([]);
+    const [currentImageUrl, setCurrentImageUrl] = useState("");
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState("");
 
     const handleInputChange = (field: string, value: string) => setFormData(prev => ({ ...prev, [field]: value }));
+
+    const handleAddUrl = () => {
+        if (currentImageUrl.trim() && !externalImageUrls.includes(currentImageUrl.trim())) {
+            setExternalImageUrls(prev => [...prev, currentImageUrl.trim()]);
+            setCurrentImageUrl("");
+        }
+    };
 
     const fileToBase64 = (file: File): Promise<string> =>
         new Promise((resolve, reject) => {
@@ -65,7 +75,9 @@ const CreateTourModal = ({ isOpen, onClose, onTourCreated }: CreateTourModalProp
         setIsSubmitting(true);
         setSubmitError("");
         try {
-            const uploadedImages: Array<{ public_id: string; url: string; alt: string }> = [];
+            const uploadedImages: Array<{ public_id?: string; url: string; alt: string }> = [];
+            
+            // Upload local files
             for (const file of images) {
                 const base64 = await fileToBase64(file);
                 const uploadRes = await fetch('/api/upload', {
@@ -77,6 +89,11 @@ const CreateTourModal = ({ isOpen, onClose, onTourCreated }: CreateTourModalProp
                 if (uploadData.success) {
                     uploadedImages.push({ public_id: uploadData.public_id, url: uploadData.url, alt: formData.title });
                 }
+            }
+
+            // Add external URLs
+            for (const url of externalImageUrls) {
+                uploadedImages.push({ url, alt: formData.title });
             }
 
             const payload = {
@@ -127,19 +144,21 @@ const CreateTourModal = ({ isOpen, onClose, onTourCreated }: CreateTourModalProp
         setInclusions([""]);
         setExclusions([""]);
         setImages([]);
+        setExternalImageUrls([]);
+        setCurrentImageUrl("");
         setSubmitError("");
         onClose();
     };
 
     return (
         <Dialog open={isOpen} onOpenChange={handleClose}>
-            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto rounded-[32px] border-none shadow-2xl p-0 bg-white">
+            <DialogContent className="max-w-4xl p-0 border-none shadow-2xl rounded-[32px] overflow-hidden bg-white text-[#111827]">
                 <DialogHeader className="p-8 pb-4 bg-gray-50/50">
                     <DialogTitle className="text-3xl font-black text-[#111827] uppercase tracking-tighter">Add New Tour</DialogTitle>
                     <DialogDescription className="text-gray-400 font-bold uppercase tracking-widest text-[10px] mt-1">Create a dedicated tour experience with specific parameters.</DialogDescription>
                 </DialogHeader>
 
-                <div className="p-8 space-y-8">
+                <div className="p-8 space-y-8 max-h-[60vh] overflow-y-auto">
                     {/* Basic Info */}
                     <Card className="rounded-3xl border-gray-100 shadow-sm overflow-hidden">
                         <CardHeader className="bg-gray-50/50 p-6 border-b border-gray-100">
@@ -203,30 +222,134 @@ const CreateTourModal = ({ isOpen, onClose, onTourCreated }: CreateTourModalProp
                         </CardContent>
                     </Card>
 
+                    {/* Daily Itinerary */}
+                    <Card className="rounded-3xl border-gray-100 shadow-sm overflow-hidden">
+                        <CardHeader className="bg-gray-50/50 p-6 border-b border-gray-100 flex flex-row items-center justify-between">
+                            <CardTitle className="text-sm font-black uppercase tracking-widest text-[#111827]">Daily Itinerary</CardTitle>
+                            <Button variant="outline" size="sm" onClick={() => setItinerary([...itinerary, { id: Date.now().toString(), day: itinerary.length + 1, title: "", description: "" }])} className="rounded-xl h-9">
+                                <Plus className="h-4 w-4 mr-2" /> Add Day
+                            </Button>
+                        </CardHeader>
+                        <CardContent className="p-6 space-y-6">
+                            {itinerary.map((day, idx) => (
+                                <div key={day.id} className="p-6 rounded-2xl bg-gray-50/50 border border-gray-100 relative group">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <Badge variant="outline" className="bg-white border-gray-200 text-[#bd9245] px-3 py-1 rounded-full font-black uppercase tracking-widest text-[9px]">Day {day.day}</Badge>
+                                        {itinerary.length > 1 && (
+                                            <Button variant="ghost" size="icon" onClick={() => {
+                                                const newItinerary = itinerary.filter((_, i) => i !== idx).map((d, i) => ({ ...d, day: i + 1 }));
+                                                setItinerary(newItinerary);
+                                            }} className="h-8 w-8 text-gray-400 hover:text-red-500 hover:bg-red-50">
+                                                <X className="h-4 w-4" />
+                                            </Button>
+                                        )}
+                                    </div>
+                                    <div className="grid grid-cols-1 gap-4">
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Day Title</label>
+                                            <Input placeholder="e.g. Arrival & Orientation" value={day.title} onChange={e => {
+                                                const newItin = [...itinerary];
+                                                newItin[idx].title = e.target.value;
+                                                setItinerary(newItin);
+                                            }} className="h-10 rounded-xl bg-white" />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Day Description</label>
+                                            <Textarea placeholder="What will happen on this day..." value={day.description} onChange={e => {
+                                                const newItin = [...itinerary];
+                                                newItin[idx].description = e.target.value;
+                                                setItinerary(newItin);
+                                            }} className="min-h-[80px] rounded-xl bg-white" />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </CardContent>
+                    </Card>
+
                     {/* Dynamic Sections: Highlights, Inclusions, Exclusions */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Highlights</label>
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1 block">Highlights</label>
                             {highlights.map((h, i) => (
-                                <div key={i} className="flex gap-2 mb-2">
+                                <div key={i} className="flex gap-2">
                                     <Input value={h} onChange={e => {
                                         const newH = [...highlights];
                                         newH[i] = e.target.value;
                                         setHighlights(newH);
                                     }} className="h-10 rounded-xl" />
-                                    {highlights.length > 1 && <Button variant="ghost" size="icon" onClick={() => setHighlights(highlights.filter((_, idx) => idx !== i))}><Minus /></Button>}
+                                    {highlights.length > 1 && (
+                                        <Button variant="ghost" size="icon" onClick={() => setHighlights(highlights.filter((_, idx) => idx !== i))} className="h-10 w-10 text-gray-400 hover:text-red-500">
+                                            <Minus className="h-4 w-4" />
+                                        </Button>
+                                    )}
                                 </div>
                             ))}
-                            <Button variant="outline" size="sm" onClick={() => setHighlights([...highlights, ""])} className="w-full rounded-xl"><Plus className="h-4 w-4 mr-2" /> Add Highlight</Button>
+                            <Button variant="outline" size="sm" onClick={() => setHighlights([...highlights, ""])} className="w-full rounded-xl h-10 border-dashed"><Plus className="h-4 w-4 mr-2" /> Add Highlight</Button>
                         </div>
 
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Images</label>
-                            <div className="border-2 border-dashed border-gray-100 rounded-3xl p-8 text-center cursor-pointer hover:border-[#bd9245] transition-colors" onClick={() => fileInputRef.current?.click()}>
-                                <Upload className="h-8 w-8 text-gray-300 mx-auto mb-2" />
-                                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Select Tour Images ({images.length} selected)</p>
-                                <input type="file" multiple hidden ref={fileInputRef} onChange={e => setImages(Array.from(e.target.files || []))} accept="image/*" />
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1 block">Tour Images</label>
+                            <div className="flex flex-col gap-4">
+                                <div className="border-2 border-dashed border-gray-100 rounded-[32px] p-8 text-center cursor-pointer hover:border-[#bd9245] transition-all bg-gray-50/30 group" onClick={() => fileInputRef.current?.click()}>
+                                    <Upload className="h-10 w-10 text-gray-300 mx-auto mb-3 group-hover:text-[#bd9245] transition-colors" />
+                                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Select Professional Images</p>
+                                    <p className="text-[9px] text-gray-300 mt-1 uppercase font-bold tracking-tight">{images.length} images selected</p>
+                                    <input type="file" multiple hidden ref={fileInputRef} onChange={e => setImages(Array.from(e.target.files || []))} accept="image/*" />
+                                </div>
+                                <div className="flex gap-2">
+                                    <Input placeholder="OR Paste Image URL here..." value={currentImageUrl} onChange={e => setCurrentImageUrl(e.target.value)} className="h-12 rounded-xl flex-1" />
+                                    <Button variant="outline" onClick={handleAddUrl} className="h-12 rounded-xl font-bold uppercase text-[10px] tracking-widest px-6 hover:bg-[#bd9245] hover:text-white transition-all">Add URL</Button>
+                                </div>
+                                {externalImageUrls.length > 0 && (
+                                    <div className="flex flex-wrap gap-3 mt-2">
+                                        {externalImageUrls.map((url, i) => (
+                                            <div key={i} className="relative w-16 h-16 rounded-xl border border-gray-100 overflow-hidden group">
+                                                <img src={url} className="w-full h-full object-cover" alt="" />
+                                                <button onClick={() => setExternalImageUrls(prev => prev.filter((_, idx) => idx !== i))} className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"><X className="h-3 w-3" /></button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1 block">Inclusions</label>
+                            {inclusions.map((inc, i) => (
+                                <div key={i} className="flex gap-2">
+                                    <Input value={inc} onChange={e => {
+                                        const newInc = [...inclusions];
+                                        newInc[i] = e.target.value;
+                                        setInclusions(newInc);
+                                    }} className="h-10 rounded-xl" />
+                                    {inclusions.length > 1 && (
+                                        <Button variant="ghost" size="icon" onClick={() => setInclusions(inclusions.filter((_, idx) => idx !== i))} className="h-10 w-10 text-gray-400 hover:text-red-500">
+                                            <Minus className="h-4 w-4" />
+                                        </Button>
+                                    )}
+                                </div>
+                            ))}
+                            <Button variant="outline" size="sm" onClick={() => setInclusions([...inclusions, ""])} className="w-full rounded-xl h-10 border-dashed"><Plus className="h-4 w-4 mr-2" /> Add Inclusion</Button>
+                        </div>
+
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1 block">Exclusions</label>
+                            {exclusions.map((exc, i) => (
+                                <div key={i} className="flex gap-2">
+                                    <Input value={exc} onChange={e => {
+                                        const newExc = [...exclusions];
+                                        newExc[i] = e.target.value;
+                                        setExclusions(newExc);
+                                    }} className="h-10 rounded-xl" />
+                                    {exclusions.length > 1 && (
+                                        <Button variant="ghost" size="icon" onClick={() => setExclusions(exclusions.filter((_, idx) => idx !== i))} className="h-10 w-10 text-gray-400 hover:text-red-500">
+                                            <Minus className="h-4 w-4" />
+                                        </Button>
+                                    )}
+                                </div>
+                            ))}
+                            <Button variant="outline" size="sm" onClick={() => setExclusions([...exclusions, ""])} className="w-full rounded-xl h-10 border-dashed"><Plus className="h-4 w-4 mr-2" /> Add Exclusion</Button>
                         </div>
                     </div>
                 </div>

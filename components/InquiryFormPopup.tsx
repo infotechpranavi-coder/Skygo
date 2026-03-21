@@ -2,12 +2,15 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { X, Phone, Mail, MapPin, Calendar, Users, Plane } from "lucide-react";
 
+import { ProductInfo } from "../contexts/InquiryFormContext";
+
 interface InquiryFormPopupProps {
   isOpen: boolean;
   onClose: () => void;
+  productInfo?: ProductInfo;
 }
 
-const InquiryFormPopup = ({ isOpen, onClose }: InquiryFormPopupProps) => {
+const InquiryFormPopup = ({ isOpen, onClose, productInfo }: InquiryFormPopupProps) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -20,6 +23,28 @@ const InquiryFormPopup = ({ isOpen, onClose }: InquiryFormPopupProps) => {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (isOpen && productInfo && productInfo.type !== 'General') {
+      setFormData(prev => ({
+        ...prev,
+        destination: "other", // Default to other since you have a fixed list, or they can change it
+        message: `I am interested in the ${productInfo.type}: ${productInfo.title}. Please provide me with more details.`
+      }));
+    } else if (isOpen) {
+      // Reset if opened in general mode
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        destination: "",
+        travelDate: "",
+        travelers: "",
+        budget: "",
+        message: ""
+      });
+    }
+  }, [isOpen, productInfo]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -34,34 +59,33 @@ const InquiryFormPopup = ({ isOpen, onClose }: InquiryFormPopupProps) => {
     setIsSubmitting(true);
 
     try {
-      // Create WhatsApp message with form data
-      const whatsappMessage = `🌍 *New Travel Inquiry - Sky Go*
+      const payload = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        packageType: productInfo && productInfo.type !== 'General' ? productInfo.type : undefined,
+        packageName: productInfo && productInfo.type !== 'General' ? productInfo.title : undefined,
+        subject: productInfo && productInfo.type !== 'General' ? `Inquiry for ${productInfo.type}: ${productInfo.title}` : 'General Inquiry',
+        destination: formData.destination,
+        travelDate: formData.travelDate,
+        travelers: formData.travelers,
+        budget: formData.budget,
+        message: formData.message,
+      };
 
-👤 *Name:* ${formData.name}
-📧 *Email:* ${formData.email}
-📱 *Phone:* ${formData.phone}
-✈️ *Destination:* ${formData.destination}
-📅 *Travel Date:* ${formData.travelDate}
-👥 *Number of Travelers:* ${formData.travelers}
-💰 *Budget Range:* ${formData.budget}
+      const res = await fetch('/api/enquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
 
-📝 *Additional Requirements:*
-${formData.message}
+      const data = await res.json();
+      
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to submit inquiry');
+      }
 
----
-*This inquiry was submitted through the website contact form.*`;
-
-      // WhatsApp number (with country code)
-      const phoneNumber = "237683577676";
-
-      // Create WhatsApp URL
-      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
-
-      // Open WhatsApp in new tab
-      window.open(whatsappUrl, '_blank');
-
-      // Show success message
-      alert("Thank you for your inquiry! WhatsApp is opening with your message. Please send it to complete your inquiry.");
+      alert("Thank you for your inquiry! Our experts will get in touch with you shortly.");
 
       // Reset form
       setFormData({
@@ -77,8 +101,8 @@ ${formData.message}
 
       onClose();
     } catch (error) {
-      console.error("Error sending to WhatsApp:", error);
-      alert("There was an error opening WhatsApp. Please try again or contact us directly.");
+      console.error("Error sending inquiry:", error);
+      alert("There was an error sending your inquiry. Please try again or contact us directly.");
     } finally {
       setIsSubmitting(false);
     }
@@ -98,8 +122,12 @@ ${formData.message}
             <X className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
           <div className="text-center pr-8 sm:pr-0">
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-1 sm:mb-2">Plan Your Dream Trip</h2>
-            <p className="text-sm sm:text-base md:text-lg opacity-90">Get personalized travel recommendations from our experts</p>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-1 sm:mb-2">
+              {productInfo && productInfo.type !== 'General' ? `Book ${productInfo.title}` : 'Plan Your Dream Trip'}
+            </h2>
+            <p className="text-sm sm:text-base md:text-lg opacity-90">
+              {productInfo && productInfo.type !== 'General' ? `Send an inquiry for this ${productInfo.type.toLowerCase()}` : 'Get personalized travel recommendations from our experts'}
+            </p>
           </div>
         </div>
 
@@ -256,12 +284,12 @@ ${formData.message}
                 {isSubmitting ? (
                   <div className="flex items-center justify-center">
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    Opening WhatsApp...
+                    Sending...
                   </div>
                 ) : (
                   <div className="flex items-center justify-center">
                     <Plane className="mr-2 h-5 w-5" />
-                    Send via WhatsApp
+                    Send Inquiry
                   </div>
                 )}
               </Button>

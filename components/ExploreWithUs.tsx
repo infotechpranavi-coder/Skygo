@@ -22,7 +22,7 @@ const ExploreWithUs = () => {
     <section
       id="explore"
       ref={ref}
-      className="py-24 bg-white relative overflow-hidden"
+      className="py-12 bg-white relative overflow-hidden"
     >
       {/* Subtle dot pattern background */}
       <div className="absolute bottom-0 left-0 w-96 h-96 opacity-5">
@@ -111,22 +111,21 @@ const ExploreWithUs = () => {
 
           {/* Right Column - Polaroid Images with Badge */}
           <motion.div
-            className="relative h-[600px]"
+            className="relative h-[500px]"
             initial={{ opacity: 0, x: 30 }}
             animate={isVisible ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
           >
             {/* Polaroid Images */}
             <div className="relative h-full">
-              {/* Image 1 - Top */}
+              {/* Image 1 - Back */}
               <div className="absolute top-0 left-0 w-64 h-80 bg-white p-4 shadow-2xl transform rotate-[-8deg] z-10">
                 <div className="relative w-full h-full">
                   <Image
-                    src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    alt="Mountain Adventure"
+                    src="/cape town,south africa.webp"
+                    alt="Cape Town, South Africa"
                     fill
                     className="object-cover"
-                    unoptimized
                   />
                 </div>
               </div>
@@ -135,37 +134,40 @@ const ExploreWithUs = () => {
               <div className="absolute top-20 left-32 w-64 h-80 bg-white p-4 shadow-2xl transform rotate-[5deg] z-20">
                 <div className="relative w-full h-full">
                   <Image
-                    src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    alt="Safari Adventure"
+                    src="/cape town.webp"
+                    alt="Cape Town"
                     fill
                     className="object-cover"
-                    unoptimized
                   />
                 </div>
               </div>
 
-              {/* Image 3 - Bottom */}
-              <div className="absolute top-40 left-64 w-64 h-80 bg-white p-4 shadow-2xl transform rotate-[-3deg] z-10">
+              {/* Image 3 - Front */}
+              <div className="absolute top-40 left-64 w-64 h-80 bg-white p-4 shadow-2xl transform rotate-[-3deg] z-30">
                 <div className="relative w-full h-full">
                   <Image
-                    src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    alt="Wildlife Experience"
+                    src="/coast , south afirca.webp"
+                    alt="South Africa Coast"
                     fill
                     className="object-cover"
-                    unoptimized
                   />
                 </div>
               </div>
             </div>
 
-            {/* Discount Badge - Jagged edge style - Positioned to overlap images */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 w-44 h-44 bg-[#bd9245] flex flex-col items-center justify-center shadow-2xl"
+            {/* Discount Badge - Professional Circular Seal - Positioned slightly towards the left from previous setup */}
+            <div className="absolute top-[18%] right-2 lg:right-0 z-40 w-36 h-36 bg-[#bd9245] rounded-full flex flex-col items-center justify-center shadow-2xl border-4 border-white transition-all duration-500 hover:scale-110 hover:-rotate-12 cursor-pointer"
               style={{
-                clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%, 15% 15%, 25% 5%, 35% 10%, 50% 0%, 65% 5%, 75% 10%, 85% 20%, 95% 30%, 100% 40%, 100% 60%, 95% 70%, 85% 80%, 75% 90%, 65% 95%, 50% 100%, 35% 95%, 25% 90%, 15% 85%, 5% 75%, 0% 65%, 0% 35%, 5% 25%)'
+                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1)'
               }}>
-              <span className="text-[10px] font-bold text-white uppercase leading-tight">Get Up to</span>
-              <span className="text-5xl font-black text-white leading-none my-1">50% Off</span>
-              <span className="text-[10px] font-bold text-white uppercase leading-tight">DISCOUNT</span>
+              <div className="flex flex-col items-center justify-center text-center">
+                <span className="text-[10px] font-black text-white uppercase tracking-widest leading-none">Up to</span>
+                <span className="text-5xl font-black text-white leading-none my-1 drop-shadow-sm">50%</span>
+                <span className="text-sm font-black text-white uppercase tracking-tighter leading-none mt-1">Discount</span>
+              </div>
+              
+              {/* Optional inner dashed ring for extra detail */}
+              <div className="absolute inset-2 border border-dashed border-white/30 rounded-full pointer-events-none"></div>
             </div>
           </motion.div>
         </motion.div>

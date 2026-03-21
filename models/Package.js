@@ -18,7 +18,6 @@ const ItineraryDaySchema = new mongoose.Schema({
 const ImageSchema = new mongoose.Schema({
   public_id: {
     type: String,
-    required: true,
   },
   url: {
     type: String,
@@ -221,6 +220,14 @@ const PackageSchema = new mongoose.Schema({
   rating: {
     type: Number,
     default: 0,
+  },
+  isFeaturedDestination: {
+    type: Boolean,
+    default: false,
+  },
+  isPopularPackage: {
+    type: Boolean,
+    default: false,
   },
   createdAt: {
     type: Date,

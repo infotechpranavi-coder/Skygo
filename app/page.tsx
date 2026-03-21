@@ -1,34 +1,48 @@
-﻿'use client'
-
 import HeroExplore from "../components/HeroExplore";
 import ExploreWithUs from "../components/ExploreWithUs";
 import DestinationsGrid from "../components/DestinationsGrid";
 import UpcomingTrips from "../components/UpcomingTrips";
 import PopularPackages from "../components/PopularPackages";
 import ClientFeedback from "../components/ClientFeedback";
-import InquiryFormPopup from "../components/InquiryFormPopup";
 import FloatingCallButton from "../components/FloatingCallButton";
-import { useInquiryForm } from "../contexts/InquiryFormContext";
+import connectDB from "@/lib/mongodb";
+import Banner from "@/models/Banner";
+import Package from "@/models/Package";
 
-export default function Home() {
-  const { isOpen: showInquiryForm, closeForm } = useInquiryForm();
+export default async function Home() {
+  // Use try/catch for database operations
+  let initialBanners = [];
+  let initialPackages = [];
+
+  try {
+    await connectDB();
+    
+    // Fetch banners with a timeout or limited fields to keep it fast
+    const bannerDocs = await Banner.find({ isActive: true })
+      .sort({ order: 1, createdAt: -1 })
+      .lean();
+    
+    // Fetch popular packages limited to top 5
+    const packageDocs = await Package.find({ isPopular: true })
+      .limit(5)
+      .lean();
+    
+    // Stringify/Parse to handle MongoDB ObjectIds for client components
+    initialBanners = JSON.parse(JSON.stringify(bannerDocs));
+    initialPackages = JSON.parse(JSON.stringify(packageDocs));
+  } catch (error) {
+    console.warn("Database fetching failed on home page, using fallback client-side fetching or static data.", error);
+  }
 
   return (
     <div className="min-h-screen">
-      <HeroExplore />
+      <HeroExplore initialBanners={initialBanners} />
       <ExploreWithUs />
       <DestinationsGrid />
       <UpcomingTrips />
-      <PopularPackages />
+      <PopularPackages initialPackages={initialPackages} />
       <ClientFeedback />
 
-      {/* Inquiry Form Popup */}
-      {showInquiryForm && (
-          <InquiryFormPopup
-            isOpen={showInquiryForm}
-            onClose={closeForm}
-          />
-      )}
 
       {/* Floating Call Button */}
       <FloatingCallButton />

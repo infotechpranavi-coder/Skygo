@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Plus, Minus, X, Upload, Star } from "lucide-react";
 
 interface ItineraryDay {
@@ -53,6 +54,8 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
     place: "dubai",
     packageCategory: "Regular",
     bestTimeToVisit: { yearRound: "", winter: "", summer: "" },
+    isFeaturedDestination: false,
+    isPopularPackage: false,
   });
 
   const [keyHighlights, setKeyHighlights] = useState<string[]>([""]);
@@ -70,12 +73,21 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
   ]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [images, setImages] = useState<File[]>([]);
+  const [externalImageUrls, setExternalImageUrls] = useState<string[]>([]);
+  const [currentImageUrl, setCurrentImageUrl] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
   // --- Handlers ---
   const handleInputChange = (field: string, value: string) => setFormData(prev => ({ ...prev, [field]: value }));
+
+  const handleAddUrl = () => {
+    if (currentImageUrl.trim() && !externalImageUrls.includes(currentImageUrl.trim())) {
+      setExternalImageUrls(prev => [...prev, currentImageUrl.trim()]);
+      setCurrentImageUrl("");
+    }
+  };
 
   const fileToBase64 = (file: File): Promise<string> =>
     new Promise((resolve, reject) => {
@@ -94,7 +106,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
     setSubmitError("");
     try {
       // 1. Upload images to Cloudinary
-      const uploadedImages: Array<{ public_id: string; url: string; alt: string }> = [];
+      const uploadedImages: Array<{ public_id?: string; url: string; alt: string }> = [];
       for (const file of images) {
         const base64 = await fileToBase64(file);
         const uploadRes = await fetch('/api/upload', {
@@ -105,6 +117,11 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
         const uploadData = await uploadRes.json();
         if (!uploadData.success) throw new Error(`Image upload failed: ${uploadData.error}`);
         uploadedImages.push({ public_id: uploadData.public_id, url: uploadData.url, alt: formData.title });
+      }
+
+      // Add external URLs
+      for (const url of externalImageUrls) {
+        uploadedImages.push({ url, alt: formData.title });
       }
 
       // 2. Build payload
@@ -122,8 +139,10 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
         images: uploadedImages,
         transportation: [],
         accommodation: [],
+        isPopularPackage: formData.isPopularPackage,
         bookings: 0,
         rating: 0,
+        isFeaturedDestination: formData.isFeaturedDestination,
       };
 
       // 3. Save to MongoDB
@@ -154,6 +173,8 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
       price: "", duration: "", location: "", capacity: "",
       packageType: "international", place: "dubai", packageCategory: "Regular",
       bestTimeToVisit: { yearRound: "", winter: "", summer: "" },
+      isFeaturedDestination: false,
+      isPopularPackage: false,
     });
     setKeyHighlights([""]);
     setHotelOptions(["Deluxe Package: 3★ hotels", "Gold Package: 4★ hotels", "Platinum Package: 5★ hotels"]);
@@ -164,19 +185,21 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
     setExclusions([{ id: "1", category: "General", items: ["International airfare", "Visa fees"] }]);
     setReviews([]);
     setImages([]);
+    setExternalImageUrls([]);
+    setCurrentImageUrl("");
     setSubmitError("");
     onClose();
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Create New Package</DialogTitle>
-          <DialogDescription>Fill in all the details to publish a new tour package. Fields marked * are required.</DialogDescription>
+      <DialogContent className="max-w-4xl p-0 border-none rounded-[32px] overflow-hidden">
+        <DialogHeader className="p-8 pb-4 bg-gray-50/50">
+          <DialogTitle className="text-3xl font-black text-[#111827] uppercase tracking-tighter">Create New Package</DialogTitle>
+          <DialogDescription className="text-gray-400 font-bold uppercase tracking-widest text-[10px] mt-1">Fill in all the details to publish a new tour package. Fields marked * are required.</DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6 py-4">
+        <div className="p-8 space-y-6 max-h-[60vh] overflow-y-auto">
 
           {/* Basic Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -257,6 +280,44 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
                   <SelectItem value="Beach">Beach</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-2 py-2 px-4 bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
+            <Checkbox 
+              id="isFeaturedDestination" 
+              checked={formData.isFeaturedDestination} 
+              onCheckedChange={(checked) => handleInputChange('isFeaturedDestination', !!checked as any)} 
+            />
+            <div className="grid gap-1.5 leading-none">
+              <label
+                htmlFor="isFeaturedDestination"
+                className="text-sm font-bold uppercase tracking-widest leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Show in Homepage Destinations Section
+              </label>
+              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">
+                If checked, this package will be featured in the destinations grid on the home page.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-2 py-2 px-4 bg-amber-50/50 rounded-2xl border border-dashed border-amber-200">
+            <Checkbox 
+              id="isPopularPackage" 
+              checked={formData.isPopularPackage} 
+              onCheckedChange={(checked) => handleInputChange('isPopularPackage', !!checked as any)} 
+            />
+            <div className="grid gap-1.5 leading-none">
+              <label
+                htmlFor="isPopularPackage"
+                className="text-sm font-bold uppercase tracking-widest leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Show in Homepage Popular Packages Section
+              </label>
+              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">
+                If checked, this package will appear in the Popular Packages section on the home page.
+              </p>
             </div>
           </div>
 
@@ -419,23 +480,39 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
           </div>
 
           {/* Images */}
-          <div className="space-y-3">
+          <div className="space-y-4">
             <label className="text-sm font-medium">Package Images (Max 5)</label>
-            <div className="border-2 border-dashed border-gray-200 rounded-xl p-8 flex flex-col items-center gap-3">
-              <Upload className="h-8 w-8 text-gray-400" />
-              <p className="text-sm text-gray-500">Upload high-resolution images</p>
-              <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>Choose Files</Button>
-              <input ref={fileInputRef} type="file" multiple accept="image/*" className="hidden" onChange={e => {
-                const files = e.target.files;
-                if (files) setImages(p => [...p, ...Array.from(files)].slice(0, 5));
-              }} />
-              {images.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {images.map((f, i) => (
-                    <Badge key={i} variant="secondary" className="flex items-center gap-1">
-                      {f.name.length > 20 ? f.name.substring(0, 20) + '...' : f.name}
-                      <X className="h-3 w-3 cursor-pointer" onClick={() => setImages(p => p.filter((_, j) => j !== i))} />
-                    </Badge>
+            <div className="flex flex-col gap-4">
+              <div className="border-2 border-dashed border-gray-200 rounded-2xl p-8 flex flex-col items-center gap-3 bg-gray-50/50 cursor-pointer hover:border-[#bd9245] transition-all" onClick={() => fileInputRef.current?.click()}>
+                <Upload className="h-8 w-8 text-gray-400" />
+                <p className="text-sm font-bold text-gray-500 uppercase tracking-widest">Select Professional Images</p>
+                <Button variant="outline" size="sm" className="h-9 px-4 rounded-xl">Choose Files</Button>
+                <input ref={fileInputRef} type="file" multiple accept="image/*" className="hidden" onChange={e => {
+                  const files = e.target.files;
+                  if (files) setImages(p => [...p, ...Array.from(files)].slice(0, 5));
+                }} />
+                {images.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {images.map((f, i) => (
+                      <Badge key={i} variant="secondary" className="flex items-center gap-1 bg-white border-gray-100 rounded-lg">
+                        {f.name.length > 15 ? f.name.substring(0, 15) + '...' : f.name}
+                        <X className="h-3 w-3 cursor-pointer text-red-400" onClick={(e) => { e.stopPropagation(); setImages(p => p.filter((_, j) => j !== i)); }} />
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="flex gap-2">
+                <Input placeholder="OR Paste Image URL here..." value={currentImageUrl} onChange={e => setCurrentImageUrl(e.target.value)} className="h-12 rounded-xl flex-1" />
+                <Button variant="outline" onClick={handleAddUrl} className="h-12 rounded-xl font-bold uppercase text-[10px] tracking-widest px-6 hover:bg-[#bd9245] hover:text-white transition-all">Add URL</Button>
+              </div>
+              {externalImageUrls.length > 0 && (
+                <div className="flex flex-wrap gap-3 mt-2">
+                  {externalImageUrls.map((url, i) => (
+                    <div key={i} className="relative w-16 h-16 rounded-xl border border-gray-100 overflow-hidden group">
+                      <img src={url} className="w-full h-full object-cover" alt="" />
+                      <button onClick={() => setExternalImageUrls(prev => prev.filter((_, idx) => idx !== i))} className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"><X className="h-3 w-3" /></button>
+                    </div>
                   ))}
                 </div>
               )}
@@ -471,11 +548,15 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
 
         </div>
 
-        <DialogFooter className="flex flex-col gap-3">
-          {submitError && <p className="text-sm text-rose-600 font-medium w-full text-center">{submitError}</p>}
-          <div className="flex gap-3 justify-end">
-            <Button variant="outline" onClick={handleClose} disabled={isSubmitting}>Cancel</Button>
-            <Button onClick={handleSubmit} disabled={isSubmitting} className="bg-gray-900 hover:bg-black text-white">
+        <DialogFooter className="p-8 bg-gray-50/50 flex flex-col items-center gap-4">
+          {submitError && <p className="text-red-500 text-xs font-bold uppercase tracking-widest mb-2">{submitError}</p>}
+          <div className="flex gap-4 w-full justify-end">
+            <Button variant="ghost" onClick={handleClose} disabled={isSubmitting} className="rounded-xl px-6 h-12 font-black uppercase text-xs tracking-widest whitespace-nowrap">Cancel</Button>
+            <Button 
+                onClick={handleSubmit} 
+                disabled={isSubmitting} 
+                className="bg-[#111827] hover:bg-[#bd9245] rounded-xl px-10 h-12 font-black uppercase text-xs tracking-widest shadow-xl transition-all w-full md:w-auto"
+            >
               {isSubmitting ? (
                 <span className="flex items-center gap-2">
                   <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />

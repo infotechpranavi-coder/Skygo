@@ -85,394 +85,396 @@ const PackageDetailModal = ({ isOpen, onClose, packageData }: PackageDetailModal
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-6xl max-h-[95vh] overflow-y-auto p-0 border-none bg-gray-50/30">
-        <div className="relative">
-          {/* Hero Section */}
-          <div className="relative h-[450px] w-full">
-            {packageData.images && packageData.images.length > 0 ? (
-              <img
-                src={packageData.images[0].url}
-                alt={packageData.title}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                <Package className="h-16 w-16 text-gray-400" />
-              </div>
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+      <DialogContent className="max-w-6xl p-0 border-none bg-gray-50/30 overflow-hidden rounded-[32px] shadow-2xl">
+        <div className="max-h-[85vh] overflow-y-auto scrollbar-hide">
+          <div className="relative">
+            {/* Hero Section */}
+            <div className="relative h-[450px] w-full">
+              {packageData.images && packageData.images.length > 0 ? (
+                <img
+                  src={packageData.images[0].url}
+                  alt={packageData.title}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                  <Package className="h-16 w-16 text-gray-400" />
+                </div>
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
-            <button
-              onClick={onClose}
-              className="absolute top-8 right-8 w-12 h-12 rounded-full bg-black/30 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white hover:bg-black/50 transition-all z-20 group"
-            >
-              <X className="h-6 w-6 group-hover:rotate-90 transition-transform" />
-            </button>
+              <button
+                onClick={onClose}
+                className="absolute top-8 right-8 w-12 h-12 rounded-full bg-black/30 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white hover:bg-black/50 transition-all z-20 group"
+              >
+                <X className="h-6 w-6 group-hover:rotate-90 transition-transform" />
+              </button>
 
-            <div className="absolute bottom-12 left-12 right-12 z-10">
-              <div className="flex flex-wrap gap-3 mb-6">
-                <Badge className="bg-[#bd9245] text-white hover:bg-[#bd9245] border-none px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest shadow-lg shadow-[#bd9245]/20">
-                  {packageData.packageCategory}
-                </Badge>
-                <Badge className="bg-white/10 backdrop-blur-md text-white border-white/20 px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest">
-                  {packageData.duration}
-                </Badge>
-                <Badge className="bg-white/10 backdrop-blur-md text-white border-white/20 px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest">
-                  {packageData.location}
-                </Badge>
+              <div className="absolute bottom-12 left-12 right-12 z-10">
+                <div className="flex flex-wrap gap-3 mb-6">
+                  <Badge className="bg-[#bd9245] text-white hover:bg-[#bd9245] border-none px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest shadow-lg shadow-[#bd9245]/20">
+                    {packageData.packageCategory}
+                  </Badge>
+                  <Badge className="bg-white/10 backdrop-blur-md text-white border-white/20 px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest">
+                    {packageData.duration}
+                  </Badge>
+                  <Badge className="bg-white/10 backdrop-blur-md text-white border-white/20 px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest">
+                    {packageData.location}
+                  </Badge>
+                </div>
+                <h1 className="text-5xl md:text-6xl font-black text-white mb-4 tracking-tight drop-shadow-2xl">
+                  {packageData.title}
+                </h1>
+                <p className="text-white/90 text-xl font-medium tracking-wide max-w-2xl leading-relaxed">
+                  {packageData.subtitle}
+                </p>
               </div>
-              <h1 className="text-5xl md:text-6xl font-black text-white mb-4 tracking-tight drop-shadow-2xl">
-                {packageData.title}
-              </h1>
-              <p className="text-white/90 text-xl font-medium tracking-wide max-w-2xl leading-relaxed">
-                {packageData.subtitle}
-              </p>
-            </div>
-          </div>
-
-          <div className="p-12 space-y-12">
-            {/* Experience Highlights Section Header */}
-            <div className="flex items-center gap-4 pb-4 border-b border-gray-100">
-              <div className="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center shadow-inner">
-                <PlayCircle className="h-7 w-7 text-gray-800" />
-              </div>
-              <h2 className="text-3xl font-black text-gray-900 tracking-tight">Experience Highlights</h2>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Abstract Card */}
-              {packageData.abstract && (
-                <DetailCard
-                  title="Abstract"
-                  icon={Info}
-                  headerBg="bg-blue-50"
-                  iconColor="text-blue-900"
-                >
-                  <p className="text-gray-600 leading-[1.8] text-xl font-medium">
-                    {packageData.abstract}
-                  </p>
-                </DetailCard>
-              )}
+            <div className="p-12 space-y-12">
+              {/* Experience Highlights Section Header */}
+              <div className="flex items-center gap-4 pb-4 border-b border-gray-100">
+                <div className="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center shadow-inner">
+                  <PlayCircle className="h-7 w-7 text-gray-800" />
+                </div>
+                <h2 className="text-3xl font-black text-gray-900 tracking-tight">Experience Highlights</h2>
+              </div>
 
-              {/* Tour Overview Card */}
-              {packageData.tourOverview && (
-                <DetailCard
-                  title="Tour Overview"
-                  icon={Sparkles}
-                  headerBg="bg-purple-50"
-                  iconColor="text-purple-900"
-                >
-                  <p className="text-gray-600 leading-[1.8] text-xl font-medium">
-                    {packageData.tourOverview}
-                  </p>
-                </DetailCard>
-              )}
-
-              {/* Key Highlights Card */}
-              {packageData.keyHighlights && packageData.keyHighlights.length > 0 && (
-                <DetailCard
-                  title="Key Highlights"
-                  icon={Star}
-                  headerBg="bg-emerald-50"
-                  iconBg="bg-emerald-500"
-                  iconColor="text-white"
-                  className="lg:col-span-2"
-                >
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
-                    {packageData.keyHighlights.map((highlight, idx) => (
-                      <div key={idx} className="flex items-start gap-5 group">
-                        <div className="mt-1.5 w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 group-hover:bg-emerald-200 group-hover:scale-110 transition-all">
-                          <Check className="h-3.5 w-3.5 text-emerald-600 stroke-[3]" />
-                        </div>
-                        <span className="text-gray-700 font-bold text-xl leading-snug">{highlight}</span>
-                      </div>
-                    ))}
-                  </div>
-                </DetailCard>
-              )}
-
-              {/* Hotel Options Card */}
-              {packageData.hotelOptions && packageData.hotelOptions.length > 0 && (
-                <DetailCard
-                  title="Hotel Options"
-                  icon={Building}
-                  headerBg="bg-indigo-50"
-                  iconBg="bg-indigo-600"
-                  iconColor="text-white"
-                >
-                  <ul className="space-y-5">
-                    {packageData.hotelOptions.map((option, idx) => (
-                      <li key={idx} className="flex items-center gap-4 text-gray-700 font-bold text-xl">
-                        <div className="w-2 h-2 rounded-full bg-indigo-400" />
-                        {option}
-                      </li>
-                    ))}
-                  </ul>
-                </DetailCard>
-              )}
-
-              {/* Best Time to Visit Card */}
-              {packageData.bestTimeToVisit && (
-                <DetailCard
-                  title={`Best Time to Visit ${packageData.place === 'dubai' ? 'Dubai' : 'this Destination'}`}
-                  icon={Calendar}
-                  headerBg="bg-orange-50"
-                  iconBg="bg-orange-500"
-                  iconColor="text-white"
-                >
-                  <div className="space-y-8">
-                    <p className="text-gray-600 font-bold text-xl italic leading-relaxed">
-                      {packageData.bestTimeToVisit.yearRound}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Abstract Card */}
+                {packageData.abstract && (
+                  <DetailCard
+                    title="Abstract"
+                    icon={Info}
+                    headerBg="bg-blue-50"
+                    iconColor="text-blue-900"
+                  >
+                    <p className="text-gray-600 leading-[1.8] text-xl font-medium">
+                      {packageData.abstract}
                     </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                      {packageData.bestTimeToVisit.winter && (
-                        <div className="p-6 rounded-2xl border border-orange-100 bg-orange-50/40">
-                          <h4 className="font-serif font-black text-2xl mb-3 text-gray-900 tracking-tight">Winter:</h4>
-                          <p className="text-gray-700 font-medium leading-[1.6] text-lg">{packageData.bestTimeToVisit.winter}</p>
-                        </div>
-                      )}
-                      {packageData.bestTimeToVisit.summer && (
-                        <div className="p-6 rounded-2xl border border-orange-100 bg-orange-50/40">
-                          <h4 className="font-serif font-black text-2xl mb-3 text-gray-900 tracking-tight">Summer:</h4>
-                          <p className="text-gray-700 font-medium leading-[1.6] text-lg">{packageData.bestTimeToVisit.summer}</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </DetailCard>
-              )}
+                  </DetailCard>
+                )}
 
-              {/* Why Choose This Trip Card */}
-              {packageData.whyChooseThisTrip && packageData.whyChooseThisTrip.length > 0 && (
+                {/* Tour Overview Card */}
+                {packageData.tourOverview && (
+                  <DetailCard
+                    title="Tour Overview"
+                    icon={Sparkles}
+                    headerBg="bg-purple-50"
+                    iconColor="text-purple-900"
+                  >
+                    <p className="text-gray-600 leading-[1.8] text-xl font-medium">
+                      {packageData.tourOverview}
+                    </p>
+                  </DetailCard>
+                )}
+
+                {/* Key Highlights Card */}
+                {packageData.keyHighlights && packageData.keyHighlights.length > 0 && (
+                  <DetailCard
+                    title="Key Highlights"
+                    icon={Star}
+                    headerBg="bg-emerald-50"
+                    iconBg="bg-emerald-500"
+                    iconColor="text-white"
+                    className="lg:col-span-2"
+                  >
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                      {packageData.keyHighlights.map((highlight, idx) => (
+                        <div key={idx} className="flex items-start gap-5 group">
+                          <div className="mt-1.5 w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 group-hover:bg-emerald-200 group-hover:scale-110 transition-all">
+                            <Check className="h-3.5 w-3.5 text-emerald-600 stroke-[3]" />
+                          </div>
+                          <span className="text-gray-700 font-bold text-xl leading-snug">{highlight}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </DetailCard>
+                )}
+
+                {/* Hotel Options Card */}
+                {packageData.hotelOptions && packageData.hotelOptions.length > 0 && (
+                  <DetailCard
+                    title="Hotel Options"
+                    icon={Building}
+                    headerBg="bg-indigo-50"
+                    iconBg="bg-indigo-600"
+                    iconColor="text-white"
+                  >
+                    <ul className="space-y-5">
+                      {packageData.hotelOptions.map((option, idx) => (
+                        <li key={idx} className="flex items-center gap-4 text-gray-700 font-bold text-xl">
+                          <div className="w-2 h-2 rounded-full bg-indigo-400" />
+                          {option}
+                        </li>
+                      ))}
+                    </ul>
+                  </DetailCard>
+                )}
+
+                {/* Best Time to Visit Card */}
+                {packageData.bestTimeToVisit && (
+                  <DetailCard
+                    title={`Best Time to Visit ${packageData.place === 'dubai' ? 'Dubai' : 'this Destination'}`}
+                    icon={Calendar}
+                    headerBg="bg-orange-50"
+                    iconBg="bg-orange-500"
+                    iconColor="text-white"
+                  >
+                    <div className="space-y-8">
+                      <p className="text-gray-600 font-bold text-xl italic leading-relaxed">
+                        {packageData.bestTimeToVisit.yearRound}
+                      </p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        {packageData.bestTimeToVisit.winter && (
+                          <div className="p-6 rounded-2xl border border-orange-100 bg-orange-50/40">
+                            <h4 className="font-serif font-black text-2xl mb-3 text-gray-900 tracking-tight">Winter:</h4>
+                            <p className="text-gray-700 font-medium leading-[1.6] text-lg">{packageData.bestTimeToVisit.winter}</p>
+                          </div>
+                        )}
+                        {packageData.bestTimeToVisit.summer && (
+                          <div className="p-6 rounded-2xl border border-orange-100 bg-orange-50/40">
+                            <h4 className="font-serif font-black text-2xl mb-3 text-gray-900 tracking-tight">Summer:</h4>
+                            <p className="text-gray-700 font-medium leading-[1.6] text-lg">{packageData.bestTimeToVisit.summer}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </DetailCard>
+                )}
+
+                {/* Why Choose This Trip Card */}
+                {packageData.whyChooseThisTrip && packageData.whyChooseThisTrip.length > 0 && (
+                  <DetailCard
+                    title="Why Choose This Trip?"
+                    icon={Heart}
+                    headerBg="bg-pink-50"
+                    iconBg="bg-pink-600"
+                    iconColor="text-white"
+                  >
+                    <div className="space-y-5">
+                      {packageData.whyChooseThisTrip.map((reason, idx) => (
+                        <div key={idx} className="flex items-center gap-5 group">
+                          <div className="shrink-0 w-8 h-8 rounded-full border border-pink-200 flex items-center justify-center group-hover:bg-pink-50 group-hover:scale-105 transition-all">
+                            <Check className="h-4 w-4 text-pink-500 stroke-[4]" />
+                          </div>
+                          <span className="text-gray-700 font-bold text-xl leading-snug">{reason}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </DetailCard>
+                )}
+
+                {/* Why Premium [Brand] Tours Card */}
                 <DetailCard
-                  title="Why Choose This Trip?"
-                  icon={Heart}
-                  headerBg="bg-pink-50"
-                  iconBg="bg-pink-600"
+                  title={`Why Premium ${packageData.place === 'dubai' ? 'Dubai' : 'Sky Go'} Tours for This Journey?`}
+                  icon={ShieldCheck}
+                  headerBg="bg-teal-50"
+                  iconBg="bg-teal-600"
                   iconColor="text-white"
                 >
                   <div className="space-y-5">
-                    {packageData.whyChooseThisTrip.map((reason, idx) => (
+                    {(packageData.whyPremiumDubaiTours || packageData.whyPremiumSkygoTours || []).map((point, idx) => (
                       <div key={idx} className="flex items-center gap-5 group">
-                        <div className="shrink-0 w-8 h-8 rounded-full border border-pink-200 flex items-center justify-center group-hover:bg-pink-50 group-hover:scale-105 transition-all">
-                          <Check className="h-4 w-4 text-pink-500 stroke-[4]" />
+                        <div className="shrink-0 w-8 h-8 rounded-full border border-teal-200 flex items-center justify-center group-hover:bg-teal-50 group-hover:scale-105 transition-all">
+                          <Check className="h-4 w-4 text-teal-600 stroke-[4]" />
                         </div>
-                        <span className="text-gray-700 font-bold text-xl leading-snug">{reason}</span>
+                        <span className="text-gray-700 font-bold text-xl leading-snug">{point}</span>
                       </div>
                     ))}
                   </div>
                 </DetailCard>
-              )}
 
-              {/* Why Premium [Brand] Tours Card */}
-              <DetailCard
-                title={`Why Premium ${packageData.place === 'dubai' ? 'Dubai' : 'Sky Go'} Tours for This Journey?`}
-                icon={ShieldCheck}
-                headerBg="bg-teal-50"
-                iconBg="bg-teal-600"
-                iconColor="text-white"
-              >
-                <div className="space-y-5">
-                  {(packageData.whyPremiumDubaiTours || packageData.whyPremiumSkygoTours || []).map((point, idx) => (
-                    <div key={idx} className="flex items-center gap-5 group">
-                      <div className="shrink-0 w-8 h-8 rounded-full border border-teal-200 flex items-center justify-center group-hover:bg-teal-50 group-hover:scale-105 transition-all">
-                        <Check className="h-4 w-4 text-teal-600 stroke-[4]" />
-                      </div>
-                      <span className="text-gray-700 font-bold text-xl leading-snug">{point}</span>
-                    </div>
-                  ))}
-                </div>
-              </DetailCard>
-
-              {/* About [Brand] Card */}
-              <DetailCard
-                title={`About Premium ${packageData.place === 'dubai' ? 'Dubai' : 'Sky Go'} Tours`}
-                icon={Info}
-                headerBg="bg-amber-50"
-                iconColor="text-amber-900"
-                className="lg:col-span-2"
-              >
-                <p className="text-gray-700 leading-[1.8] text-xl font-medium">
-                  {packageData.about}
-                </p>
-              </DetailCard>
-            </div>
-
-            {/* Daily Itinerary Section */}
-            <div className="space-y-10">
-              <div className="flex items-center gap-4 pb-4 border-b border-gray-100">
-                <div className="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center shadow-inner">
-                  <Calendar className="h-7 w-7 text-gray-800" />
-                </div>
-                <h2 className="text-3xl font-black text-gray-900 tracking-tight">Daily Itinerary Schedule</h2>
+                {/* About [Brand] Card */}
+                <DetailCard
+                  title={`About Premium ${packageData.place === 'dubai' ? 'Dubai' : 'Sky Go'} Tours`}
+                  icon={Info}
+                  headerBg="bg-amber-50"
+                  iconColor="text-amber-900"
+                  className="lg:col-span-2"
+                >
+                  <p className="text-gray-700 leading-[1.8] text-xl font-medium">
+                    {packageData.about}
+                  </p>
+                </DetailCard>
               </div>
 
-              <div className="space-y-8">
-                {packageData.itinerary.map((day, idx) => (
-                  <Card key={idx} className="overflow-hidden border-none shadow-sm rounded-2xl hover:shadow-lg transition-all transform hover:-translate-y-1">
-                    <div className="flex flex-col md:flex-row min-h-[160px]">
-                      <div className="md:w-40 bg-gray-900 text-white flex flex-col items-center justify-center p-8 shrink-0 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-20 h-20 bg-white/5 rounded-full -mr-10 -mt-10" />
-                        <span className="text-xs font-black uppercase tracking-[0.2em] opacity-40 mb-2 relative z-10">Day</span>
-                        <span className="text-5xl font-black relative z-10">{day.day}</span>
-                      </div>
-                      <div className="p-10 bg-white flex-grow flex flex-col justify-center">
-                        <h4 className="text-2xl font-black text-gray-900 mb-4 tracking-tight leading-tight">{day.title}</h4>
-                        <div className="space-y-2">
-                          {day.description.split('\n').map((line, lIdx) => (
-                            <p key={lIdx} className="text-gray-600 leading-relaxed font-bold text-xl italic flex items-start gap-2">
-                              {day.description.includes('\n') && <span className="mt-2.5 w-1.5 h-1.5 rounded-full bg-gray-300 shrink-0" />}
-                              {line}
-                            </p>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </Card>
-                ))}
-              </div>
-            </div>
-
-            {/* Inclusions & Exclusions Section */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 pt-8">
-              {/* Inclusions */}
-              <div className="space-y-8">
-                <h3 className="text-2xl font-black text-gray-900 flex items-center gap-4 px-2">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
-                    <CheckCircle className="h-6 w-6 text-emerald-600" />
-                  </div>
-                  Inclusions
-                </h3>
-                <div className="p-10 rounded-[40px] bg-white border border-gray-100 shadow-sm space-y-8 overflow-hidden relative group">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-50/50 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-150 duration-1000" />
-                  {Array.isArray(packageData.inclusions) && typeof packageData.inclusions[0] === 'object' ? (
-                    (packageData.inclusions as any[]).map((group, idx) => (
-                      <div key={idx} className="space-y-4 relative z-10">
-                        <h4 className="text-xs font-black text-gray-400 uppercase tracking-[0.3em]">{group.category}</h4>
-                        <ul className="grid grid-cols-1 gap-3">
-                          {group.items.map((item: string, i: number) => (
-                            <li key={i} className="text-lg font-bold text-gray-700 flex items-start gap-4">
-                              <span className="mt-2.5 w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))
-                  ) : (
-                    <ul className="grid grid-cols-1 gap-4 relative z-10">
-                      {(packageData.inclusions as string[])?.map((item, idx) => (
-                        <li key={idx} className="text-lg font-bold text-gray-700 flex items-start gap-4">
-                          <span className="mt-2.5 w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              </div>
-
-              {/* Exclusions */}
-              <div className="space-y-8">
-                <h3 className="text-2xl font-black text-gray-900 flex items-center gap-4 px-2">
-                  <div className="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center">
-                    <X className="h-6 w-6 text-rose-600" />
-                  </div>
-                  Exclusions
-                </h3>
-                <div className="p-10 rounded-[40px] bg-white border border-gray-100 shadow-sm space-y-8 overflow-hidden relative group">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-rose-50/50 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-150 duration-1000" />
-                  {Array.isArray(packageData.exclusions) && typeof packageData.exclusions[0] === 'object' ? (
-                    (packageData.exclusions as any[]).map((group, idx) => (
-                      <div key={idx} className="space-y-4 relative z-10">
-                        <h4 className="text-xs font-black text-gray-400 uppercase tracking-[0.3em]">{group.category}</h4>
-                        <ul className="grid grid-cols-1 gap-3">
-                          {group.items.map((item: string, i: number) => (
-                            <li key={i} className="text-lg font-bold text-gray-700 flex items-start gap-4">
-                              <span className="mt-2.5 w-2 h-2 rounded-full bg-rose-300 shrink-0" />
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))
-                  ) : (
-                    <ul className="grid grid-cols-1 gap-4 relative z-10">
-                      {(packageData.exclusions as string[])?.map((item, idx) => (
-                        <li key={idx} className="text-lg font-bold text-gray-700 flex items-start gap-4">
-                          <span className="mt-2.5 w-2 h-2 rounded-full bg-rose-300 shrink-0" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Guest Reviews Section */}
-            {packageData.reviews && packageData.reviews.length > 0 && (
-              <div className="space-y-10 pt-8">
+              {/* Daily Itinerary Section */}
+              <div className="space-y-10">
                 <div className="flex items-center gap-4 pb-4 border-b border-gray-100">
                   <div className="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center shadow-inner">
-                    <Star className="h-7 w-7 text-[#bd9245]" />
+                    <Calendar className="h-7 w-7 text-gray-800" />
                   </div>
-                  <h2 className="text-3xl font-black text-gray-900 tracking-tight">Guest Feedback & Reviews</h2>
+                  <h2 className="text-3xl font-black text-gray-900 tracking-tight">Daily Itinerary Schedule</h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {packageData.reviews.map((review, idx) => (
-                    <Card key={idx} className="p-10 border-none bg-white shadow-sm rounded-[32px] hover:shadow-xl hover:-translate-y-1 transition-all">
-                      <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center gap-5">
-                          <div className="w-14 h-14 rounded-full bg-[#bd9245]/10 flex items-center justify-center font-black text-[#bd9245] text-xl shadow-inner">
-                            {review.name.charAt(0)}
-                          </div>
-                          <div>
-                            <h4 className="text-xl font-black text-gray-900">{review.name}</h4>
-                            <p className="text-xs text-gray-400 font-black uppercase tracking-[0.2em]">{review.date}</p>
-                          </div>
+                <div className="space-y-8">
+                  {packageData.itinerary.map((day, idx) => (
+                    <Card key={idx} className="overflow-hidden border-none shadow-sm rounded-2xl hover:shadow-lg transition-all transform hover:-translate-y-1">
+                      <div className="flex flex-col md:flex-row min-h-[160px]">
+                        <div className="md:w-40 bg-gray-900 text-white flex flex-col items-center justify-center p-8 shrink-0 relative overflow-hidden">
+                          <div className="absolute top-0 right-0 w-20 h-20 bg-white/5 rounded-full -mr-10 -mt-10" />
+                          <span className="text-xs font-black uppercase tracking-[0.2em] opacity-40 mb-2 relative z-10">Day</span>
+                          <span className="text-5xl font-black relative z-10">{day.day}</span>
                         </div>
-                        <div className="flex gap-1 bg-gray-50 px-3 py-1.5 rounded-full">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={cn("h-4 w-4", i < review.rating ? "fill-[#bd9245] text-[#bd9245]" : "fill-gray-200 text-gray-200")}
-                            />
-                          ))}
+                        <div className="p-10 bg-white flex-grow flex flex-col justify-center">
+                          <h4 className="text-2xl font-black text-gray-900 mb-4 tracking-tight leading-tight">{day.title}</h4>
+                          <div className="space-y-2">
+                            {day.description.split('\n').map((line, lIdx) => (
+                              <p key={lIdx} className="text-gray-600 leading-relaxed font-bold text-xl italic flex items-start gap-2">
+                                {day.description.includes('\n') && <span className="mt-2.5 w-1.5 h-1.5 rounded-full bg-gray-300 shrink-0" />}
+                                {line}
+                              </p>
+                            ))}
+                          </div>
                         </div>
                       </div>
-                      <p className="text-gray-600 font-bold leading-relaxed italic text-xl">
-                        "{review.comment}"
-                      </p>
                     </Card>
                   ))}
                 </div>
               </div>
-            )}
-          </div>
 
-          {/* Footer Action Bar */}
-          <div className="p-12 bg-white border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-8 rounded-b-[40px] sticky bottom-0 z-30 shadow-[0_-20px_50px_-20px_rgba(0,0,0,0.1)]">
-            <div className="text-center md:text-left">
-              <p className="text-xs text-gray-400 font-black uppercase tracking-[0.3em] mb-2">Package Investment</p>
-              <div className="flex items-baseline gap-3">
-                <span className="text-5xl font-black text-[#111827] tracking-tight">R {packageData.price.toLocaleString()}</span>
-                <span className="text-gray-400 font-bold text-lg">/ Complete Journey</span>
+              {/* Inclusions & Exclusions Section */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 pt-8">
+                {/* Inclusions */}
+                <div className="space-y-8">
+                  <h3 className="text-2xl font-black text-gray-900 flex items-center gap-4 px-2">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
+                      <CheckCircle className="h-6 w-6 text-emerald-600" />
+                    </div>
+                    Inclusions
+                  </h3>
+                  <div className="p-10 rounded-[40px] bg-white border border-gray-100 shadow-sm space-y-8 overflow-hidden relative group">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-50/50 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-150 duration-1000" />
+                    {Array.isArray(packageData.inclusions) && typeof packageData.inclusions[0] === 'object' ? (
+                      (packageData.inclusions as any[]).map((group, idx) => (
+                        <div key={idx} className="space-y-4 relative z-10">
+                          <h4 className="text-xs font-black text-gray-400 uppercase tracking-[0.3em]">{group.category}</h4>
+                          <ul className="grid grid-cols-1 gap-3">
+                            {group.items.map((item: string, i: number) => (
+                              <li key={i} className="text-lg font-bold text-gray-700 flex items-start gap-4">
+                                <span className="mt-2.5 w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))
+                    ) : (
+                      <ul className="grid grid-cols-1 gap-4 relative z-10">
+                        {(packageData.inclusions as string[])?.map((item, idx) => (
+                          <li key={idx} className="text-lg font-bold text-gray-700 flex items-start gap-4">
+                            <span className="mt-2.5 w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </div>
+
+                {/* Exclusions */}
+                <div className="space-y-8">
+                  <h3 className="text-2xl font-black text-gray-900 flex items-center gap-4 px-2">
+                    <div className="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center">
+                      <X className="h-6 w-6 text-rose-600" />
+                    </div>
+                    Exclusions
+                  </h3>
+                  <div className="p-10 rounded-[40px] bg-white border border-gray-100 shadow-sm space-y-8 overflow-hidden relative group">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-rose-50/50 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-150 duration-1000" />
+                    {Array.isArray(packageData.exclusions) && typeof packageData.exclusions[0] === 'object' ? (
+                      (packageData.exclusions as any[]).map((group, idx) => (
+                        <div key={idx} className="space-y-4 relative z-10">
+                          <h4 className="text-xs font-black text-gray-400 uppercase tracking-[0.3em]">{group.category}</h4>
+                          <ul className="grid grid-cols-1 gap-3">
+                            {group.items.map((item: string, i: number) => (
+                              <li key={i} className="text-lg font-bold text-gray-700 flex items-start gap-4">
+                                <span className="mt-2.5 w-2 h-2 rounded-full bg-rose-300 shrink-0" />
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))
+                    ) : (
+                      <ul className="grid grid-cols-1 gap-4 relative z-10">
+                        {(packageData.exclusions as string[])?.map((item, idx) => (
+                          <li key={idx} className="text-lg font-bold text-gray-700 flex items-start gap-4">
+                            <span className="mt-2.5 w-2 h-2 rounded-full bg-rose-300 shrink-0" />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </div>
               </div>
+
+              {/* Guest Reviews Section */}
+              {packageData.reviews && packageData.reviews.length > 0 && (
+                <div className="space-y-10 pt-8">
+                  <div className="flex items-center gap-4 pb-4 border-b border-gray-100">
+                    <div className="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center shadow-inner">
+                      <Star className="h-7 w-7 text-[#bd9245]" />
+                    </div>
+                    <h2 className="text-3xl font-black text-gray-900 tracking-tight">Guest Feedback & Reviews</h2>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {packageData.reviews.map((review, idx) => (
+                      <Card key={idx} className="p-10 border-none bg-white shadow-sm rounded-[32px] hover:shadow-xl hover:-translate-y-1 transition-all">
+                        <div className="flex items-center justify-between mb-6">
+                          <div className="flex items-center gap-5">
+                            <div className="w-14 h-14 rounded-full bg-[#bd9245]/10 flex items-center justify-center font-black text-[#bd9245] text-xl shadow-inner">
+                              {review.name.charAt(0)}
+                            </div>
+                            <div>
+                              <h4 className="text-xl font-black text-gray-900">{review.name}</h4>
+                              <p className="text-xs text-gray-400 font-black uppercase tracking-[0.2em]">{review.date}</p>
+                            </div>
+                          </div>
+                          <div className="flex gap-1 bg-gray-50 px-3 py-1.5 rounded-full">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className={cn("h-4 w-4", i < review.rating ? "fill-[#bd9245] text-[#bd9245]" : "fill-gray-200 text-gray-200")}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                        <p className="text-gray-600 font-bold leading-relaxed italic text-xl">
+                          "{review.comment}"
+                        </p>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-            <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-              <Button
-                onClick={onClose}
-                variant="outline"
-                className="w-full sm:w-auto border-gray-200 text-gray-600 font-black uppercase tracking-widest h-16 px-12 rounded-2xl hover:bg-gray-50 transition-all text-xs"
-              >
-                Close Details
-              </Button>
-              <Button className="w-full sm:w-auto bg-[#bd9245] hover:bg-[#a67e3a] text-white font-black uppercase tracking-widest h-16 px-12 rounded-2xl shadow-2xl shadow-[#bd9245]/30 group transition-all text-xs">
-                Reservations & Support <TrendingUp className="ml-3 h-5 w-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-              </Button>
+          </div>
+        </div>
+
+        {/* Footer Action Bar */}
+        <div className="p-12 bg-white border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-8 rounded-b-[40px] z-30 shadow-[0_-20px_50px_-20px_rgba(0,0,0,0.1)]">
+          <div className="text-center md:text-left">
+            <p className="text-xs text-gray-400 font-black uppercase tracking-[0.3em] mb-2">Package Investment</p>
+            <div className="flex items-baseline gap-3">
+              <span className="text-5xl font-black text-[#111827] tracking-tight">R {packageData.price.toLocaleString()}</span>
+              <span className="text-gray-400 font-bold text-lg">/ Complete Journey</span>
             </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+            <Button
+              onClick={onClose}
+              variant="outline"
+              className="w-full sm:w-auto border-gray-200 text-gray-600 font-black uppercase tracking-widest h-16 px-12 rounded-2xl hover:bg-gray-50 transition-all text-xs"
+            >
+              Close Details
+            </Button>
+            <Button className="w-full sm:w-auto bg-[#bd9245] hover:bg-[#a67e3a] text-white font-black uppercase tracking-widest h-16 px-12 rounded-2xl shadow-2xl shadow-[#bd9245]/30 group transition-all text-xs">
+              Reservations & Support <TrendingUp className="ml-3 h-5 w-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+            </Button>
           </div>
         </div>
       </DialogContent>

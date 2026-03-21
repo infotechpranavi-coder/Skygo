@@ -24,10 +24,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { TicketData } from "@/lib/types";
+import { useInquiryForm } from "@/contexts/InquiryFormContext";
 
 const TicketDetailPage = () => {
     const params = useParams();
     const router = useRouter();
+    const { openForm } = useInquiryForm();
     const [ticketData, setTicketData] = useState<TicketData | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -317,15 +319,14 @@ const TicketDetailPage = () => {
                                         </div>
                                     </div>
 
-                                    <Link
-                                        href={`/contact?packageName=${encodeURIComponent(ticketData.title)}&packageType=flight&location=${encodeURIComponent(ticketData.location)}`}
-                                        className="block"
-                                    >
-                                        <Button className="w-full h-20 bg-gray-900 hover:bg-black text-white font-black uppercase tracking-[0.2em] rounded-[32px] shadow-2xl transition-all duration-300 group flex items-center justify-center gap-4">
+                                    <div className="block">
+                                        <Button
+                                            onClick={() => openForm({ title: ticketData.title, type: 'Ticket' })}
+                                            className="w-full h-20 bg-gray-900 hover:bg-black text-white font-black uppercase tracking-[0.2em] rounded-[32px] shadow-2xl transition-all duration-300 group flex items-center justify-center gap-4">
                                             Request Fare Quote
                                             <ArrowRight className="h-6 w-6 transition-transform group-hover:translate-x-2" />
                                         </Button>
-                                    </Link>
+                                    </div>
 
                                     <div className="flex items-center justify-center gap-8 py-2">
                                         <Plane className="h-6 w-6 text-gray-100" />

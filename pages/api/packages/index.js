@@ -7,115 +7,115 @@ const getDemoPackages = () => {
   return [
     {
       _id: 'demo-1',
-      title: 'Dubai City Tour',
-      subtitle: 'Explore the stunning city of Dubai',
-      about: 'Experience the best of Dubai with our comprehensive city tour package. Visit iconic landmarks, enjoy luxury shopping, and witness the perfect blend of traditional and modern architecture.',
-      services: 'Customized travel planning, Guided tours & local experiences, Group & family vacations, Luxury & adventure travel',
-      tourDetails: 'Full-day city tour including visits to Burj Khalifa, Dubai Mall, Palm Jumeirah, and traditional souks.',
-      price: 299,
+      title: 'Cape Town coastal adventure',
+      subtitle: 'Explore the Mother City and its coast',
+      about: 'Experience the best of Cape Town with our comprehensive coastal tour. Visit Table Mountain, enjoy the V&A Waterfront, and drive along the scenic Chapmans Peak for breathtaking ocean views.',
+      services: 'Private airport transfers, Guided Table Mountain tour, V&A Waterfront exploration, Scenic coastal drives',
+      tourDetails: 'Full-day Cape Town tour including Table Mountain cable car, Bo-Kaap heritage walk, and a sunset cruise from the Waterfront.',
+      price: 1299,
       duration: '1 Day',
-      location: 'Dubai, UAE',
-      capacity: '2-10 persons',
-      packageType: 'international',
-      place: 'dubai',
+      location: 'Cape Town, South Africa',
+      capacity: '2-8 persons',
+      packageType: 'domestic',
+      place: 'cape-town',
       packageCategory: 'Deluxe',
       images: [
         {
-          public_id: 'demo-dubai-1',
-          url: '/placeholder.svg',
-          alt: 'Dubai Skyline'
+          public_id: 'demo-ct-1',
+          url: '/cape town.webp',
+          alt: 'Cape Town Skyline'
         }
       ],
       itinerary: [
         {
           day: 1,
-          title: 'City Exploration',
-          description: 'Morning visit to Burj Khalifa, afternoon shopping at Dubai Mall, evening desert safari.'
+          title: 'The Mother City Highlights',
+          description: 'Morning Cable Car ride to Table Mountain, afternoon Bo-Kaap cultural tour, and evening at the V&A Waterfront.'
         }
       ],
       transportation: [],
       accommodation: [],
-      inclusions: ['Entrance fees', 'Transportation', 'Guide'],
+      inclusions: ['Table Mountain tickets', 'Private vehicle', 'Expert Guide'],
       exclusions: ['Meals', 'Personal expenses'],
       reviews: [],
-      bookings: 25,
-      rating: 4.5,
+      bookings: 45,
+      rating: 4.9,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     },
     {
       _id: 'demo-2',
-      title: 'Abu Dhabi Cultural Experience',
-      subtitle: 'Discover the capital city of UAE',
-      about: 'Immerse yourself in the rich culture and heritage of Abu Dhabi. Visit the magnificent Sheikh Zayed Mosque, explore the Louvre Abu Dhabi, and experience traditional Emirati hospitality.',
-      services: 'Cultural tours, Museum visits, Traditional experiences',
-      tourDetails: 'Full-day cultural tour covering major landmarks and cultural sites.',
-      price: 349,
-      duration: '1 Day',
-      location: 'Abu Dhabi, UAE',
-      capacity: '2-15 persons',
-      packageType: 'international',
-      place: 'dubai',
-      packageCategory: 'Deluxe',
+      title: 'Kruger Safari Experience',
+      subtitle: 'The ultimate Big Five wildlife safari',
+      about: 'Immerse yourself in the wild heart of South Africa. Witness lions, elephants, and leopards in their natural habitat with our expert trackers and luxurious bush LODGE stays.',
+      services: 'Professional game drives, Luxury bush accommodation, Traditional boma dinners',
+      tourDetails: 'Multi-day safari at a private concession within Kruger National Park, including sunrise and sunset game drives.',
+      price: 8499,
+      duration: '3 Days',
+      location: 'Kruger Park, Mpumalanga',
+      capacity: '2-12 persons',
+      packageType: 'domestic',
+      place: 'kruger',
+      packageCategory: 'Luxury',
       images: [
         {
-          public_id: 'demo-abu-dhabi-1',
-          url: '/placeholder.svg',
-          alt: 'Abu Dhabi Mosque'
+          public_id: 'demo-kruger-1',
+          url: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+          alt: 'Kruger Wildlife'
         }
       ],
       itinerary: [
         {
           day: 1,
-          title: 'Cultural Immersion',
-          description: 'Visit Sheikh Zayed Mosque, Louvre Abu Dhabi, and traditional markets.'
+          title: 'Into the Wild',
+          description: 'Arrival at the lodge, afternoon game drive, and welcome dinner under the stars.'
         }
       ],
       transportation: [],
       accommodation: [],
-      inclusions: ['Entrance fees', 'Transportation', 'Professional guide'],
-      exclusions: ['Meals', 'Personal expenses'],
+      inclusions: ['All meals', 'All game drives', 'Conservation fees'],
+      exclusions: ['Flights', 'Premium beverages'],
       reviews: [],
-      bookings: 18,
-      rating: 4.7,
+      bookings: 32,
+      rating: 4.8,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     },
     {
       _id: 'demo-3',
-      title: 'Desert Safari Adventure',
-      subtitle: 'Thrilling desert experience',
-      about: 'Enjoy an unforgettable desert safari experience with dune bashing, camel rides, traditional entertainment, and a delicious BBQ dinner under the stars.',
-      services: 'Adventure activities, Cultural shows, Dining experiences',
-      tourDetails: 'Evening desert safari with multiple activities and traditional dinner.',
-      price: 199,
-      duration: '6 Hours',
-      location: 'Dubai Desert, UAE',
-      capacity: '1-20 persons',
-      packageType: 'international',
-      place: 'dubai',
-      packageCategory: 'Luxury',
+      title: 'Garden Route Scenic Quest',
+      subtitle: 'Pristine beaches and magic forests',
+      about: 'Journey through the most beautiful coastal stretch of South Africa. Explore Knysna, Plettenberg Bay, and the Tsitsikamma forest on this spectacular road trip.',
+      services: 'Boutique hotel stays, Coastal hiking tours, Whale watching (seasonal)',
+      tourDetails: 'Panoramic tour of the Garden Route including world-class beaches and indigenous forests.',
+      price: 4999,
+      duration: '4 Days',
+      location: 'Garden Route, Western Cape',
+      capacity: '1-10 persons',
+      packageType: 'domestic',
+      place: 'garden-route',
+      packageCategory: 'Premium',
       images: [
         {
-          public_id: 'demo-desert-1',
-          url: '/placeholder.svg',
-          alt: 'Desert Safari'
+          public_id: 'demo-gr-1',
+          url: '/coast , south afirca.webp',
+          alt: 'Garden Route'
         }
       ],
       itinerary: [
         {
           day: 1,
-          title: 'Desert Adventure',
-          description: 'Dune bashing, camel rides, sandboarding, traditional shows, and BBQ dinner.'
+          title: 'The Forest & The Sea',
+          description: 'Hiking in Tsitsikamma, crossing the suspension bridge, and staying in Knysna.'
         }
       ],
       transportation: [],
       accommodation: [],
-      inclusions: ['All activities', 'BBQ dinner', 'Transportation', 'Entertainment'],
-      exclusions: ['Alcohol', 'Personal expenses'],
+      inclusions: ['Activity fees', 'Transport', 'Breakfast', 'Accommodation'],
+      exclusions: ['Lunch and Dinner', 'Optional activities'],
       reviews: [],
-      bookings: 42,
-      rating: 4.8,
+      bookings: 28,
+      rating: 4.7,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     }
@@ -160,7 +160,7 @@ export default async function handler(req, res) {
         return res.status(200).json({ success: true, data: packages, demo: true });
       }
 
-      const { search } = req.query;
+      const { search, popular, featured } = req.query;
       let query = {};
 
       // If search parameter is provided, create a search query
@@ -174,6 +174,16 @@ export default async function handler(req, res) {
             { tourDetails: { $regex: search, $options: 'i' } }
           ]
         };
+      }
+
+      // Add popular filter if requested
+      if (popular === 'true') {
+        query.isPopularPackage = true;
+      }
+
+      // Add featured filter if requested
+      if (featured === 'true') {
+        query.isFeaturedDestination = true;
       }
 
       const packages = await Package.find(query).sort({ createdAt: -1 });

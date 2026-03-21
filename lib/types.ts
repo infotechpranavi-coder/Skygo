@@ -65,6 +65,8 @@ export interface PackageData {
     reviews?: Review[];
     bookings: number;
     rating: number;
+    isFeaturedDestination?: boolean;
+    isPopularPackage?: boolean;
     createdAt: string;
     updatedAt: string;
 }

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const ImageSchema = new mongoose.Schema({
-  public_id: { type: String, required: true },
+  public_id: { type: String, required: false },
   url: { type: String, required: true },
   alt: { type: String, default: '' },
 });
@@ -25,6 +25,7 @@ const TicketSchema = new mongoose.Schema({
   location: { type: String, required: true }, // Destination city
   images: [ImageSchema],
   description: { type: String, default: '' },
+  itinerary: [{ day: Number, title: String, description: String }],
   isAvailable: { type: Boolean, default: true },
   bookings: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now },

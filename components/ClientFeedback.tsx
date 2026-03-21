@@ -3,11 +3,39 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Quote } from 'lucide-react';
-import { testimonials } from '@/data/homeData';
+import { testimonials as staticTestimonials } from '@/data/homeData';
 
 const ClientFeedback = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [apiTestimonials, setApiTestimonials] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const res = await fetch('/api/testimonials?activeOnly=true');
+        const data = await res.json();
+        if (data.success && data.data.length > 0) {
+          const formatted = data.data.map((t: any) => ({
+             id: t._id,
+             name: t.name,
+             role: t.role,
+             quote: t.content,
+             avatar: t.image?.url || 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200'
+          }));
+          setApiTestimonials(formatted);
+        }
+      } catch (err) {
+        console.error('Failed to load testimonials', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchTestimonials();
+  }, []);
+
+  const displayTestimonials = apiTestimonials.length > 0 ? apiTestimonials : staticTestimonials;
 
   const nextTestimonial = (index: number) => {
     setDirection(1);
@@ -15,12 +43,13 @@ const ClientFeedback = () => {
   };
 
   useEffect(() => {
+    if (displayTestimonials.length === 0) return;
     const timer = setInterval(() => {
       setDirection(1);
-      setActiveIndex((prev) => (prev + 1) % testimonials.length);
+      setActiveIndex((prev) => (prev + 1) % displayTestimonials.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [displayTestimonials.length]);
 
   const variants = {
     enter: (direction: number) => ({
@@ -37,6 +66,8 @@ const ClientFeedback = () => {
     }),
   };
 
+  if (isLoading || displayTestimonials.length === 0) return null;
+
   return (
     <section className="py-24 bg-[#faf8f3] overflow-hidden">
       <div className="container mx-auto px-4">
@@ -47,11 +78,11 @@ const ClientFeedback = () => {
 
         <div className="flex flex-col lg:flex-row items-center gap-12 relative h-full">
           {/* Main Image Area */}
-          <div className="relative w-[280px] h-[280px] md:w-[360px] md:h-[360px] flex-shrink-0 overflow-hidden rounded-full">
+          <div className="relative w-[220px] h-[220px] md:w-[280px] md:h-[280px] flex-shrink-0 overflow-hidden rounded-full">
             <div className="absolute inset-0 bg-[#ffc107] rounded-full scale-90" />
             <AnimatePresence mode="popLayout" custom={direction} initial={false}>
               <motion.div
-                key={testimonials[activeIndex].id}
+                key={displayTestimonials[activeIndex].id}
                 custom={direction}
                 variants={variants}
                 initial="enter"
@@ -64,8 +95,8 @@ const ClientFeedback = () => {
                 className="absolute inset-0 w-full h-full rounded-full border-[8px] border-white shadow-[0_15px_40px_rgba(0,0,0,0.1)] overflow-hidden z-10"
               >
                 <img
-                  src={testimonials[activeIndex].avatar}
-                  alt={testimonials[activeIndex].name}
+                  src={displayTestimonials[activeIndex].avatar}
+                  alt={displayTestimonials[activeIndex].name}
                   className="w-full h-full object-cover"
                 />
               </motion.div>
@@ -73,13 +104,13 @@ const ClientFeedback = () => {
           </div>
 
           {/* Divider Line */}
-          <div className="hidden lg:block w-[1.5px] h-[280px] bg-[#1e1f44]/10 mx-6 flex-shrink-0" />
+          <div className="hidden lg:block w-[1.5px] h-[220px] bg-[#1e1f44]/10 mx-6 flex-shrink-0" />
 
           {/* Testimonial Content */}
           <div className="flex-grow relative min-h-[400px] flex flex-col justify-center overflow-hidden">
             <AnimatePresence mode="popLayout" custom={direction} initial={false}>
               <motion.div
-                key={testimonials[activeIndex].id}
+                key={displayTestimonials[activeIndex].id}
                 custom={direction}
                 variants={variants}
                 initial="enter"
@@ -91,16 +122,16 @@ const ClientFeedback = () => {
                 }}
                 className="absolute w-full"
               >
-                <Quote className="w-20 h-20 text-[#bd9245] mb-6 fill-[#bd9245]" />
-                <p className="text-xl md:text-[26px] text-gray-700 leading-snug font-medium mb-12 max-w-3xl tracking-tight">
-                  {testimonials[activeIndex].quote}
+                <Quote className="w-14 h-14 text-[#bd9245] mb-4 fill-[#bd9245]" />
+                <p className="text-lg md:text-[20px] text-gray-700 leading-snug font-medium mb-8 max-w-3xl tracking-tight">
+                  {displayTestimonials[activeIndex].quote}
                 </p>
                 <div>
                   <h4 className="text-2xl font-black text-[#1e1f44] uppercase tracking-tighter">
-                    {testimonials[activeIndex].name}
+                    {displayTestimonials[activeIndex].name}
                   </h4>
                   <p className="text-gray-400 font-bold uppercase tracking-[0.2em] text-xs mt-2">
-                    {testimonials[activeIndex].role}
+                    {displayTestimonials[activeIndex].role}
                   </p>
                 </div>
               </motion.div>
@@ -108,12 +139,12 @@ const ClientFeedback = () => {
           </div>
 
           {/* Thumbnail List - Vertical Capsule */}
-          <div className="flex lg:flex-col gap-3 bg-white p-3 rounded-[40px] shadow-[0_10px_30px_rgba(0,0,0,0.05)] border border-gray-100">
-            {testimonials.map((t, idx) => (
+          <div className="flex lg:flex-col gap-3 bg-white p-3 rounded-[40px] shadow-[0_10px_30px_rgba(0,0,0,0.05)] border border-gray-100 flex-wrap justify-center">
+            {displayTestimonials.map((t, idx) => (
               <button
                 key={t.id}
                 onClick={() => nextTestimonial(idx)}
-                className={`w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden border-4 transition-all duration-500 ${activeIndex === idx ? 'border-[#bd9245] scale-110 shadow-md' : 'border-transparent opacity-40 grayscale hover:opacity-100 hover:grayscale-0'
+                className={`w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-4 transition-all duration-500 flex-shrink-0 ${activeIndex === idx ? 'border-[#bd9245] scale-110 shadow-md' : 'border-transparent opacity-40 grayscale hover:opacity-100 hover:grayscale-0'
                   }`}
               >
                 <img src={t.avatar} alt={t.name} className="w-full h-full object-cover" />

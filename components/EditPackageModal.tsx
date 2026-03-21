@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Plus, Minus, X, Upload, Image as ImageIcon, Bold, Star } from "lucide-react";
 
 // Utility function to render text with bold formatting
@@ -108,6 +109,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
       winter: "",
       summer: "",
     },
+    isFeaturedDestination: false,
+    isPopularPackage: false,
   });
 
   const [keyHighlights, setKeyHighlights] = useState<string[]>([]);
@@ -127,8 +130,10 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
   const [inclusions, setInclusions] = useState<InclusionExclusionCategory[]>([]);
   const [exclusions, setExclusions] = useState<InclusionExclusionCategory[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [existingImages, setExistingImages] = useState<Array<{ public_id: string; url: string; alt: string }>>([]);
+  const [existingImages, setExistingImages] = useState<Array<{ public_id?: string; url: string; alt: string }>>([]);
   const [newImages, setNewImages] = useState<File[]>([]);
+  const [externalImageUrls, setExternalImageUrls] = useState<string[]>([]);
+  const [currentImageUrl, setCurrentImageUrl] = useState("");
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRefs = useRef<{ [key: string]: HTMLTextAreaElement | null }>({});
@@ -174,6 +179,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
           winter: packageData.bestTimeToVisit?.winter || "",
           summer: packageData.bestTimeToVisit?.summer || "",
         },
+        isFeaturedDestination: packageData.isFeaturedDestination || false,
+        isPopularPackage: packageData.isPopularPackage || false,
       });
 
       setKeyHighlights(packageData.keyHighlights || []);
@@ -246,6 +253,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
 
       setExistingImages(packageData.images || []);
       setNewImages([]);
+      setExternalImageUrls([]);
+      setCurrentImageUrl("");
     }
   }, [packageData]);
 
@@ -253,6 +262,20 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
     setFormData(prev => ({
       ...prev,
       [field]: value
+    }));
+  };
+
+  const handleAddUrl = () => {
+    if (currentImageUrl.trim() && !externalImageUrls.includes(currentImageUrl.trim())) {
+      setExternalImageUrls(prev => [...prev, currentImageUrl.trim()]);
+      setCurrentImageUrl("");
+    }
+  };
+
+  const handleCheckboxChange = (field: string, checked: boolean) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: checked
     }));
   };
 
@@ -619,7 +642,9 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
             items: item.items.filter(i => i.trim() !== "")
           })),
         reviews: reviews.filter(review => review.name.trim() !== "" && review.comment.trim() !== ""),
-        images: [...existingImages, ...uploadedNewImages],
+        images: [...existingImages, ...uploadedNewImages, ...externalImageUrls.map(url => ({ url, alt: formData.title }))],
+        isFeaturedDestination: formData.isFeaturedDestination,
+        isPopularPackage: formData.isPopularPackage,
         bookings: packageData?.bookings || 0,
         rating: packageData?.rating || 0
       };
@@ -685,6 +710,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
         winter: "",
         summer: "",
       },
+      isFeaturedDestination: false,
+      isPopularPackage: false,
     });
     setKeyHighlights([]);
     setHotelOptions([]);
@@ -699,6 +726,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
     setReviews([]);
     setExistingImages([]);
     setNewImages([]);
+    setExternalImageUrls([]);
+    setCurrentImageUrl("");
     onClose();
   };
 
@@ -706,15 +735,15 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">Edit Package</DialogTitle>
-          <DialogDescription>
+      <DialogContent className="max-w-4xl p-0 border-none rounded-[32px] overflow-hidden bg-white shadow-2xl">
+        <DialogHeader className="p-8 pb-4 bg-gray-50/50">
+          <DialogTitle className="text-3xl font-black text-[#111827] uppercase tracking-tighter">Edit Package</DialogTitle>
+          <DialogDescription className="text-gray-400 font-bold uppercase tracking-widest text-[10px] mt-1">
             Update the details for "{packageData.title}"
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6">
+        <div className="p-8 space-y-6 max-h-[60vh] overflow-y-auto">
           {/* Package Title */}
           <div className="space-y-2">
             <label className="text-sm font-medium">Package Title</label>
@@ -1033,6 +1062,44 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
             </div>
           </div>
 
+          <div className="flex items-center space-x-2 py-4 px-6 bg-gray-50/50 rounded-[24px] border border-dashed border-gray-200">
+            <Checkbox 
+              id="isFeaturedDestinationEdit" 
+              checked={formData.isFeaturedDestination} 
+              onCheckedChange={(checked) => handleCheckboxChange('isFeaturedDestination', !!checked)} 
+            />
+            <div className="grid gap-1.5 leading-none">
+              <label
+                htmlFor="isFeaturedDestinationEdit"
+                className="text-sm font-black uppercase tracking-widest leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Show in Homepage Destinations Section
+              </label>
+              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">
+                If checked, this package will be featured in the destinations grid on the home page.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-2 py-4 px-6 bg-amber-50/50 rounded-[24px] border border-dashed border-amber-200">
+            <Checkbox 
+              id="isPopularPackageEdit" 
+              checked={formData.isPopularPackage} 
+              onCheckedChange={(checked) => handleCheckboxChange('isPopularPackage', !!checked)} 
+            />
+            <div className="grid gap-1.5 leading-none">
+              <label
+                htmlFor="isPopularPackageEdit"
+                className="text-sm font-black uppercase tracking-widest leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Show in Homepage Popular Packages Section
+              </label>
+              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">
+                If checked, this package will appear in the Popular Packages section on the home page.
+              </p>
+            </div>
+          </div>
+
           {/* Package Details - Three Small Inputs */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
@@ -1124,11 +1191,11 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
             {/* Existing Images */}
             {existingImages.length > 0 && (
               <div className="space-y-2">
-                <h4 className="text-sm font-medium text-gray-700">Current Images</h4>
+                <h4 className="text-sm font-medium text-gray-700 uppercase tracking-widest text-[10px]">Current Images</h4>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                   {existingImages.map((image, index) => (
                     <div key={`existing_${index}`} className="relative group">
-                      <div className="aspect-square rounded-lg overflow-hidden border-2 border-gray-200">
+                      <div className="aspect-square rounded-2xl overflow-hidden border-2 border-gray-100 shadow-sm">
                         <img
                           src={image.url}
                           alt={image.alt || `Existing image ${index + 1}`}
@@ -1140,7 +1207,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
                         variant="destructive"
                         size="sm"
                         onClick={() => removeExistingImage(index)}
-                        className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
                       >
                         <X className="h-3 w-3" />
                       </Button>
@@ -1150,14 +1217,14 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
               </div>
             )}
 
-            {/* New Images */}
+            {/* New Images From Files */}
             {newImages.length > 0 && (
               <div className="space-y-2">
-                <h4 className="text-sm font-medium text-gray-700">New Images</h4>
+                <h4 className="text-sm font-medium text-[#bd9245] uppercase tracking-widest text-[10px]">New Uploads Staged</h4>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                   {newImages.map((file, index) => (
                     <div key={`new_${index}`} className="relative group">
-                      <div className="aspect-square rounded-lg overflow-hidden border-2 border-gray-200">
+                      <div className="aspect-square rounded-2xl overflow-hidden border-2 border-amber-100 shadow-sm">
                         <img
                           src={URL.createObjectURL(file)}
                           alt={`New image ${index + 1}`}
@@ -1169,34 +1236,74 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
                         variant="destructive"
                         size="sm"
                         onClick={() => removeNewImage(index)}
-                        className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
                       >
                         <X className="h-3 w-3" />
                       </Button>
-                      <div className="mt-1">
-                        <p className="text-xs text-gray-600 truncate">{file.name}</p>
-                        <p className="text-xs text-gray-400">
-                          {(file.size / 1024 / 1024).toFixed(1)} MB
-                        </p>
-                      </div>
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* Upload more button when less than 5 images */}
-            {(existingImages.length + newImages.length) < 5 && (
-              <Button
-                type="button"
-                variant="outline"
-                onClick={openFileDialog}
-                className="flex items-center gap-2"
-              >
-                <Plus className="h-4 w-4" />
-                Add More Images ({(existingImages.length + newImages.length)}/5)
-              </Button>
+            {/* New Images From URLs */}
+            {externalImageUrls.length > 0 && (
+              <div className="space-y-2">
+                <h4 className="text-sm font-medium text-blue-500 uppercase tracking-widest text-[10px]">External URLs Staged</h4>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                  {externalImageUrls.map((url, index) => (
+                    <div key={`url_${index}`} className="relative group">
+                      <div className="aspect-square rounded-2xl overflow-hidden border-2 border-blue-100 shadow-sm">
+                        <img
+                          src={url}
+                          alt={`URL image ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => setExternalImageUrls(prev => prev.filter((_, i) => i !== index))}
+                        className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                      >
+                        <X className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
             )}
+
+            <div className="flex flex-col gap-3">
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={openFileDialog}
+                  className="flex-1 h-12 rounded-xl font-bold uppercase text-[10px] tracking-widest hover:border-[#bd9245] hover:text-[#bd9245] transition-all"
+                  disabled={(existingImages.length + newImages.length + externalImageUrls.length) >= 10}
+                >
+                  <Upload className="h-4 w-4 mr-2" />
+                  Upload From Device
+                </Button>
+              </div>
+              <div className="flex gap-2">
+                <Input 
+                  placeholder="OR Paste image URL here..." 
+                  value={currentImageUrl} 
+                  onChange={e => setCurrentImageUrl(e.target.value)} 
+                  className="h-12 rounded-xl flex-1" 
+                />
+                <Button 
+                  variant="outline" 
+                  onClick={handleAddUrl} 
+                  className="h-12 rounded-xl font-bold uppercase text-[10px] tracking-widest px-6 hover:bg-[#bd9245] hover:text-white transition-all"
+                >
+                  Add URL
+                </Button>
+              </div>
+            </div>
           </div>
 
           {/* Itinerary Section */}
@@ -1729,13 +1836,17 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
           </div>
         </div>
 
-        <DialogFooter className="flex gap-2">
-          <Button variant="outline" onClick={handleClose} disabled={uploading}>
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit} className="bg-blue-600 hover:bg-blue-700" disabled={uploading}>
-            {uploading ? 'Updating...' : 'Update Package'}
-          </Button>
+        <DialogFooter className="p-8 bg-gray-50/50 flex flex-col items-center gap-4">
+          <div className="flex gap-4 w-full justify-end">
+            <Button variant="ghost" onClick={handleClose} disabled={uploading} className="rounded-xl px-6 h-12 font-black uppercase text-xs tracking-widest">Cancel</Button>
+            <Button 
+                onClick={handleSubmit} 
+                disabled={uploading} 
+                className="bg-[#111827] hover:bg-[#bd9245] rounded-xl px-10 h-12 font-black uppercase text-xs tracking-widest shadow-xl transition-all w-full md:w-auto text-white"
+            >
+              {uploading ? 'Updating...' : 'Update Package'}
+            </Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>
