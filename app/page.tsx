@@ -1,4 +1,5 @@
 import HeroExplore from "../components/HeroExplore";
+export const dynamic = 'force-dynamic';
 import ExploreWithUs from "../components/ExploreWithUs";
 import DestinationsGrid from "../components/DestinationsGrid";
 import UpcomingTrips from "../components/UpcomingTrips";

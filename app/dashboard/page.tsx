@@ -106,7 +106,7 @@ export default function DashboardPage() {
   const fetchPackages = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/packages');
+      const response = await fetch('/api/packages', { cache: 'no-store' });
       const data = await response.json();
       console.log('Fetched packages:', data);
       if (data.success && data.data) {
@@ -126,7 +126,7 @@ export default function DashboardPage() {
 
   const fetchTours = async () => {
     try {
-      const response = await fetch('/api/tours');
+      const response = await fetch('/api/tours', { cache: 'no-store' });
       const data = await response.json();
       if (data.success) setTours(data.data);
     } catch (error) {
@@ -136,7 +136,7 @@ export default function DashboardPage() {
 
   const fetchTickets = async () => {
     try {
-      const response = await fetch('/api/tickets');
+      const response = await fetch('/api/tickets', { cache: 'no-store' });
       const data = await response.json();
       if (data.success) setTickets(data.data);
     } catch (error) {
@@ -146,7 +146,7 @@ export default function DashboardPage() {
 
   const fetchBanners = async () => {
     try {
-      const response = await fetch('/api/banners');
+      const response = await fetch('/api/banners', { cache: 'no-store' });
       const data = await response.json();
       if (data.success) setBanners(data.data);
     } catch (error) {
@@ -156,7 +156,7 @@ export default function DashboardPage() {
 
   const fetchEnquiries = async () => {
     try {
-      const response = await fetch('/api/enquiries');
+      const response = await fetch('/api/enquiries', { cache: 'no-store' });
       const data = await response.json();
       if (data.success) setEnquiries(data.data);
     } catch (error) {
@@ -166,7 +166,7 @@ export default function DashboardPage() {
 
   const fetchTestimonials = async () => {
     try {
-      const response = await fetch('/api/testimonials');
+      const response = await fetch('/api/testimonials', { cache: 'no-store' });
       const data = await response.json();
       if (data.success) setTestimonials(data.data);
     } catch (error) {
@@ -176,7 +176,7 @@ export default function DashboardPage() {
 
   const fetchBlogs = async () => {
     try {
-      const response = await fetch('/api/blogs');
+      const response = await fetch('/api/blogs', { cache: 'no-store' });
       const data = await response.json();
       if (data.success) setBlogs(data.data);
     } catch (error) {
