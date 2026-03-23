@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { Badge } from "../../components/ui/badge";
@@ -291,10 +291,6 @@ export default function DashboardPage() {
     fetchBlogs();
   }, []);
 
-  useEffect(() => {
-    filterPackages();
-  }, [packages, searchTerm, packageTypeFilter, placeFilter, categoryFilter]);
-
   // Reset place filter when package type changes
   useEffect(() => {
     if (packageTypeFilter !== "all" && placeFilter !== "all") {
@@ -310,7 +306,7 @@ export default function DashboardPage() {
     }
   }, [packageTypeFilter, placeFilter]);
 
-  const filterPackages = () => {
+  const filterPackages = useCallback(() => {
     let filtered = packages;
 
     // Search filter
@@ -338,7 +334,11 @@ export default function DashboardPage() {
     }
 
     setFilteredPackages(filtered);
-  };
+  }, [packages, searchTerm, packageTypeFilter, placeFilter, categoryFilter]);
+
+  useEffect(() => {
+    filterPackages();
+  }, [filterPackages]);
 
   const handlePackageCreated = (newPackage: PackageData) => {
     setPackages(prev => [newPackage, ...prev]);

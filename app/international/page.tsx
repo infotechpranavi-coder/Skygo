@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -46,15 +46,7 @@ const InternationalPage = () => {
     const [priceFilter, setPriceFilter] = useState("all");
     const router = useRouter();
 
-    useEffect(() => {
-        fetchPackages();
-    }, []);
-
-    useEffect(() => {
-        filterPackages();
-    }, [packages, searchTerm, priceFilter]);
-
-    const fetchPackages = async () => {
+    const fetchPackages = useCallback(async () => {
         try {
             const response = await fetch('/api/packages');
             const result = await response.json();
@@ -70,9 +62,13 @@ const InternationalPage = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
-    const filterPackages = () => {
+    useEffect(() => {
+        fetchPackages();
+    }, [fetchPackages]);
+
+    const filterPackages = useCallback(() => {
         let filtered = packages;
 
         if (searchTerm) {
@@ -94,7 +90,11 @@ const InternationalPage = () => {
         }
 
         setFilteredPackages(filtered);
-    };
+    }, [packages, searchTerm, priceFilter]);
+
+    useEffect(() => {
+        filterPackages();
+    }, [filterPackages]);
 
     const formatPrice = (price: number) => {
         return new Intl.NumberFormat('en-ZA', {

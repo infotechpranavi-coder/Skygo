@@ -1,6 +1,6 @@
-﻿'use client'
+'use client'
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -50,15 +50,7 @@ const DestinationsPage = () => {
     { name: "Beach", icon: Globe, color: "bg-cyan-500" }
   ];
 
-  useEffect(() => {
-    fetchPackages();
-  }, []);
-
-  useEffect(() => {
-    filterPackages();
-  }, [packages, searchTerm, selectedCategory]);
-
-  const fetchPackages = async () => {
+  const fetchPackages = useCallback(async () => {
     try {
       const response = await fetch('/api/packages');
       const result = await response.json();
@@ -70,9 +62,13 @@ const DestinationsPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const filterPackages = () => {
+  useEffect(() => {
+    fetchPackages();
+  }, [fetchPackages]);
+
+  const filterPackages = useCallback(() => {
     let filtered = packages;
 
     // Search filter
@@ -90,7 +86,11 @@ const DestinationsPage = () => {
     }
 
     setFilteredPackages(filtered);
-  };
+  }, [packages, searchTerm, selectedCategory]);
+
+  useEffect(() => {
+    filterPackages();
+  }, [filterPackages]);
 
   const getCategoryCount = (categoryName: string) => {
     return packages.filter(pkg => pkg.packageCategory === categoryName).length;
