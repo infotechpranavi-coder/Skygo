@@ -52,6 +52,11 @@ const nextConfig = {
         hostname: 'livingnomads.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'imgs.search.brave.com',
+        pathname: '/**',
+      },
     ],
   },
 }

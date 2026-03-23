@@ -14,7 +14,7 @@ const DestinationsGrid = () => {
   const { ref, isVisible } = useScrollReveal({ threshold: 0.1 });
   const [hoveredCardImage, setHoveredCardImage] = useState<string | null>(null);
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
-  const [displayDestinations, setDisplayDestinations] = useState<Destination[]>(defaultDestinations);
+  const [displayDestinations, setDisplayDestinations] = useState<Destination[]>([]);
 
   useEffect(() => {
     const fetchFeaturedPackages = async () => {
@@ -28,14 +28,16 @@ const DestinationsGrid = () => {
               id: pkg._id,
               title: pkg.title,
               subtitle: pkg.subtitle,
-              image: pkg.images[0]?.url || defaultDestinations[0].image,
+              image: pkg.images[0]?.url || "",
               link: `/packages/${pkg._id}`
             }));
 
+          // Only set if we have actual data from database
           if (featured.length > 0) {
-            // Combine with defaults if less than 4
-            const combined = [...featured, ...defaultDestinations].slice(0, 4);
-            setDisplayDestinations(combined);
+            setDisplayDestinations(featured.slice(0, 4));
+          } else {
+            // Set to empty or don't show demo data as per user request
+            setDisplayDestinations([]);
           }
         }
       } catch (error) {
@@ -128,7 +130,22 @@ const DestinationsGrid = () => {
               <motion.div
                 key={destination.id}
                 className="group relative rounded-2xl overflow-hidden cursor-pointer h-64 card-hover z-10"
-                onClick={() => router.push(destination.link.startsWith('/packages/') ? destination.link : `/packages?search=${encodeURIComponent(destination.title)}`)}
+                onClick={() => {
+                  const itemType = destination.type || 'package';
+                  const isDetailLink = destination.link.includes('/packages/') || destination.link.includes('/tours/') || destination.link.includes('/tickets/');
+                  
+                  if (isDetailLink) {
+                    router.push(destination.link);
+                  } else {
+                    const route = itemType === 'tour' ? `/tours/${destination.id}` : itemType === 'ticket' ? `/tickets/${destination.id}` : `/packages/${destination.id}`;
+                    // If link is a generic list page like '/packages', use the respective detail route
+                    if (destination.link === '/packages' || destination.link === '/tours' || destination.link === '/tickets') {
+                      router.push(route);
+                    } else {
+                      router.push(destination.link);
+                    }
+                  }
+                }}
                 onMouseEnter={() => setHoveredCardImage(destination.image)}
                 onMouseLeave={() => setHoveredCardImage(null)}
                 initial={{ opacity: 0, y: 40 }}

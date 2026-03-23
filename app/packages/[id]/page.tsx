@@ -30,11 +30,15 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin, Clock, Users, Star, Calendar, Phone, Mail, ArrowLeft,
   CheckCircle, Plane, Camera, Globe, Heart, Share, Car, Hotel,
-  Utensils, Info, X, Car as CarIcon, Building, Bed,
-  Calendar as CalendarIcon, ChevronRight, PlayCircle, Sparkles, ShieldCheck, Ticket, ArrowRight, XCircle, MessageCircle, MessageSquare
+  Utensils, Info, X, Car as CarIcon, Building, Bed, Award,
+  Package as PackageIcon,
+  Calendar as CalendarIcon, ChevronRight, PlayCircle, Sparkles, ShieldCheck, Ticket, ArrowRight, XCircle, MessageCircle, MessageSquare,
+  LayoutDashboard,
+  TrendingUp
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -104,6 +108,10 @@ interface Package {
   packageType: 'domestic' | 'international';
   place: string;
   packageCategory?: string;
+  faqs?: Array<{
+    question: string;
+    answer: string;
+  }>;
   images: Array<{
     public_id?: string;
     url: string;
@@ -148,7 +156,9 @@ const PackageDetailPage = () => {
       const packageId = params?.id as string;
       const isAttractionPackage = packageId?.includes('ticket') || packageId?.includes('attraction') || packageId === 'burj-khalifa-tickets';
 
-      if (!isAttractionPackage && demoPackageIds.includes(packageId)) {
+      // If ID is one of the fallback demo IDs used on the homepage, skip API fetch
+      const demoPageIds = ['demo-package-id', '1', '2', '3', '4', '5'];
+      if (!isAttractionPackage && demoPageIds.includes(packageId)) {
         return;
       }
 
@@ -206,8 +216,9 @@ const PackageDetailPage = () => {
       return; // Don't set any hardcoded data for attraction packages
     }
 
-    // Only set hardcoded data for specific demo IDs, skip API fetch for these
-    if (params.id === 'demo-package-id') {
+    // Only set hardcoded data for specific demo IDs used on the homepage
+    const demoPageIds = ['demo-package-id', '1', '2', '3', '4', '5'];
+    if (demoPageIds.includes(params.id as string)) {
       // Set hardcoded demo data
       setPackageData({
         _id: 'demo-package-id',
@@ -2411,7 +2422,7 @@ Key Highlights`,
           { name: "David Lee", rating: 5, comment: "Ideal for travelers with limited time. Covered all the essentials!", date: "2024-03-22" }
         ],
         packageCategory: 'regular',
-        highlights: [
+        keyHighlights: [
           'Designed for 2–3 day airline stopovers',
           'Balanced mix of sightseeing and leisure',
           'Waterfront Harbour Cruise & Wildlife Safari included',
@@ -2461,14 +2472,8 @@ Key Highlights`,
     );
   }
 
-  // Check if this is an attraction package
-  const isAttractionPackage = packageData && (
-    packageData._id?.includes('ticket') ||
-    packageData._id?.includes('attraction') ||
-    packageData._id === 'burj-khalifa-tickets' ||
-    packageData.title?.toLowerCase().includes('ticket') ||
-    packageData.packageCategory === 'Cultural'
-  );
+  // All packages use the same standard layout regardless of category
+  const isAttractionPackage = false;
 
   if (error || !packageData) {
     return (
@@ -2490,7 +2495,10 @@ Key Highlights`,
     );
   }
 
-  const isPremium = (packageData as any).packageCategory === 'premium';
+  const isPremium = packageData && (
+    packageData.packageCategory?.toLowerCase() === 'premium' ||
+    packageData.packageCategory?.toLowerCase() === 'luxury'
+  );
 
   return (
     <div className={`min-h-screen ${playfair.variable} ${cormorant.variable} ${poppins.variable} font-sans bg-[#faf8f3]`}>
@@ -2514,7 +2522,7 @@ Key Highlights`,
         </div>
 
         {/* Navigation Bar Overlay */}
-        <div className="absolute top-32 left-0 right-0 p-6 z-20">
+        <div className="absolute top-12 left-0 right-0 p-6 z-20">
           <div className="container mx-auto flex justify-between items-center">
             <Button
               variant="outline"
@@ -2620,389 +2628,731 @@ Key Highlights`,
 
             {/* Special View for Attraction Packages - Dynamic Data from Database */}
             {isAttractionPackage && (
-              <div className="space-y-10">
-                {/* Information Grid for Mobile/Quick View */}
-                <div className="grid md:grid-cols-3 gap-6">
-                  {[
-                    { label: 'Category', value: packageData.packageCategory || 'Attraction', icon: Ticket },
-                    { label: 'Location', value: packageData.location || 'Dubai, UAE', icon: MapPin },
-                    { label: 'Validity', value: 'Instant Confirmation', icon: Clock },
-                  ].map((item, idx) => (
-                    <div key={idx} className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex items-center gap-4 group hover:border-[#bd9245]/30 transition-all duration-300">
-                      <div className="p-3 bg-[#1e1f44]/5 rounded-2xl group-hover:bg-[#bd9245]/10 transition-colors">
-                        <item.icon className="h-5 w-5 text-[#1e1f44]" />
-                      </div>
-                      <div>
-                        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#bd9245] mb-0.5">{item.label}</p>
-                        <p className="font-extrabold text-[#1e1f44] text-base tracking-tight">{item.value}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Main Descriptive Cards */}
-                <div className="grid gap-8">
-                  {packageData.about && (
-                    <Card className="border-none shadow-sm border border-gray-100/50 bg-white rounded-3xl overflow-hidden group">
-                      <CardHeader className="bg-[#1e1f44] p-8 border-b border-white/5">
-                        <div className="flex items-center gap-4">
-                          <div className="h-10 w-1 px-1 bg-[#bd9245] rounded-full" />
-                          <CardTitle className="text-2xl font-black text-white uppercase tracking-[0.2em] font-playfair">Overview</CardTitle>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="p-8">
-                        <p className="text-gray-500 leading-[1.8] text-lg font-medium font-poppins">
-                          {packageData.about}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  )}
-
-                  {packageData.abstract && (
-                    <Card className="border-none shadow-sm border border-gray-100/50 bg-[#faf8f3] rounded-3xl overflow-hidden group">
-                      <CardHeader className="bg-[#bd9245] p-8 border-b border-white/5">
-                        <div className="flex items-center gap-4">
-                          <div className="h-10 w-1 px-1 bg-[#1e1f44] rounded-full" />
-                          <CardTitle className="text-2xl font-black text-white uppercase tracking-[0.2em] font-playfair">Tour Concept</CardTitle>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="p-8">
-                        <p className="text-gray-600 leading-[1.8] text-lg font-bold italic font-playfair">
-                          {packageData.abstract}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  )}
-                </div>
-
-                {/* Key Highlights */}
-                {packageData.keyHighlights && packageData.keyHighlights.length > 0 && (
-                  <Card className="border-none shadow-sm border border-gray-100/50 bg-[#1e1f44] rounded-3xl overflow-hidden">
-                    <CardHeader className="p-8 border-b border-white/10">
-                      <CardTitle className="text-2xl font-black text-white uppercase tracking-tighter font-playfair flex items-center gap-3">
-                        <Star className="h-6 w-6 text-[#bd9245]" />
-                        Key Highlights
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-8">
-                      <div className="grid md:grid-cols-2 gap-4">
-                        {packageData.keyHighlights.map((highlight: string, idx: number) => (
-                          <div key={idx} className="flex items-start gap-3 bg-white/5 p-4 rounded-2xl border border-white/5">
-                            <CheckCircle className="h-5 w-5 text-[#bd9245] mt-0.5 flex-shrink-0" />
-                            <span className="text-white/80 font-medium text-sm">{highlight}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-
-                {/* Pricing Information */}
-                <Card className="border-none shadow-lg border border-gray-200/50 bg-white rounded-3xl overflow-hidden border border-gray-100">
-                  <CardHeader className="bg-[#1e1f44] p-8 text-center">
-                    <div className="inline-flex p-4 rounded-full bg-[#bd9245]/20 mb-6">
-                      <Ticket className="h-10 w-10 text-[#bd9245]" />
-                    </div>
-                    <CardTitle className="text-3xl md:text-5xl font-bold text-white uppercase tracking-tight font-playfair leading-tight mb-2">
-                      Pricing <span className="text-[#bd9245]">Structure</span>
-                    </CardTitle>
-                    <p className="text-gray-400 font-bold uppercase tracking-[0.3em] text-sm">{packageData.title}</p>
-                  </CardHeader>
-                  <CardContent className="p-8">
-                    {/* Pricing Grid */}
-                    {packageData.hotelOptions && packageData.hotelOptions.length > 0 && (
-                      <div className="mb-12">
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                          {packageData.hotelOptions.map((option: string, idx: number) => {
-                            const priceMatch = option.match(/(?:AED|ZAR|R)\s*(\d+)/i);
-                            const price = priceMatch ? priceMatch[1] : null;
-                            const isHighlighted = option.toLowerCase().includes('prime') || option.toLowerCase().includes('adult');
-
-                            return (
-                              <div
-                                key={idx}
-                                className={`p - 8 rounded - 3xl border - 2 transition - all duration - 500 group ${isHighlighted
-                                  ? 'bg-[#1e1f44] border-[#1e1f44] text-white shadow-2xl scale-105 z-10'
-                                  : 'bg-white border-gray-100 text-[#1e1f44] hover:border-[#bd9245]/30'
-                                  } `}
-                              >
-                                <div className="flex flex-col h-full">
-                                  <div className="mb-4">
-                                    <span className={`text - xs font - black uppercase tracking - [0.2em] mb - 2 block ${isHighlighted ? 'text-[#bd9245]' : 'text-gray-400'} `}>
-                                      {isHighlighted ? 'Most Popular' : 'Ticket Category'}
-                                    </span>
-                                    <h4 className="text-xl font-black uppercase tracking-tighter leading-tight">
-                                      {option.split(':')[0]}
-                                    </h4>
-                                  </div>
-
-                                  {price ? (
-                                    <div className="mt-auto pt-6 border-t border-white/10">
-                                      <div className={`text - 4xl font - black tracking - tighter ${isHighlighted ? 'text-[#bd9245]' : 'text-[#1e1f44]'} `}>
-                                        R {price}
-                                      </div>
-                                      <p className={`text - xs font - bold uppercase tracking - widest mt - 1 ${isHighlighted ? 'text-white/60' : 'text-gray-400'} `}>
-                                        {option.includes('Free') ? 'Complimentary' : 'Per Person'}
-                                      </p>
-                                    </div>
-                                  ) : (
-                                    <p className={`text - sm mt - auto italic font - medium pt - 4 ${isHighlighted ? 'text-white/70' : 'text-gray-500'} `}>
-                                      {option.split(':')[1]?.trim() || option}
-                                    </p>
-                                  )}
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
+              <div className="space-y-12">
+                {/* Visual Header Enhancement */}
+                <div className="bg-white rounded-[40px] border border-gray-100 shadow-xl overflow-hidden group">
+                  <div className="relative h-[550px] md:h-[650px] w-full overflow-hidden">
+                    {packageData.images && packageData.images.length > 0 ? (
+                      <motion.img
+                        initial={{ scale: 1.1 }}
+                        animate={{ scale: 1 }}
+                        transition={{ duration: 1.5 }}
+                        src={packageData.images[0].url}
+                        alt={packageData.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gray-900 flex items-center justify-center">
+                        <PackageIcon className="h-20 w-20 text-gray-800" />
                       </div>
                     )}
-
-                    {/* Inclusions */}
-                    {packageData.inclusions && packageData.inclusions.length > 0 && (
-                      <div className="mb-12">
-                        <div className="flex items-center gap-4 mb-8">
-                          <div className="h-10 w-10 rounded-full bg-[#bd9245] flex items-center justify-center text-white">
-                            <CheckCircle className="h-6 w-6" />
+                    {/* Multi-layered Premium Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent" />
+                    
+                    <div className="absolute bottom-16 left-8 md:left-16 right-8 md:right-16 z-10">
+                      <motion.div 
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="flex flex-wrap gap-4 mb-8"
+                      >
+                        <Badge className="bg-[#bd9245] text-white hover:bg-[#bd9245] border-none px-8 py-3 rounded-full text-xs font-black uppercase tracking-[0.2em] shadow-2xl shadow-[#bd9245]/30">
+                          {packageData.packageCategory} Selection
+                        </Badge>
+                        <Badge className="bg-white/10 backdrop-blur-2xl text-white border-white/10 px-8 py-3 rounded-full text-xs font-black uppercase tracking-[0.2em]">
+                          {packageData.packageType}
+                        </Badge>
+                      </motion.div>
+                      
+                      <motion.h1 
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
+                        className="text-6xl md:text-8xl font-black text-white mb-6 uppercase tracking-[-0.04em] leading-[0.9] drop-shadow-2xl"
+                      >
+                        {packageData.title.split(' ').slice(0, -1).join(' ')} <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#bd9245] to-[#f4d06f]">
+                          {packageData.title.split(' ').slice(-1)}
+                        </span>
+                      </motion.h1>
+                      
+                      <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.6 }}
+                        className="flex flex-wrap items-center gap-8 text-white/70 font-black uppercase tracking-[0.2em] text-[10px]"
+                      >
+                        <span className="flex items-center gap-3">
+                          <div className="p-2 bg-white/10 rounded-lg backdrop-blur-xl">
+                            <MapPin className="h-4 w-4 text-[#bd9245]" />
                           </div>
-                          <h3 className="text-3xl font-black text-[#1e1f44] uppercase tracking-tighter">Inclusions</h3>
+                          {packageData.location}
+                        </span>
+                        <div className="h-1 w-1 bg-white/30 rounded-full" />
+                        <span className="flex items-center gap-3">
+                          <div className="p-2 bg-white/10 rounded-lg backdrop-blur-xl">
+                            <Clock className="h-4 w-4 text-[#bd9245]" />
+                          </div>
+                          {packageData.duration}
+                        </span>
+                      </motion.div>
+                    </div>
+                  </div>
+
+                  <CardContent className="p-8 md:p-12">
+                    {/* About Sky Go Story */}
+                    {packageData.about && (
+                      <Card className="border border-gray-100 shadow-sm overflow-hidden bg-white rounded-3xl mb-12">
+                        <div className="p-8 bg-gray-50 border-b border-gray-100">
+                           <div className="flex items-center gap-4">
+                            <div className="p-3 bg-gray-900 rounded-2xl text-white">
+                              <ShieldCheck className="h-6 w-6" />
+                            </div>
+                            <div>
+                              <h4 className="text-amber-600 font-bold uppercase text-[10px] tracking-[0.4em]">The Collection</h4>
+                              <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tighter">The Sky Go Story</h3>
+                            </div>
+                          </div>
                         </div>
-                        <div className="grid md:grid-cols-2 gap-6">
-                          {packageData.inclusions.map((item: any, idx: number) => {
-                            if (typeof item === 'object' && 'category' in item) {
+                        <CardContent className="p-8">
+                          <p className="text-gray-600 text-xl leading-relaxed font-serif italic">
+                            {packageData.about}
+                          </p>
+                        </CardContent>
+                      </Card>
+                    )}
+
+                    {/* Elite Summary Grid */}
+                    {/* Elite Summary Grid */}
+                    <div className="grid md:grid-cols-2 gap-8 mb-12">
+                      {packageData.abstract && (
+                        <Card className="border border-gray-100 shadow-sm overflow-hidden bg-white rounded-3xl group">
+                          <div className="p-8 bg-gray-50 border-b border-gray-100">
+                             <h4 className="text-amber-500 font-black uppercase text-[10px] tracking-[0.4em]">Concierge Abstract</h4>
+                          </div>
+                          <CardContent className="p-8">
+                             <h3 className="text-2xl font-black mb-6 leading-none uppercase tracking-tighter text-gray-900">Premium Glimpse</h3>
+                             <p className="text-gray-600 font-medium leading-relaxed italic border-l-2 border-amber-500/20 pl-6 text-xl">
+                               {packageData.abstract}
+                             </p>
+                          </CardContent>
+                        </Card>
+                      )}
+
+                      {packageData.bestTimeToVisit && (
+                        <Card className="border border-gray-100 shadow-sm overflow-hidden bg-white rounded-3xl group">
+                          <div className="p-8 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
+                             <h4 className="text-orange-600 font-black uppercase text-[10px] tracking-[0.4em]">Seasonal Wisdom</h4>
+                             <Calendar className="h-5 w-5 text-orange-500 opacity-30" />
+                          </div>
+                          <CardContent className="p-8">
+                            <h3 className="text-2xl font-black text-gray-900 mb-6 uppercase tracking-tighter leading-none">Ideal Climates</h3>
+                            <div className="space-y-4 font-black tracking-tight text-gray-800">
+                              {packageData.bestTimeToVisit.yearRound && (
+                                <div className="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                                  <div className="h-2 w-2 bg-orange-500 rounded-full" />
+                                  <span className="text-base">{packageData.bestTimeToVisit.yearRound}</span>
+                                </div>
+                              )}
+                              {(packageData.bestTimeToVisit.winter || packageData.bestTimeToVisit.summer) && (
+                                  <div className="grid grid-cols-2 gap-4">
+                                       {packageData.bestTimeToVisit.winter && (
+                                          <div className="p-4 bg-blue-50/50 rounded-2xl border border-blue-100/30">
+                                              <p className="text-[10px] uppercase tracking-widest text-blue-500 mb-1 font-bold">Winter</p>
+                                              <p className="text-xs font-black">{packageData.bestTimeToVisit.winter}</p>
+                                          </div>
+                                       )}
+                                       {packageData.bestTimeToVisit.summer && (
+                                          <div className="p-4 bg-orange-50/50 rounded-2xl border border-orange-100/30">
+                                              <p className="text-[10px] uppercase tracking-widest text-orange-500 mb-1 font-bold">Summer</p>
+                                              <p className="text-xs font-black">{packageData.bestTimeToVisit.summer}</p>
+                                          </div>
+                                       )}
+                                  </div>
+                              )}
+                            </div>
+                          </CardContent>
+                        </Card>
+                      )}
+                    </div>
+
+                    {/* Quick Stats Grid */}
+                    <Card className="border border-gray-100 shadow-sm overflow-hidden bg-white rounded-3xl mb-12">
+                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 p-8">
+                        <div className="space-y-1">
+                          <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Pricing From</p>
+                          <p className="text-xl font-black text-gray-900 tracking-tighter"> {formatPrice(packageData.price)}</p>
+                        </div>
+                        <div className="space-y-1">
+                          <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Experience Vibe</p>
+                          <p className="text-xl font-black text-[#bd9245] tracking-tighter uppercase">Ultimate</p>
+                        </div>
+                        <div className="space-y-1">
+                          <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Guest Capacity</p>
+                          <p className="text-xl font-black text-gray-900 tracking-tighter">{packageData.capacity || '1 - 6'} PAX</p>
+                        </div>
+                        <div className="space-y-1">
+                          <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Booking Status</p>
+                          <div className="flex items-center gap-2">
+                            <div className="h-1.5 w-1.5 bg-green-500 rounded-full animate-pulse" />
+                            <p className="text-xl font-black text-gray-900 tracking-tighter uppercase">Instant</p>
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+
+                    {/* Main Sections for Attraction Packages */}
+                    <div className="grid lg:grid-cols-1 gap-12">
+
+                      {/* Key Highlights */}
+                      {packageData.keyHighlights && packageData.keyHighlights.length > 0 && (
+                        <div className="space-y-8">
+                          <div className="flex items-center gap-4">
+                            <div className="p-3 bg-[#bd9245]/10 rounded-2xl">
+                              <Star className="h-6 w-6 text-[#bd9245]" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-gray-900 uppercase tracking-tight">Key Highlights</h3>
+                          </div>
+                          <div className="grid md:grid-cols-2 gap-4">
+                            {packageData.keyHighlights.map((highlight: string, idx: number) => (
+                              <div key={idx} className="flex items-start gap-4 p-5 bg-white border border-gray-100 rounded-3xl shadow-sm hover:shadow-md transition-all">
+                                <div className="p-2 bg-green-50 rounded-lg">
+                                  <CheckCircle className="h-4 w-4 text-green-600" />
+                                </div>
+                                <span className="text-gray-700 font-bold text-sm uppercase tracking-tight">{highlight}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Our Services */}
+                      {packageData.services && (
+                        <Card className="border border-gray-100 shadow-sm overflow-hidden bg-white rounded-3xl mb-12">
+                          <div className="p-8 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
+                            <div>
+                               <h4 className="text-blue-600 font-bold uppercase text-[10px] tracking-[0.4em]">The Service Deck</h4>
+                               <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tighter">Elite Services</h3>
+                            </div>
+                            <Award className="h-6 w-6 text-blue-600 opacity-30" />
+                          </div>
+                          <CardContent className="p-8">
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                              {(Array.isArray(packageData.services) ? packageData.services : packageData.services.split(',')).map((service: string, idx: number) => (
+                                <div key={idx} className="p-6 bg-gray-50 border border-gray-100 rounded-2xl text-center group transition-colors hover:bg-white hover:shadow-md">
+                                  <span className="text-gray-900 font-black text-[10px] uppercase tracking-[0.1em]">{service.trim()}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </CardContent>
+                        </Card>
+                      )}
+
+                      {/* Tour Itinerary */}
+                      {packageData.itinerary && packageData.itinerary.length > 0 && (
+                        <div className="mt-16 pt-16 border-t border-gray-100">
+                          <div className="flex items-center gap-6 mb-12">
+                            <div className="p-4 bg-amber-50 rounded-[24px]">
+                               <Calendar className="h-8 w-8 text-[#bd9245]" />
+                            </div>
+                            <h3 className="text-4xl font-black text-gray-900 uppercase tracking-tighter text-black">Daily Itinerary</h3>
+                          </div>
+
+                          <div className="space-y-8">
+                            {packageData.itinerary.map((day: any, index: number) => (
+                              <div key={index} className="bg-white border border-[#bd9245]/20 rounded-[40px] p-8 md:p-12 shadow-sm transition-all hover:shadow-md">
+                                <div className="flex items-center justify-between mb-10">
+                                   <div className="flex items-center gap-8">
+                                      <div className="w-20 h-20 bg-[#bd9245] rounded-[28px] flex flex-col items-center justify-center text-white shadow-lg shadow-[#bd9245]/20">
+                                        <span className="text-[10px] font-black uppercase tracking-widest leading-none mb-1">Day</span>
+                                        <span className="text-3xl font-black">{day.day}</span>
+                                      </div>
+                                      <h4 className="text-2xl font-black text-gray-900 uppercase tracking-tighter">{day.title}</h4>
+                                   </div>
+                                   <div className="h-12 w-12 rounded-full border border-[#bd9245]/20 flex items-center justify-center text-[#bd9245]/60">
+                                     <ArrowRight className="h-6 w-6 rotate-90" />
+                                   </div>
+                                </div>
+
+                                <div className="flex gap-10 ml-4 md:ml-10">
+                                   <div className="w-px bg-[#bd9245]/20 h-auto self-stretch mt-2 mb-2" />
+                                   <div className="text-gray-600 text-lg leading-relaxed font-medium py-1">
+                                     {day.description.split('\n').filter(Boolean).map((line: string, i: number) => (
+                                       <p key={i} className="mb-4 last:mb-0">{line}</p>
+                                     ))}
+                                   </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Pricing Information */}
+                      <div className="space-y-8">
+                        <div className="flex items-center gap-4">
+                          <div className="p-3 bg-amber-50 rounded-2xl">
+                            <Ticket className="h-6 w-6 text-amber-600" />
+                          </div>
+                          <h3 className="text-2xl font-bold text-gray-900 uppercase tracking-tight">Ticket Options</h3>
+                        </div>
+                        {packageData.hotelOptions && packageData.hotelOptions.length > 0 && (
+                          <div className="grid md:grid-cols-2 gap-6">
+                            {packageData.hotelOptions.map((option: string, idx: number) => {
+                              const priceMatch = option.match(/(?:AED|ZAR|R)\s*(\d+)/i);
+                              const price = priceMatch ? priceMatch[1] : null;
+                              const isHighlighted = option.toLowerCase().includes('prime') || option.toLowerCase().includes('adult');
+
                               return (
-                                <div key={idx} className="bg-[#faf8f3] p-8 rounded-3xl border border-gray-100 hover:border-[#bd9245]/20 transition-all">
-                                  <h4 className="text-lg font-black text-[#1e1f44] mb-4 uppercase tracking-tight flex items-center gap-3">
-                                    <div className="h-1.5 w-1.5 bg-[#bd9245] rounded-full" />
-                                    {item.category}
-                                  </h4>
-                                  <ul className="space-y-3">
-                                    {item.items.map((subItem: string, subIdx: number) => (
-                                      <li key={subIdx} className="flex items-start gap-3 text-gray-500 font-medium text-sm leading-relaxed">
-                                        <CheckCircle className="h-4 w-4 text-[#bd9245] mt-0.5 flex-shrink-0" />
-                                        <span>{subItem}</span>
-                                      </li>
-                                    ))}
-                                  </ul>
+                                <div
+                                  key={idx}
+                                  className={`p-8 rounded-3xl border-2 transition-all duration-500 group ${isHighlighted
+                                    ? 'bg-[#1e1f44] border-[#1e1f44] text-white shadow-2xl skew-y-1 hover:skew-y-0'
+                                    : 'bg-white border-gray-100 text-[#1e1f44] hover:border-[#bd9245]/30'
+                                    }`}
+                                >
+                                  <div className="flex flex-col h-full">
+                                    <div className="mb-4">
+                                      <span className={`text-[10px] font-black uppercase tracking-widest mb-2 block ${isHighlighted ? 'text-[#bd9245]' : 'text-gray-400'}`}>
+                                        {isHighlighted ? 'Most Popular' : 'Ticket Category'}
+                                      </span>
+                                      <h4 className="text-xl font-black uppercase tracking-tighter leading-tight">
+                                        {option.split(':')[0]}
+                                      </h4>
+                                    </div>
+                                    {price ? (
+                                      <div className="mt-auto pt-6 border-t border-white/10">
+                                        <div className={`text-3xl font-black tracking-tighter ${isHighlighted ? 'text-[#bd9245]' : 'text-[#1e1f44]'}`}>
+                                          R {price}
+                                        </div>
+                                        <p className={`text-[10px] font-bold uppercase tracking-widest mt-1 ${isHighlighted ? 'text-white/60' : 'text-gray-400'}`}>
+                                          {option.includes('Free') ? 'Complimentary' : 'Per Person'}
+                                        </p>
+                                      </div>
+                                    ) : (
+                                      <p className={`text-sm mt-auto italic font-medium pt-4 ${isHighlighted ? 'text-white/70' : 'text-gray-500'}`}>
+                                        {option.split(':')[1]?.trim() || option}
+                                      </p>
+                                    )}
+                                  </div>
                                 </div>
                               );
-                            }
-                            return null;
-                          })}
-                        </div>
+                            })}
+                          </div>
+                        )}
                       </div>
-                    )}
+                    </div>
 
-                    {/* Child Policy */}
-                    {packageData.exclusions && packageData.exclusions.length > 0 && (
-                      <div className="mb-0">
-                        {packageData.exclusions.map((item: any, idx: number) => {
-                          if (typeof item === 'object' && 'category' in item && item.category === 'Child Policy') {
-                            return (
-                              <div key={idx} className="bg-white p-8 rounded-3xl border border-gray-100 mb-8 group transition-all hover:border-gray-200 shadow-sm">
-                                <h3 className="text-xl font-bold text-gray-900 uppercase tracking-tight mb-6 flex items-center gap-3">
-                                  <div className="p-2.5 bg-gray-100 rounded-xl">
-                                    <Users className="h-5 w-5 text-gray-600" />
-                                  </div>
-                                  Child Policy
-                                </h3>
-                                <ul className="space-y-4">
-                                  {item.items.map((policy: string, policyIdx: number) => (
-                                    <li key={policyIdx} className="flex items-start gap-4 p-4 bg-gray-50/50 rounded-2xl border border-gray-100/50">
-                                      <div className="h-1.5 w-1.5 bg-gray-400 rounded-full mt-2 shrink-0" />
-                                      <span className="text-gray-600 font-medium text-sm leading-relaxed">{policy}</span>
-                                    </li>
-                                  ))}
-                                </ul>
+                    {/* Logistics, Accommodation, Services, Inclusions Grid */}
+                    <div className="grid md:grid-cols-2 gap-8 mt-12">
+                      {/* Transportation */}
+                      {packageData.transportation && packageData.transportation.length > 0 && (
+                        <div className="bg-slate-50 p-8 rounded-[40px] border border-slate-100">
+                          <div className="flex items-center gap-4 mb-6">
+                            <div className="p-3 bg-white rounded-2xl shadow-sm">
+                              <CarIcon className="h-6 w-6 text-slate-600" />
+                            </div>
+                            <h4 className="text-xl font-black text-gray-900 uppercase tracking-tight">Logistics</h4>
+                          </div>
+                          <div className="space-y-4">
+                            {packageData.transportation.map((t: any, idx: number) => (
+                              <div key={idx} className="pb-4 border-b border-gray-200 last:border-0 last:pb-0">
+                                <p className="font-bold text-gray-900 text-base uppercase">{t.type}</p>
+                                <p className="text-gray-500 text-sm mt-0.5">{t.vehicle}</p>
+                                {t.description && <p className="text-gray-600 text-base mt-2 leading-relaxed">{t.description}</p>}
                               </div>
-                            );
-                          }
-                          return null;
-                        })}
-                      </div>
-                    )}
+                            ))}
+                          </div>
+                        </div>
+                      )}
 
-                    {/* Terms & Conditions */}
-                    {packageData.exclusions && packageData.exclusions.length > 0 && (
-                      <div className="mb-0">
-                        {packageData.exclusions.map((item: any, idx: number) => {
-                          if (typeof item === 'object' && 'category' in item && item.category === 'Terms & Conditions') {
-                            return (
-                              <div key={idx} className="bg-white p-8 rounded-3xl border border-gray-100 mb-8 shadow-sm">
-                                <div className="flex flex-col md:flex-row items-start gap-6">
-                                  <div className="w-12 h-12 bg-gray-900 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
-                                    <Info className="h-6 w-6 text-white" />
-                                  </div>
-                                  <div className="flex-1">
-                                    <h4 className="text-xl font-bold text-gray-900 uppercase tracking-tight mb-6">Terms & Conditions</h4>
-                                    <ul className="grid gap-3">
-                                      {item.items.map((term: string, termIdx: number) => (
-                                        <li key={termIdx} className="flex items-start gap-4 p-4 bg-gray-50/50 rounded-2xl border border-gray-100/50 group transition-all hover:border-gray-200">
-                                          <div className="h-1.5 w-1.5 bg-gray-400 rounded-full mt-2 shrink-0" />
-                                          <span className="text-gray-600 font-medium text-sm leading-relaxed">{term}</span>
+                      {/* Accommodation */}
+                      {packageData.accommodation && packageData.accommodation.length > 0 && (
+                        <div className="bg-indigo-50 p-8 rounded-[40px] border border-indigo-100">
+                          <div className="flex items-center gap-4 mb-6">
+                            <div className="p-3 bg-white rounded-2xl shadow-sm">
+                              <Hotel className="h-6 w-6 text-indigo-600" />
+                            </div>
+                            <h4 className="text-xl font-black text-gray-900 uppercase tracking-tight">Stay Details</h4>
+                          </div>
+                          <div className="space-y-4">
+                            {packageData.accommodation.map((a: any, idx: number) => (
+                              <div key={idx} className="pb-4 border-b border-indigo-100 last:border-0 last:pb-0">
+                                <p className="font-bold text-gray-900 text-base uppercase">{a.city}: {a.hotel}</p>
+                                <p className="text-gray-600 text-sm mt-1 font-medium">{a.roomType} • {a.nights} • {a.rooms} Room(s)</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Inclusions */}
+                      {packageData.inclusions && packageData.inclusions.length > 0 && (
+                        <div className="bg-green-50 p-8 rounded-[40px] border border-green-100">
+                          <div className="flex items-center gap-4 mb-6">
+                            <div className="p-3 bg-white rounded-2xl shadow-sm">
+                              <CheckCircle className="h-6 w-6 text-green-600" />
+                            </div>
+                            <h4 className="text-xl font-black text-gray-900 uppercase tracking-tight">What's Included</h4>
+                          </div>
+                          <div className="grid gap-6">
+                            {packageData.inclusions.map((item: any, idx: number) => {
+                              if (typeof item === 'object' && 'category' in item) {
+                                return (
+                                  <div key={idx} className="group/item">
+                                    <h5 className="font-black text-[10px] text-green-700 uppercase tracking-[0.2em] mb-3 opacity-60">
+                                      {item.category}
+                                    </h5>
+                                    <ul className="space-y-2">
+                                      {item.items.map((subItem: string, subIdx: number) => (
+                                        <li key={subIdx} className="flex items-start gap-3 group-hover/item:translate-x-1 transition-transform">
+                                          <div className="h-1.5 w-1.5 bg-green-400 rounded-full mt-2 shrink-0" />
+                                          <span className="text-gray-600 text-base font-bold uppercase tracking-tight">{subItem}</span>
                                         </li>
                                       ))}
                                     </ul>
                                   </div>
+                                );
+                              }
+                              return (
+                                <div key={idx} className="flex items-start gap-3 group/item">
+                                  <div className="h-1.5 w-1.5 bg-green-400 rounded-full mt-2 shrink-0" />
+                                  <span className="text-gray-600 text-base font-bold uppercase tracking-tight">{item as string}</span>
                                 </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Exclusions */}
+                      {packageData.exclusions && packageData.exclusions.length > 0 && (
+                        <div className="bg-orange-50 p-8 rounded-[40px] border border-orange-100">
+                          <div className="flex items-center gap-4 mb-6">
+                            <div className="p-3 bg-white rounded-2xl shadow-sm">
+                              <XCircle className="h-6 w-6 text-orange-600" />
+                            </div>
+                            <h4 className="text-xl font-black text-gray-900 uppercase tracking-tight">What's Excluded</h4>
+                          </div>
+                          <div className="grid gap-6">
+                            {packageData.exclusions.map((item: any, idx: number) => {
+                              if (typeof item === 'object' && 'category' in item) {
+                                return (
+                                  <div key={idx} className="group/item">
+                                    <h5 className="font-black text-[10px] text-orange-700 uppercase tracking-[0.2em] mb-3 opacity-60">
+                                      {item.category}
+                                    </h5>
+                                    <ul className="space-y-2">
+                                      {item.items.map((subItem: string, subIdx: number) => (
+                                        <li key={subIdx} className="flex items-start gap-3 group-hover/item:translate-x-1 transition-transform">
+                                          <div className="h-1.5 w-1.5 bg-orange-300 rounded-full mt-2 shrink-0" />
+                                          <span className="text-gray-600 text-sm font-bold uppercase tracking-tight">{subItem}</span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                );
+                              }
+                              return (
+                                <div key={idx} className="flex items-start gap-3 group/item">
+                                  <div className="h-1.5 w-1.5 bg-orange-300 rounded-full mt-2 shrink-0" />
+                                  <span className="text-gray-600 text-sm font-bold uppercase tracking-tight">{item as string}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Why Choose Us & Premium Reason - For Attractions too */}
+                    {((packageData.whyChooseThisTrip && packageData.whyChooseThisTrip.length > 0) || (packageData.whyPremiumSkygoTours && packageData.whyPremiumSkygoTours.length > 0)) && (
+                      <div className="grid md:grid-cols-2 gap-8 mt-12 pt-12 border-t border-gray-100">
+                        {packageData.whyChooseThisTrip && packageData.whyChooseThisTrip.length > 0 && (
+                          <div className="space-y-6">
+                            <div className="flex items-center gap-4">
+                              <div className="p-3 bg-rose-50 rounded-2xl">
+                                <Heart className="h-6 w-6 text-rose-600" />
                               </div>
-                            );
-                          }
-                          return null;
-                        })}
+                              <h4 className="text-xl font-black text-gray-900 uppercase tracking-tight">Why Choose This?</h4>
+                            </div>
+                            <ul className="space-y-4">
+                              {packageData.whyChooseThisTrip.map((w: string, idx: number) => (
+                                <li key={idx} className="flex items-start gap-4 p-4 bg-rose-50/30 rounded-2xl border border-rose-50 transition-all hover:bg-rose-50/50">
+                                  <CheckCircle className="h-4 w-4 text-rose-500 mt-0.5" />
+                                  <span className="text-gray-700 text-sm font-bold uppercase tracking-tight">{w}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                        {packageData.whyPremiumSkygoTours && packageData.whyPremiumSkygoTours.length > 0 && (
+                          <div className="space-y-6">
+                            <div className="flex items-center gap-4">
+                              <div className="p-3 bg-amber-50 rounded-2xl">
+                                <Sparkles className="h-6 w-6 text-amber-600" />
+                              </div>
+                              <h4 className="text-xl font-black text-gray-900 uppercase tracking-tight">Premium Edge</h4>
+                            </div>
+                            <ul className="space-y-4">
+                              {packageData.whyPremiumSkygoTours.map((w: string, idx: number) => (
+                                <li key={idx} className="flex items-start gap-4 p-4 bg-amber-50/30 rounded-2xl border border-amber-50 transition-all hover:bg-amber-50/50">
+                                  <Award className="h-4 w-4 text-amber-500 mt-0.5" />
+                                  <span className="text-gray-700 text-sm font-bold uppercase tracking-tight">{w}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
                       </div>
                     )}
 
-                    {/* Transfers Note */}
-                    {packageData.exclusions && packageData.exclusions.length > 0 && (
-                      <div className="mb-0">
-                        {packageData.exclusions.map((item: any, idx: number) => {
-                          if (typeof item === 'object' && 'category' in item && item.category === 'Transfers') {
-                            return (
-                              <div key={idx} className="bg-gray-50 p-6 rounded-2xl border border-gray-100 flex items-center gap-4 mb-8">
-                                <div className="p-2 bg-gray-100 rounded-lg">
-                                  <MapPin className="h-5 w-5 text-gray-600" />
-                                </div>
-                                <p className="text-gray-600 font-medium text-sm">
-                                  <strong className="text-gray-900 uppercase tracking-widest text-xs mr-2 font-bold">Transfers:</strong> {item.items[0]}
-                                </p>
-                              </div>
-                            );
-                          }
-                          return null;
-                        })}
+                    {/* FAQs Section - For Attraction Packages */}
+                    {packageData.faqs && packageData.faqs.length > 0 && (
+                      <div className="mt-12 pt-12 border-t border-gray-100">
+                        <div className="flex items-center gap-4 mb-8">
+                          <div className="p-3 bg-indigo-50 rounded-2xl">
+                            <MessageSquare className="h-6 w-6 text-indigo-600" />
+                          </div>
+                          <h4 className="text-2xl font-black text-gray-900 uppercase tracking-tight">Need to Know (FAQs)</h4>
+                        </div>
+                        <div className="grid md:grid-cols-2 gap-6">
+                          {packageData.faqs.map((faq: any, idx: number) => (
+                            <div key={idx} className="bg-gray-50/50 p-8 rounded-[40px] border border-gray-100 hover:bg-white hover:shadow-xl transition-all duration-500 group">
+                              <p className="font-black text-gray-900 text-base uppercase tracking-tighter mb-4 flex items-center gap-3">
+                                <span className="h-2 w-2 bg-indigo-400 rounded-full" />
+                                {faq.question}
+                              </p>
+                              <p className="text-gray-600 text-base font-medium leading-relaxed italic border-l-2 border-indigo-100 pl-4">{faq.answer}</p>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     )}
+
+                    {/* Shared Reviews Section at the bottom */}
+                    <div className="mt-16 pt-12 border-t border-gray-100">
+                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+                        <div>
+                          <h3 className="text-3xl font-black text-gray-900 uppercase tracking-tighter mb-2">Visitor Experiences</h3>
+                          <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">What explorers say about this attraction</p>
+                        </div>
+                        {packageData.rating && (
+                          <div className="flex items-center gap-4 bg-amber-50 px-8 py-4 rounded-[32px] border border-amber-100 shadow-sm">
+                            <Star className="h-6 w-6 fill-amber-400 text-amber-400" />
+                            <div className="flex flex-col">
+                              <span className="font-black text-gray-900 text-xl leading-none">{packageData.rating}</span>
+                              <span className="text-gray-500 text-[10px] font-black uppercase tracking-widest">Global Rating</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="grid md:grid-cols-2 gap-6">
+                        {packageData.reviews && packageData.reviews.length > 0 ? (
+                          packageData.reviews.map((review: any, idx: number) => (
+                            <div key={idx} className="bg-white border border-gray-100 rounded-[32px] p-8 shadow-sm hover:shadow-xl transition-all duration-500 border-b-4 border-b-[#bd9245]/20">
+                              <div className="flex items-center gap-4 mb-6">
+                                <div className="h-12 w-12 rounded-2xl bg-gray-900 flex items-center justify-center text-[#bd9245] font-black text-lg shadow-lg">
+                                  {review.name?.charAt(0) || 'U'}
+                                </div>
+                                <div>
+                                  <p className="font-black text-gray-900 text-sm uppercase tracking-tight">{review.name || 'Verified Explorer'}</p>
+                                  <div className="flex items-center gap-0.5 mt-1">
+                                    {[...Array(5)].map((_, i) => (
+                                      <Star key={i} className={`h-3 w-3 ${i < review.rating ? 'fill-amber-400 text-amber-400' : 'text-gray-200'} `} />
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                              <p className="text-gray-600 text-base font-medium leading-relaxed italic">"{review.comment}"</p>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="md:col-span-2 bg-gray-50/50 border border-dashed border-gray-200 rounded-[40px] p-16 text-center">
+                            <div className="mb-6 inline-flex p-6 rounded-[32px] bg-white shadow-sm">
+                              <MessageSquare className="h-10 w-10 text-gray-200" />
+                            </div>
+                            <p className="font-black text-gray-900 text-lg uppercase tracking-tight mb-2">No Reviews Found</p>
+                            <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">Experience this first and share your story.</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
 
                     {/* Contact Button */}
-                    <div className="mt-12 text-center">
+                    <div className="mt-16 text-center">
                       <Link href="/contact" className="inline-block w-full md:w-auto">
-                        <Button className="w-full md:px-12 h-16 bg-gray-900 hover:bg-black text-white font-bold uppercase tracking-widest rounded-2xl shadow-lg group transition-all duration-300">
-                          <span className="flex items-center justify-center gap-3">
-                            Secure Your Experience
-                            <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                        <Button className="w-full md:px-20 h-20 bg-gray-900 hover:bg-black text-white font-black uppercase tracking-[0.3em] rounded-[32px] shadow-2xl group transition-all duration-500">
+                          <span className="flex items-center justify-center gap-4">
+                            Reserve Your Access
+                            <ArrowRight className="h-6 w-6 transition-transform group-hover:translate-x-3" />
                           </span>
                         </Button>
                       </Link>
                     </div>
                   </CardContent>
-                </Card>
+                </div>
               </div>
             )}
 
-            {/* Regular Package View - Only show if NOT an attraction package */}
             {!isAttractionPackage && (
-              <div className="space-y-8">
-                {/* Navigation Tabs */}
-                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-2 sticky top-[80px] z-10">
-                  <div className="flex gap-1 overflow-x-auto hide-scrollbar">
-                    {[
-                      { id: 'overview', label: 'Overview', icon: Info },
-                      { id: 'itinerary', label: 'Itinerary', icon: Calendar },
-                      { id: 'inclusions', label: 'Inclusions', icon: CheckCircle },
-                      { id: 'reviews', label: 'Reviews', icon: Star },
-                    ].map((tab) => (
-                      <button
-                        key={tab.id}
-                        onClick={() => {
-                          const el = document.getElementById(tab.id);
-                          el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                          setActiveTab(tab.id as any);
-                        }}
-                        className={`flex items - center gap - 2 px - 5 py - 2.5 rounded - xl text - sm font - semibold transition - all whitespace - nowrap ${activeTab === tab.id
-                          ? 'bg-gray-900 text-white shadow-sm'
-                          : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
-                          } `}
-                      >
-                        <tab.icon className="h-4 w-4" />
-                        {tab.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
+              <div className="space-y-10">
                 {/* Overview Section */}
-                <section id="overview" className="space-y-6">
-                  {/* Section Header */}
-                  <div className="flex items-center gap-4">
-                    <div className="p-2.5 bg-gray-100 rounded-xl">
-                      <PlayCircle className="h-6 w-6 text-gray-600" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-gray-900">Experience Highlights</h3>
-                  </div>
-
+                <section id="overview" className="space-y-8">
                   {/* Best Time to Visit Card */}
-                  <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                    <div className="bg-orange-50 px-6 py-4 flex items-center gap-3">
+                  <Card className="border border-gray-100 shadow-sm overflow-hidden bg-white rounded-3xl">
+                    <div className="bg-gray-50 px-8 py-5 flex items-center gap-3 border-b border-gray-100">
                       <div className="p-2 bg-orange-500 rounded-lg">
                         <Calendar className="h-4 w-4 text-white" />
                       </div>
-                      <h4 className="font-bold text-gray-900 text-base">Best Time to Visit Dubai</h4>
+                      <h4 className="font-black text-gray-900 text-sm uppercase tracking-tight">Best Time to Visit {packageData.location?.split(',')[0]}</h4>
                     </div>
-                    <div className="p-6">
-                      <p className="text-gray-600 text-sm leading-relaxed">
+                    <CardContent className="p-8">
+                      <p className="text-gray-600 text-base leading-relaxed">
                         {((packageData as any).bestTimeToVisit?.yearRound) || ''}
                       </p>
                       {((packageData as any).bestTimeToVisit?.winter && (
-                        <p className="text-gray-600 text-sm leading-relaxed mt-2">
+                        <p className="text-gray-600 text-base leading-relaxed mt-2">
                           <span className="font-semibold text-gray-700">Winter (Oct–Apr):</span> {(packageData as any).bestTimeToVisit.winter}
                         </p>
                       ))}
                       {((packageData as any).bestTimeToVisit?.summer && (
-                        <p className="text-gray-600 text-sm leading-relaxed mt-2">
+                        <p className="text-gray-600 text-base leading-relaxed mt-2">
                           <span className="font-semibold text-gray-700">Summer (May–Sep):</span> {(packageData as any).bestTimeToVisit.summer}
                         </p>
                       ))}
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
 
                   {/* About Sky Go */}
-                  <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                    <div className="bg-amber-50 px-6 py-4">
-                      <h4 className="font-bold text-gray-900 text-base">About Sky Go</h4>
+                  <Card className="border border-gray-100 shadow-sm overflow-hidden bg-white rounded-3xl">
+                    <div className="bg-gray-50 px-8 py-5 border-b border-gray-100">
+                      <h4 className="font-black text-gray-900 text-sm uppercase tracking-tight">About Sky Go</h4>
                     </div>
-                    <div className="p-6 bg-amber-50/30">
-                      <p className="text-gray-600 text-sm leading-relaxed">
+                    <CardContent className="p-8">
+                      <p className="text-gray-600 text-base leading-relaxed italic border-l-2 border-amber-500/20 pl-6">
                         {packageData.about}
                       </p>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
 
-                  {/* Abstract / Tour Overview */}
-                  {packageData.tourDetails && (
-                    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                      <div className="bg-blue-50 px-6 py-4">
-                        <h4 className="font-bold text-gray-900 text-base">Tour Overview</h4>
+                  {/* Our Services */}
+                  {packageData.services && (
+                    <Card className="border border-gray-100 shadow-sm overflow-hidden bg-white rounded-3xl">
+                      <div className="bg-gray-50 px-8 py-5 flex items-center gap-3 border-b border-gray-100">
+                        <Award className="h-5 w-5 text-blue-600" />
+                        <h4 className="font-black text-gray-900 text-sm uppercase tracking-tight">Package Inclusions & Services</h4>
                       </div>
-                      <div className="p-6">
-                        <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">
-                          {(packageData.tourDetails?.includes('Tour Overview')
-                            ? packageData.tourDetails?.split('Tour Overview')[1]?.split('Key Highlights')[0]?.trim()
-                            : packageData.tourDetails?.includes('Overview')
-                              ? packageData.tourDetails?.split('Overview')[1]?.split('Highlights')[0]?.trim()
-                              : packageData.tourDetails) || ''}
+                      <CardContent className="p-8">
+                        {Array.isArray(packageData.services) ? (
+                          <div className="grid md:grid-cols-2 gap-4">
+                            {(packageData.services as string[]).map((service, idx) => (
+                              <div key={idx} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
+                                <CheckCircle className="h-4 w-4 text-blue-500 shrink-0" />
+                                <span className="text-gray-700 text-base font-medium">{service}</span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-gray-600 text-base leading-relaxed">
+                            {packageData.services}
+                          </p>
+                        )}
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Ideal For */}
+                  {packageData.ideaFor && (
+                    <Card className="border border-gray-100 shadow-sm overflow-hidden bg-white rounded-3xl">
+                      <div className="bg-gray-50 px-8 py-5 flex items-center gap-3 border-b border-gray-100">
+                        <Users className="h-5 w-5 text-emerald-600" />
+                        <h4 className="font-black text-gray-900 text-sm uppercase tracking-tight">Ideal For</h4>
+                      </div>
+                      <CardContent className="p-8">
+                        <div className="flex flex-wrap gap-2">
+                          {packageData.ideaFor.split(',').map((tag, idx) => (
+                            <span key={idx} className="px-4 py-2 bg-emerald-50 text-emerald-700 rounded-full text-sm font-bold uppercase tracking-wider border border-emerald-100">
+                              {tag.trim()}
+                            </span>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Abstract */}
+                  {packageData.abstract && (
+                    <Card className="border border-gray-100 shadow-sm overflow-hidden bg-white rounded-3xl">
+                      <div className="bg-gray-50 px-8 py-5 border-b border-gray-100">
+                        <h4 className="font-black text-gray-900 text-sm uppercase tracking-tight">Executive Abstract</h4>
+                      </div>
+                      <CardContent className="p-8">
+                        <p className="text-gray-600 text-base italic leading-relaxed border-l-2 border-purple-100 pl-6">
+                          {packageData.abstract}
                         </p>
-                      </div>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Tour Overview & Details */}
+                  {(packageData.tourOverview || packageData.tourDetails) && (
+                    <div className="space-y-6">
+                      {packageData.tourOverview && (
+                        <Card className="border border-gray-100 shadow-sm overflow-hidden bg-white rounded-3xl">
+                          <div className="bg-gray-50 px-8 py-5 flex items-center gap-3 border-b border-gray-100">
+                            <div className="p-2 bg-blue-500 rounded-lg shadow-sm">
+                              <LayoutDashboard className="h-4 w-4 text-white" />
+                            </div>
+                            <h4 className="font-black text-gray-900 text-sm uppercase tracking-tight">Experience Overview</h4>
+                          </div>
+                          <CardContent className="p-8">
+                            <p className="text-gray-600 text-base leading-relaxed whitespace-pre-line font-medium">
+                              {packageData.tourOverview}
+                            </p>
+                          </CardContent>
+                        </Card>
+                      )}
                     </div>
+                  )}
+
+                  {/* Pricing / Hotel Options */}
+                  {packageData.hotelOptions && packageData.hotelOptions.length > 0 && (
+                    <Card className="border border-gray-100 shadow-sm overflow-hidden bg-white rounded-3xl">
+                      <div className="bg-gray-50 px-8 py-5 flex items-center gap-3 border-b border-gray-100">
+                        <Hotel className="h-5 w-5 text-amber-600" />
+                        <h4 className="font-black text-gray-900 text-sm uppercase tracking-tight">Package Tier Options</h4>
+                      </div>
+                      <CardContent className="p-8 grid gap-4 md:grid-cols-2">
+                        {packageData.hotelOptions.map((option, idx) => (
+                          <div key={idx} className="p-4 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-between">
+                            <span className="font-semibold text-gray-700 text-sm">{option.split(':')[0]}</span>
+                            {option.split(':')[1] && <span className="text-gray-500 text-xs font-bold uppercase tracking-widest">{option.split(':')[1]}</span>}
+                          </div>
+                        ))}
+                      </CardContent>
+                    </Card>
                   )}
 
                   {/* Key Highlights */}
                   {packageData.keyHighlights && packageData.keyHighlights.length > 0 && (
-                    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                      <div className="bg-green-50 px-6 py-4">
-                        <h4 className="font-bold text-gray-900 text-base">Key Highlights</h4>
+                    <Card className="border border-gray-100 shadow-sm overflow-hidden bg-white rounded-3xl">
+                      <div className="bg-gray-50 px-8 py-5 border-b border-gray-100">
+                        <h4 className="font-black text-gray-900 text-sm uppercase tracking-tight">Exclusive Glimpses</h4>
                       </div>
-                      <div className="p-6">
+                      <CardContent className="p-8">
                         <ul className="space-y-3">
                           {packageData.keyHighlights.map((highlight: string, idx: number) => (
                             <li key={idx} className="flex items-start gap-3">
                               <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
-                              <span className="text-gray-600 text-sm leading-relaxed">{highlight}</span>
+                              <span className="text-gray-600 text-base leading-relaxed font-medium">{highlight}</span>
                             </li>
                           ))}
                         </ul>
-                      </div>
-                    </div>
+                      </CardContent>
+                    </Card>
                   )}
 
                   {/* Feature Grid */}
@@ -3013,52 +3363,48 @@ Key Highlights`,
                       { icon: Users, label: 'Expert Local Guides', color: 'text-purple-500', bg: 'bg-purple-50' },
                       { icon: Heart, label: 'Curated with Love', color: 'text-rose-500', bg: 'bg-rose-50' },
                     ].map((feat, idx) => (
-                      <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-5 flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
-                        <div className={`p - 2 rounded - xl ${feat.bg} `}>
-                          <feat.icon className={`h - 5 w - 5 ${feat.color} `} />
+                      <div key={idx} className="bg-white border border-gray-100 rounded-3xl p-6 flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
+                        <div className={`p-3 rounded-2xl ${feat.bg}`}>
+                          <feat.icon className={`h-5 w-5 ${feat.color}`} />
                         </div>
-                        <span className="text-gray-700 font-semibold text-sm">{feat.label}</span>
+                        <span className="text-gray-900 font-black text-[10px] uppercase tracking-widest">{feat.label}</span>
                       </div>
                     ))}
                   </div>
                 </section>
 
                 {/* Itinerary Section */}
-                <section id="itinerary">
-                  <div className="flex items-center justify-between mb-8">
-                    <h3 className="text-3xl font-bold text-gray-900">Daily Itinerary</h3>
-                    <span className="bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full text-sm font-semibold">
-                      {packageData.duration}
-                    </span>
+                <section id="itinerary" className="space-y-10">
+                  <div className="flex items-center gap-6 mb-12">
+                    <div className="p-4 bg-amber-50 rounded-[24px]">
+                       <Calendar className="h-8 w-8 text-[#bd9245]" />
+                    </div>
+                    <h3 className="text-4xl font-black text-gray-900 uppercase tracking-tighter text-black">Daily Itinerary</h3>
                   </div>
 
-                  <div className="space-y-4 relative">
-                    {/* Vertical Line */}
-                    <div className="absolute left-[22px] top-10 bottom-4 w-px bg-gray-200" />
-
+                  <div className="space-y-8">
                     {Array.isArray(packageData.itinerary) && packageData.itinerary.map((day, index) => (
-                      <div key={index} className="relative flex gap-6">
-                        {/* Day Number Circle */}
-                        <div className="relative z-10 w-11 h-11 rounded-full bg-gray-100 border-2 border-white shadow-sm flex items-center justify-center flex-shrink-0">
-                          <span className="font-bold text-gray-500 text-sm">{day.day}</span>
+                      <div key={index} className="bg-white border border-[#bd9245]/20 rounded-[40px] p-8 md:p-12 shadow-sm transition-all hover:shadow-md">
+                        <div className="flex items-center justify-between mb-10">
+                           <div className="flex items-center gap-8">
+                              <div className="w-20 h-20 bg-[#bd9245] rounded-[28px] flex flex-col items-center justify-center text-white shadow-lg shadow-[#bd9245]/20">
+                                <span className="text-[10px] font-black uppercase tracking-widest leading-none mb-1">Day</span>
+                                <span className="text-3xl font-black">{day.day}</span>
+                              </div>
+                              <h4 className="text-2xl font-black text-gray-900 uppercase tracking-tighter">{day.title}</h4>
+                           </div>
+                           <div className="h-12 w-12 rounded-full border border-[#bd9245]/20 flex items-center justify-center text-[#bd9245]/60">
+                             <ArrowRight className="h-6 w-6 rotate-90" />
+                           </div>
                         </div>
 
-                        {/* Card */}
-                        <div className="flex-1 bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden mb-2 hover:shadow-md transition-shadow">
-                          <div className="px-6 py-4 border-b border-gray-50">
-                            <p className="font-bold text-gray-900 text-base">
-                              <span className="text-gray-900">Day {day.day}</span>
-                              <span className="mx-2 inline-block w-1.5 h-1.5 rounded-full bg-gray-300 align-middle" />
-                              <span>{day.title}</span>
-                            </p>
-                          </div>
-                          <div className="px-6 py-5">
-                            <div className="text-gray-500 text-sm leading-relaxed space-y-2">
-                              {day.description.split('\n').filter(Boolean).map((line, i) => (
-                                <p key={i}>{line}</p>
-                              ))}
-                            </div>
-                          </div>
+                        <div className="flex gap-10 ml-4 md:ml-10">
+                           <div className="w-px bg-[#bd9245]/20 h-auto self-stretch mt-2 mb-2" />
+                           <div className="text-gray-600 text-lg leading-relaxed font-medium py-1">
+                             {day.description.split('\n').filter(Boolean).map((line, i) => (
+                               <p key={i} className="mb-4 last:mb-0">{line}</p>
+                             ))}
+                           </div>
                         </div>
                       </div>
                     ))}
@@ -3066,120 +3412,255 @@ Key Highlights`,
                 </section>
 
                 {/* Inclusions & Exclusions */}
-                <section id="inclusions" className="space-y-6">
-                  <h3 className="text-2xl font-bold text-gray-900">Inclusions & Exclusions</h3>
-
-                  <div className="grid lg:grid-cols-2 gap-6">
-                    {/* Inclusions */}
-                    <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
-                      <div className="bg-green-50 px-6 py-4 flex items-center gap-3">
-                        <CheckCircle className="h-5 w-5 text-green-600" />
-                        <h4 className="font-bold text-gray-900">What's Included</h4>
+                <section id="inclusions">
+                   <Card className="border border-gray-100 shadow-sm overflow-hidden bg-white rounded-3xl">
+                      <div className="bg-gray-50 px-8 py-5 border-b border-gray-100">
+                        <h4 className="font-black text-gray-900 text-sm uppercase tracking-tight text-center">Inclusions & Exclusions</h4>
                       </div>
-                      <div className="p-6 space-y-3">
-                        {packageData.inclusions?.map((item, idx) => {
-                          if (typeof item === 'object' && 'category' in item) {
-                            return (
-                              <div key={idx}>
-                                <p className="font-semibold text-gray-700 text-sm mb-2">{item.category}</p>
-                                <ul className="space-y-2 ml-2">
-                                  {item.items.map((subItem, subIdx) => (
-                                    <li key={subIdx} className="flex items-start gap-3 text-gray-600 text-sm">
-                                      <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
-                                      <span>{subItem}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            );
-                          }
-                          return (
-                            <div key={idx} className="flex items-start gap-3 text-gray-600 text-sm">
-                              <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
-                              <span>{item as string}</span>
+                      <CardContent className="p-8">
+                        <div className="grid lg:grid-cols-2 gap-12">
+                          {/* Inclusions */}
+                          <div className="space-y-6">
+                            <div className="flex items-center gap-3 text-green-600 mb-2">
+                              <CheckCircle className="h-5 w-5" />
+                              <span className="font-black text-xs uppercase tracking-widest">Premium Inclusions</span>
                             </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Exclusions */}
-                    <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
-                      <div className="bg-red-50 px-6 py-4 flex items-center gap-3">
-                        <XCircle className="h-5 w-5 text-red-500" />
-                        <h4 className="font-bold text-gray-900">What's Not Included</h4>
-                      </div>
-                      <div className="p-6 space-y-3">
-                        {packageData.exclusions?.map((item, idx) => {
-                          if (typeof item === 'object' && 'category' in item) {
-                            return (
-                              <div key={idx}>
-                                <p className="font-semibold text-gray-700 text-sm mb-2">{item.category}</p>
-                                <ul className="space-y-2 ml-2">
-                                  {item.items.map((subItem, subIdx) => (
-                                    <li key={subIdx} className="flex items-start gap-3 text-gray-600 text-sm">
-                                      <XCircle className="h-4 w-4 text-red-400 mt-0.5 shrink-0" />
-                                      <span>{subItem}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            );
-                          }
-                          return (
-                            <div key={idx} className="flex items-start gap-3 text-gray-600 text-sm">
-                              <XCircle className="h-4 w-4 text-red-400 mt-0.5 shrink-0" />
-                              <span>{item as string}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                </section>
-                {/* Reviews Section */}
-                <section id="reviews" className="space-y-6">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <h3 className="text-2xl font-bold text-gray-900">Reviews</h3>
-                    {packageData.rating && (
-                      <div className="flex items-center gap-2 bg-amber-50 px-4 py-2 rounded-full border border-amber-100">
-                        <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-                        <span className="font-bold text-gray-800 text-sm">{packageData.rating}</span>
-                        <span className="text-gray-500 text-xs">Overall Rating</span>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-5">
-                    {packageData.reviews && packageData.reviews.length > 0 ? (
-                      packageData.reviews.map((review: any, idx: number) => (
-                        <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                          <div className="flex items-center gap-3 mb-3">
-                            <div className="h-9 w-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 font-bold text-sm">
-                              {review.name?.charAt(0) || 'U'}
-                            </div>
-                            <div>
-                              <p className="font-semibold text-gray-900 text-sm">{review.name || 'Verified Explorer'}</p>
-                              <div className="flex items-center gap-0.5 mt-0.5">
-                                {[...Array(5)].map((_, i) => (
-                                  <Star key={i} className={`h - 3 w - 3 ${i < review.rating ? 'fill-amber-400 text-amber-400' : 'text-gray-200'} `} />
-                                ))}
-                              </div>
+                            <div className="space-y-4">
+                              {packageData.inclusions?.map((item, idx) => {
+                                if (typeof item === 'object' && 'category' in item) {
+                                  return (
+                                    <div key={idx} className="bg-gray-50/50 p-5 rounded-2xl border border-gray-100">
+                                      <p className="font-black text-gray-900 text-[10px] uppercase tracking-widest mb-3 text-green-700">{item.category}</p>
+                                      <ul className="space-y-3">
+                                        {item.items.map((subItem, subIdx) => (
+                                          <li key={subIdx} className="flex items-start gap-3 text-gray-600 text-base font-medium">
+                                            <div className="h-1.5 w-1.5 bg-green-500 rounded-full mt-2 shrink-0" />
+                                            <span>{subItem}</span>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  )
+                                }
+                                return (
+                                  <div key={idx} className="flex items-start gap-4 p-4 bg-green-50/30 rounded-xl border border-green-50">
+                                    <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
+                                    <span className="text-gray-700 text-sm font-black uppercase tracking-tight">{item as string}</span>
+                                  </div>
+                                )
+                              })}
                             </div>
                           </div>
-                          <p className="text-gray-600 text-sm leading-relaxed">{review.comment}</p>
+
+                          {/* Exclusions */}
+                          <div className="space-y-6">
+                            <div className="flex items-center gap-3 text-red-600 mb-2">
+                              <XCircle className="h-5 w-5" />
+                              <span className="font-black text-xs uppercase tracking-widest">Exclusions</span>
+                            </div>
+                            <div className="space-y-4">
+                              {packageData.exclusions?.map((item, idx) => {
+                                if (typeof item === 'object' && 'category' in item) {
+                                  return (
+                                    <div key={idx} className="bg-gray-50/50 p-5 rounded-2xl border border-gray-100">
+                                      <p className="font-black text-gray-900 text-[10px] uppercase tracking-widest mb-3 text-red-700">{item.category}</p>
+                                      <ul className="space-y-3">
+                                        {item.items.map((subItem, subIdx) => (
+                                          <li key={subIdx} className="flex items-start gap-3 text-gray-600 text-base font-medium">
+                                            <div className="h-1.5 w-1.5 bg-red-400 rounded-full mt-2 shrink-0" />
+                                            <span>{subItem}</span>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  )
+                                }
+                                return (
+                                  <div key={idx} className="flex items-start gap-4 p-4 bg-red-50/30 rounded-xl border border-red-50">
+                                    <XCircle className="h-4 w-4 text-red-400 mt-0.5 shrink-0" />
+                                    <span className="text-gray-700 text-sm font-black uppercase tracking-tight">{item as string}</span>
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          </div>
                         </div>
-                      ))
-                    ) : (
-                      <div className="md:col-span-2 bg-white border border-gray-100 rounded-2xl p-10 text-center shadow-sm">
-                        <div className="mb-4 inline-flex p-4 rounded-2xl bg-gray-50">
-                          <MessageSquare className="h-8 w-8 text-gray-300" />
-                        </div>
-                        <p className="font-semibold text-gray-700 mb-1">No reviews yet</p>
-                        <p className="text-gray-400 text-sm">Be the first to share your experience.</p>
+                      </CardContent>
+                    </Card>
+                </section>
+
+                {/* Logistics & Accommodation */}
+                {(packageData.transportation?.length > 0 || packageData.accommodation?.length > 0) && (
+                  <section id="logistics" className="space-y-8">
+                    <Card className="border border-gray-100 shadow-sm overflow-hidden bg-white rounded-3xl">
+                      <div className="bg-gray-50 px-8 py-5 border-b border-gray-100">
+                        <h4 className="font-black text-gray-900 text-sm uppercase tracking-tight text-center">Logistics & Stay Details</h4>
                       </div>
-                    )}
-                  </div>
+                      <CardContent className="p-8">
+                        <div className="grid md:grid-cols-2 gap-8">
+                          {/* Transportation */}
+                          {packageData.transportation?.length > 0 && (
+                            <div className="space-y-4">
+                               <div className="flex items-center gap-3 text-slate-600 mb-2">
+                                  <CarIcon className="h-5 w-5" />
+                                  <span className="font-black text-xs uppercase tracking-widest">Fleet & Transfers</span>
+                                </div>
+                                <div className="space-y-4">
+                                  {packageData.transportation.map((t, idx) => (
+                                    <div key={idx} className="p-6 bg-gray-50 rounded-2xl border border-gray-100">
+                                      <p className="font-black text-gray-900 text-[10px] uppercase tracking-widest mb-1">{t.type}</p>
+                                      <p className="text-slate-600 text-xl font-black tracking-tighter uppercase">{t.vehicle}</p>
+                                      <p className="text-gray-500 text-sm mt-2 font-medium leading-relaxed italic">{t.description}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                            </div>
+                          )}
+
+                          {/* Accommodation */}
+                          {packageData.accommodation?.length > 0 && (
+                            <div className="space-y-4">
+                               <div className="flex items-center gap-3 text-indigo-600 mb-2">
+                                  <Hotel className="h-5 w-5" />
+                                  <span className="font-black text-xs uppercase tracking-widest">Elite Stays</span>
+                                </div>
+                                <div className="space-y-4">
+                                  {packageData.accommodation.map((a, idx) => (
+                                    <div key={idx} className="p-6 bg-gray-50 rounded-2xl border border-gray-100">
+                                      <p className="font-black text-gray-900 text-[10px] uppercase tracking-widest mb-1">{a.city}</p>
+                                      <p className="text-indigo-900 text-xl font-black tracking-tighter uppercase">{a.hotel}</p>
+                                      <p className="text-gray-500 text-sm mt-2 font-medium uppercase tracking-widest">{a.roomType} • {a.nights}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                            </div>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </section>
+                )}
+
+                {/* Why Choose Us Sections */}
+                {((packageData.whyChooseThisTrip && packageData.whyChooseThisTrip.length > 0) || (packageData.whyPremiumSkygoTours && packageData.whyPremiumSkygoTours.length > 0)) && (
+                  <section id="why-choose" className="space-y-8">
+                    <div className="grid md:grid-cols-2 gap-8">
+                      {packageData.whyChooseThisTrip && packageData.whyChooseThisTrip.length > 0 && (
+                        <Card className="border border-gray-100 shadow-sm overflow-hidden bg-white rounded-3xl">
+                          <div className="bg-gray-50 px-8 py-5 flex items-center gap-3 border-b border-gray-100">
+                            <Heart className="h-5 w-5 text-rose-600" />
+                            <h4 className="font-black text-gray-900 text-sm uppercase tracking-tight">Curated Reasons</h4>
+                          </div>
+                          <CardContent className="p-8">
+                             <h3 className="text-xl font-black text-gray-900 mb-6 uppercase tracking-tighter">Why Choose This Trip?</h3>
+                            <ul className="space-y-4">
+                              {packageData.whyChooseThisTrip.map((w: string, idx: number) => (
+                                <li key={idx} className="flex items-start gap-4 p-4 bg-rose-50/30 rounded-2xl border border-rose-50">
+                                  <CheckCircle className="h-4 w-4 text-rose-500 mt-0.5" />
+                                  <span className="text-gray-700 text-sm font-black uppercase tracking-tight leading-relaxed">{w}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </CardContent>
+                        </Card>
+                      )}
+
+                      {packageData.whyPremiumSkygoTours && packageData.whyPremiumSkygoTours.length > 0 && (
+                        <Card className="border border-gray-100 shadow-sm overflow-hidden bg-white rounded-3xl">
+                          <div className="bg-gray-50 px-8 py-5 flex items-center gap-3 border-b border-gray-100">
+                            <Sparkles className="h-5 w-5 text-amber-600" />
+                            <h4 className="font-black text-gray-900 text-sm uppercase tracking-tight">The Sky Go Edge</h4>
+                          </div>
+                          <CardContent className="p-8">
+                             <h3 className="text-xl font-black text-gray-900 mb-6 uppercase tracking-tighter">Why Premium Sky Go?</h3>
+                            <ul className="space-y-4">
+                              {packageData.whyPremiumSkygoTours.map((w: string, idx: number) => (
+                                <li key={idx} className="flex items-start gap-4 p-4 bg-amber-50/30 rounded-2xl border border-amber-50">
+                                  <Award className="h-4 w-4 text-amber-500 mt-0.5" />
+                                  <span className="text-gray-700 text-sm font-black uppercase tracking-tight leading-relaxed">{w}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </CardContent>
+                        </Card>
+                      )}
+                    </div>
+                  </section>
+                )}
+
+                {/* FAQs Section */}
+                {packageData.faqs && packageData.faqs.length > 0 && (
+                   <Card className="border border-gray-100 shadow-sm overflow-hidden bg-white rounded-3xl">
+                      <div className="bg-gray-50 px-8 py-5 border-b border-gray-100 flex items-center gap-3">
+                         <MessageSquare className="h-5 w-5 text-indigo-600" />
+                        <h4 className="font-black text-gray-900 text-sm uppercase tracking-tight">Expert Inquiries (FAQs)</h4>
+                      </div>
+                      <CardContent className="p-8">
+                        <div className="grid md:grid-cols-2 gap-6">
+                          {packageData.faqs.map((faq: any, idx: number) => (
+                            <div key={idx} className="bg-gray-50/50 p-6 rounded-2xl border border-gray-100 hover:bg-white hover:shadow-md transition-all">
+                              <p className="font-black text-gray-900 text-sm uppercase tracking-tighter mb-3 flex items-center gap-2">
+                                <span className="h-1.5 w-1.5 bg-indigo-400 rounded-full" />
+                                {faq.question}
+                              </p>
+                              <p className="text-gray-500 text-sm font-medium leading-relaxed italic border-l-2 border-indigo-100 pl-4">{faq.answer}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                )}
+
+                {/* Reviews Section */}
+                <section id="reviews" className="space-y-8">
+                   <Card className="border border-gray-100 shadow-sm overflow-hidden bg-white rounded-3xl">
+                      <div className="bg-gray-50 px-8 py-6 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div>
+                          <h4 className="text-amber-600 font-black uppercase text-[10px] tracking-[0.4em] mb-1">Elite Testimonials</h4>
+                          <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight">Visitor Experiences</h3>
+                        </div>
+                        {packageData.rating && (
+                          <div className="flex items-center gap-3 bg-white px-5 py-2 rounded-2xl border border-gray-100 shadow-sm">
+                            <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                            <div className="flex flex-col">
+                              <span className="font-black text-gray-900 text-lg leading-none">{packageData.rating}</span>
+                              <span className="text-gray-400 text-[8px] font-black uppercase tracking-widest">Global Rating</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <CardContent className="p-8">
+                        <div className="grid md:grid-cols-2 gap-6">
+                          {packageData.reviews && packageData.reviews.length > 0 ? (
+                            packageData.reviews.map((review: any, idx: number) => (
+                              <div key={idx} className="bg-gray-50/30 border border-gray-100 rounded-2xl p-6 hover:bg-white hover:shadow-xl transition-all border-b-4 border-b-[#bd9245]/10">
+                                <div className="flex items-center gap-4 mb-4">
+                                  <div className="h-10 w-10 rounded-xl bg-gray-900 flex items-center justify-center text-[#bd9245] font-black text-sm">
+                                    {review.name?.charAt(0) || 'U'}
+                                  </div>
+                                  <div>
+                                    <p className="font-black text-gray-900 text-sm uppercase tracking-tight">{review.name || 'Verified Explorer'}</p>
+                                    <div className="flex items-center gap-0.5 mt-1">
+                                      {[...Array(5)].map((_, i) => (
+                                        <Star key={i} className={`h-2.5 w-2.5 ${i < review.rating ? 'fill-amber-400 text-amber-400' : 'text-gray-200'} `} />
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                                <p className="text-gray-600 text-sm font-medium leading-relaxed italic">"{review.comment}"</p>
+                              </div>
+                            ))
+                          ) : (
+                            <div className="md:col-span-2 py-12 text-center">
+                              <div className="mb-4 inline-flex p-4 rounded-2xl bg-gray-50">
+                                <MessageSquare className="h-8 w-8 text-gray-200" />
+                              </div>
+                              <p className="font-black text-gray-900 text-sm uppercase tracking-tight">No testimonials yet</p>
+                            </div>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
                 </section>
               </div>
             )}
@@ -3267,40 +3748,6 @@ Key Highlights`,
                   </div>
 
                   <CardContent className="p-8 space-y-8">
-                    <div className="space-y-6">
-                      <div className="space-y-3">
-                        <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">Select Travel Date</Label>
-                        <div className="relative group">
-                          <CalendarIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 transition-colors group-focus-within:text-gray-900" />
-                          <Input
-                            type="date"
-                            className="h-14 pl-12 rounded-2xl border-gray-100 bg-gray-50 focus:ring-gray-900 focus:border-gray-900 font-bold text-gray-900"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="space-y-3">
-                        <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">Party Size</Label>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="relative group">
-                            <Users className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                            <Input
-                              type="number"
-                              placeholder="Adults"
-                              min="1"
-                              className="h-14 pl-12 rounded-2xl border-gray-100 bg-gray-50 focus:ring-gray-900 focus:border-gray-900 font-bold text-gray-900"
-                            />
-                          </div>
-                          <Input
-                            type="number"
-                            placeholder="Kids"
-                            min="0"
-                            className="h-14 px-6 rounded-2xl border-gray-100 bg-gray-50 focus:ring-gray-900 focus:border-gray-900 font-bold text-gray-900"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
                     <div className="space-y-4">
                       <Button
                         className="w-full h-16 bg-gray-900 hover:bg-black text-white font-bold uppercase tracking-widest rounded-2xl shadow-lg group transition-all duration-300"

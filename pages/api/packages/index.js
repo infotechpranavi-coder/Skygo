@@ -141,23 +141,8 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     try {
       if (useDemoData) {
-        console.log('Using demo data for packages');
-        let packages = getDemoPackages();
-
-        // Apply search filter if provided
-        const { search } = req.query;
-        if (search) {
-          const searchLower = search.toLowerCase();
-          packages = packages.filter(pkg =>
-            pkg.title.toLowerCase().includes(searchLower) ||
-            pkg.subtitle.toLowerCase().includes(searchLower) ||
-            pkg.location.toLowerCase().includes(searchLower) ||
-            pkg.about.toLowerCase().includes(searchLower) ||
-            pkg.tourDetails.toLowerCase().includes(searchLower)
-          );
-        }
-
-        return res.status(200).json({ success: true, data: packages, demo: true });
+        console.warn('Database not connected. Returning empty packages list.');
+        return res.status(200).json({ success: true, data: [], demo: false, error: 'Database connection failed' });
       }
 
       const { search, popular, featured } = req.query;
@@ -188,17 +173,11 @@ export default async function handler(req, res) {
 
       const packages = await Package.find(query).sort({ createdAt: -1 });
 
-      // If no packages found, return demo data
-      if (packages.length === 0) {
-        console.log('No packages found in database, using demo data');
-        return res.status(200).json({ success: true, data: getDemoPackages(), demo: true });
-      }
-
+      // Return empty array if no packages found instead of falling back to demo
       res.status(200).json({ success: true, data: packages });
     } catch (error) {
-      console.error('Error fetching packages, using demo data:', error.message);
-      // Return demo data on error
-      res.status(200).json({ success: true, data: getDemoPackages(), demo: true });
+      console.error('Error fetching packages:', error.message);
+      res.status(500).json({ success: false, data: [], error: error.message });
     }
   } else if (req.method === 'POST') {
     if (useDemoData) {

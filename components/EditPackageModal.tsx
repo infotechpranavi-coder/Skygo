@@ -129,6 +129,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
 
   const [inclusions, setInclusions] = useState<InclusionExclusionCategory[]>([]);
   const [exclusions, setExclusions] = useState<InclusionExclusionCategory[]>([]);
+  const [faqs, setFaqs] = useState<Array<{ id: string; question: string; answer: string }>>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [existingImages, setExistingImages] = useState<Array<{ public_id?: string; url: string; alt: string }>>([]);
   const [newImages, setNewImages] = useState<File[]>([]);
@@ -163,7 +164,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
         subtitle: packageData.subtitle || "",
         ideaFor: packageData.ideaFor || "",
         about: packageData.about || "",
-        services: packageData.services || "",
+        services: Array.isArray(packageData.services) ? packageData.services.join(', ') : (packageData.services || ""),
         tourDetails: packageData.tourDetails || "",
         abstract: packageData.abstract || "",
         tourOverview: packageData.tourOverview || "",
@@ -248,6 +249,14 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
       } else {
         setExclusions([{ id: "1", category: "", items: [""] }]);
       }
+
+      setFaqs(
+        packageData.faqs?.map((faq, index) => ({
+          id: `faq_${index}`,
+          question: faq.question || "",
+          answer: faq.answer || "",
+        })) || [{ id: "1", question: "", answer: "" }]
+      );
 
       setReviews(packageData.reviews || []);
 
@@ -561,35 +570,54 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
     fileInputRef.current?.click();
   };
 
+  const fileToBase64 = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = e => reject(e);
+    });
+
   const handleSubmit = async () => {
     try {
       setUploading(true);
 
       // Upload new images first if any
-      let uploadedNewImages = [];
+      let uploadedNewImages: Array<{ url: string; alt: string; public_id?: string }> = [];
       if (newImages.length > 0) {
         console.log('Uploading', newImages.length, 'new images to Cloudinary...');
-        const formData = new FormData();
-        newImages.forEach((file) => {
-          formData.append('images', file);
-        });
-
-        const uploadResponse = await fetch('/api/upload', {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (uploadResponse.ok) {
-          const uploadResult = await uploadResponse.json();
-          uploadedNewImages = uploadResult.data || [];
-        } else {
-          throw new Error('Failed to upload new images');
+        for (const file of newImages) {
+          try {
+            const base64 = await fileToBase64(file);
+            const uploadRes = await fetch('/api/upload', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ 
+                data: base64,
+                folder: 'skygo/packages'
+              })
+            });
+            
+            const uploadData = await uploadRes.json();
+            if (uploadRes.ok && uploadData.success) {
+              uploadedNewImages.push({ 
+                url: uploadData.url, 
+                alt: formData.title,
+                public_id: uploadData.public_id 
+              });
+            } else {
+              throw new Error(uploadData.error || 'Upload failed');
+            }
+          } catch (uploadError) {
+            console.error('Error uploading image:', uploadError);
+            throw new Error(`Failed to upload image ${file.name}: ${uploadError.message}`);
+          }
         }
       }
 
       // Validate required fields
-      if (!formData.title || !formData.subtitle || !formData.about || !formData.services || !formData.tourDetails || !formData.price || !formData.duration || !formData.location || !formData.capacity || !formData.packageType || !formData.place || !formData.packageCategory) {
-        alert('Please fill in all required fields including package type, category and place');
+      if (!formData.title || !formData.about || !formData.price || !formData.duration || !formData.place || !formData.packageType || !formData.packageCategory) {
+        alert('Please fill in all required fields including title, price, duration, place, type and category');
         return;
       }
 
@@ -602,6 +630,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
       // Prepare updated package data
       const updatedPackageData = {
         ...formData,
+        location: formData.place, // Sync location with place
         price: price,
         abstract: formData.abstract,
         tourOverview: formData.tourOverview,
@@ -641,6 +670,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
             category: item.category,
             items: item.items.filter(i => i.trim() !== "")
           })),
+        faqs: faqs.filter(f => f.question.trim() !== "").map(f => ({ question: f.question, answer: f.answer })),
         reviews: reviews.filter(review => review.name.trim() !== "" && review.comment.trim() !== ""),
         images: [...existingImages, ...uploadedNewImages, ...externalImageUrls.map(url => ({ url, alt: formData.title }))],
         isFeaturedDestination: formData.isFeaturedDestination,
@@ -1032,33 +1062,13 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
                 </SelectContent>
               </Select>
             </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Place *</label>
-              <Select value={formData.place} onValueChange={(value) => handleInputChange('place', value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select place" />
-                </SelectTrigger>
-                <SelectContent>
-                  {/* Domestic destinations */}
-                  <SelectItem value="darjeeling">Darjeeling</SelectItem>
-                  <SelectItem value="sikkim">Sikkim</SelectItem>
-                  <SelectItem value="meghalaya">Meghalaya</SelectItem>
-                  <SelectItem value="arunachal">Arunachal</SelectItem>
-                  <SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
-                  <SelectItem value="kashmir">Kashmir</SelectItem>
-                  <SelectItem value="leh-ladakh">Leh Ladakh</SelectItem>
-                  {/* International destinations */}
-                  <SelectItem value="vietnam">Vietnam</SelectItem>
-                  <SelectItem value="sri-lanka">Sri Lanka</SelectItem>
-                  <SelectItem value="bali">Bali</SelectItem>
-                  <SelectItem value="malaysia">Malaysia</SelectItem>
-                  <SelectItem value="singapore">Singapore</SelectItem>
-                  <SelectItem value="dubai">Dubai</SelectItem>
-                  <SelectItem value="oman">Oman</SelectItem>
-                  <SelectItem value="bhutan">Bhutan</SelectItem>
-                  <SelectItem value="nepal">Nepal</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="space-y-2 col-span-2">
+              <label className="text-sm font-medium">Place / Location *</label>
+              <Input 
+                placeholder="e.g. Darjeeling, West Bengal or Dubai, UAE" 
+                value={formData.place} 
+                onChange={(e) => handleInputChange('place', e.target.value)} 
+              />
             </div>
           </div>
 
@@ -1108,14 +1118,6 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
                 placeholder="e.g., 4N/5D"
                 value={formData.duration}
                 onChange={(e) => handleInputChange('duration', e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Location</label>
-              <Input
-                placeholder="e.g., Nepal"
-                value={formData.location}
-                onChange={(e) => handleInputChange('location', e.target.value)}
               />
             </div>
             <div className="space-y-2">
@@ -1742,10 +1744,30 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
             </div>
           </div>
 
-          {/* Reviews Section */}
-          <div className="space-y-4">
+          {/* FAQs */}
+          <div className="space-y-4 pt-8 border-t border-gray-100">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-700">Customer Reviews</h3>
+              <label className="text-sm font-bold uppercase tracking-tight text-gray-900 px-2">Frequently Asked Questions</label>
+              <Button type="button" variant="outline" size="sm" onClick={() => setFaqs(p => [...p, { id: Date.now().toString(), question: "", answer: "" }])} className="rounded-xl border-gray-200"><Plus className="h-4 w-4 mr-1" /> Add FAQ</Button>
+            </div>
+            {faqs.map((faq, i) => (
+              <Card key={faq.id} className="border-gray-100 rounded-3xl overflow-hidden shadow-sm">
+                <CardContent className="pt-6 space-y-4 bg-gray-50/10">
+                  <div className="flex items-center justify-between">
+                    <Badge variant="secondary" className="bg-gray-100 text-gray-500 font-bold uppercase text-[9px] tracking-widest px-3 py-1">FAQ {i + 1}</Badge>
+                    <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-red-500 hover:bg-red-50" onClick={() => setFaqs(p => p.filter(f => f.id !== faq.id))}><X className="h-4 w-4" /></Button>
+                  </div>
+                  <Input placeholder="Enter question..." value={faq.question} onChange={e => setFaqs(p => p.map(f => f.id === faq.id ? { ...f, question: e.target.value } : f))} className="border-gray-100 bg-white" />
+                  <Textarea placeholder="Enter answer..." value={faq.answer} onChange={e => setFaqs(p => p.map(f => f.id === faq.id ? { ...f, answer: e.target.value } : f))} rows={2} className="border-gray-100 bg-white" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Reviews Section */}
+          <div className="space-y-4 pt-8 border-t border-gray-100">
+            <div className="flex items-center justify-between px-2">
+              <h3 className="text-lg font-bold text-gray-900">Customer Reviews</h3>
               <Button
                 type="button"
                 variant="outline"

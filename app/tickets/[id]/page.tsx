@@ -26,6 +26,75 @@ import { motion } from "framer-motion";
 import { TicketData } from "@/lib/types";
 import { useInquiryForm } from "@/contexts/InquiryFormContext";
 
+const demoTickets = [
+    {
+        _id: 'demo-ticket-1',
+        title: 'Cape Town to Dubai – Premium Economy',
+        carrier: 'Emirates',
+        route: 'CPT → DXB',
+        price: 12500,
+        travelClass: 'Premium Economy',
+        departureTime: '23:30',
+        arrivalTime: '08:45 +1',
+        luggageAllowance: '2 x 23kg checked + 7kg cabin',
+        refundPolicy: 'Refundable with 15% fee before departure',
+        validity: '12 months from issue date',
+        location: 'Dubai, UAE',
+        images: [{ url: 'https://images.unsplash.com/photo-1436491865332-7a61a109c0f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Emirates Flight' }],
+        description: 'Direct overnight flight from Cape Town International to Dubai International. Wide seats, enhanced dining, and dedicated cabin service.',
+        isAvailable: true,
+        bookings: 0,
+        itinerary: [
+            { title: 'Check-in', description: 'Early boarding at Cape Town International (CPT).' },
+            { title: 'In-flight Dining', description: 'Three-course meal service with complimentary beverages.' },
+        ]
+    },
+    {
+        _id: 'demo-ticket-2',
+        title: 'Johannesburg to London Heathrow – Business Class',
+        carrier: 'South African Airways',
+        route: 'JNB → LHR',
+        price: 38000,
+        travelClass: 'Business',
+        departureTime: '18:15',
+        arrivalTime: '07:30 +1',
+        luggageAllowance: '3 x 32kg checked + 18kg cabin',
+        refundPolicy: 'Fully refundable up to 24 hours before departure',
+        validity: '12 months from issue date',
+        location: 'London, United Kingdom',
+        images: [{ url: 'https://images.unsplash.com/photo-1542296332-2e4473faf563?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Business Class Flight' }],
+        description: 'Non-stop overnight service from OR Tambo to London Heathrow. Lie-flat seats, premium dining, and exclusive lounge access at both airports.',
+        isAvailable: true,
+        bookings: 0,
+        itinerary: [
+             { title: 'Lounge Access', description: 'Priority check-in and access to the departure lounge in JNB.' },
+             { title: 'Sleeper Service', description: 'Flat-bed seat setup for a restful overnight journey.' },
+        ]
+    },
+    {
+        _id: 'demo-ticket-3',
+        title: 'Durban to Cape Town – Economy Saver',
+        carrier: 'Airlink',
+        route: 'DUR → CPT',
+        price: 1800,
+        travelClass: 'Economy',
+        departureTime: '06:00',
+        arrivalTime: '08:10',
+        luggageAllowance: '1 x 20kg checked + 7kg cabin',
+        refundPolicy: 'Non-refundable, name change allowed once',
+        validity: '3 months from issue date',
+        location: 'Cape Town, South Africa',
+        images: [{ url: 'https://images.unsplash.com/photo-1587019158091-1a103c5dd17f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Domestic Flight' }],
+        description: 'Quick and affordable domestic flight from King Shaka International in Durban to Cape Town International. Perfect for early morning arrivals.',
+        isAvailable: true,
+        bookings: 0,
+        itinerary: [
+            { title: 'Departure', description: 'Early morning flight from Durban (DUR).' },
+            { title: 'Arrival', description: 'Direct flight into the heart of Cape Town.' },
+        ]
+    },
+] as unknown as TicketData[];
+
 const TicketDetailPage = () => {
     const params = useParams();
     const router = useRouter();
@@ -35,6 +104,17 @@ const TicketDetailPage = () => {
 
     const fetchTicket = useCallback(async () => {
         if (!params?.id) return;
+
+        // Check for demo data first
+        if (typeof params.id === 'string' && params.id.startsWith('demo-')) {
+            const demo = demoTickets.find(t => t._id === params.id);
+            if (demo) {
+                setTicketData(demo);
+                setLoading(false);
+                return;
+            }
+        }
+
         try {
             setLoading(true);
             const response = await fetch(`/api/tickets/${params.id}`);
@@ -266,6 +346,27 @@ const TicketDetailPage = () => {
                                 </ul>
                             </div>
                         </div>
+
+                        {/* Experience Schedule / Itinerary */}
+                        {ticketData.itinerary && ticketData.itinerary.length > 0 && (
+                            <div className="bg-white p-12 rounded-[40px] border border-gray-100 shadow-lg">
+                                <h3 className="text-2xl font-black text-gray-900 mb-8 flex items-center gap-4 uppercase tracking-tighter">
+                                    <div className="p-3 bg-gray-50 rounded-2xl">
+                                        <Calendar className="h-6 w-6 text-gray-400" />
+                                    </div>
+                                    Experience Schedule
+                                </h3>
+                                <div className="space-y-6">
+                                    {ticketData.itinerary.map((item, idx) => (
+                                        <div key={idx} className="relative pl-10 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-1 before:bg-amber-500/20 before:rounded-full">
+                                            <div className="absolute left-[-6px] top-2 h-4 w-4 bg-amber-500 rounded-full border-4 border-white shadow-sm" />
+                                            <h4 className="text-lg font-black text-gray-900 uppercase tracking-tight mb-2">{item.title}</h4>
+                                            <p className="text-gray-500 text-sm font-bold uppercase tracking-tight leading-relaxed italic">{item.description}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
 
                         {/* About Section */}
                         <div className="bg-white p-12 rounded-[40px] border border-gray-100 shadow-lg">

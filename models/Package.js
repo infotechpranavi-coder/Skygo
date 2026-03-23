@@ -185,14 +185,6 @@ const PackageSchema = new mongoose.Schema({
   place: {
     type: String,
     required: true,
-    enum: [
-      // Domestic destinations
-      'darjeeling', 'sikkim', 'meghalaya', 'arunachal', 'himachal-pradesh', 'kashmir', 'leh-ladakh',
-      // International destinations
-      'vietnam', 'sri-lanka', 'bali', 'malaysia', 'singapore', 'dubai', 'oman',
-      // Legacy destinations (keeping for backward compatibility)
-      'bhutan', 'nepal'
-    ],
   },
   packageCategory: {
     type: String,
@@ -213,6 +205,10 @@ const PackageSchema = new mongoose.Schema({
     default: [],
   },
   reviews: [ReviewSchema],
+  faqs: [{
+    question: String,
+    answer: String,
+  }],
   bookings: {
     type: Number,
     default: 0,

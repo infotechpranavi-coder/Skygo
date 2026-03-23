@@ -37,9 +37,54 @@ interface Package {
     rating: number;
 }
 
+const demoTours = [
+    {
+        _id: 'demo-tour-1',
+        title: 'Cape Winelands Explorer',
+        subtitle: 'Full Day Wine & Scenery Tour from Cape Town',
+        about: 'Journey through the lush Winelands of Stellenbosch, Franschhoek, and Paarl. Visit award-winning estates, taste world-class wines, and enjoy stunning mountain scenery.',
+        price: 1800,
+        duration: '1 Day',
+        location: 'Cape Town, South Africa',
+        capacity: '2–12 Guests',
+        packageCategory: 'Cultural',
+        images: [{ url: 'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Winelands' }],
+        bookings: 0,
+        rating: 4.9,
+    },
+    {
+        _id: 'demo-tour-2',
+        title: 'Boulders Beach Penguins & Cape of Good Hope',
+        subtitle: 'Full Day Cape Peninsula Tour',
+        about: 'Explore the iconic Cape Peninsula. Visit the Cape of Good Hope and encounter the famous African Penguins at Boulders Beach up close.',
+        price: 2200,
+        duration: '1 Day',
+        location: 'Cape Peninsula, South Africa',
+        capacity: '2–8 Guests',
+        packageCategory: 'Wildlife',
+        images: [{ url: 'https://images.unsplash.com/photo-1572198270420-2e5c1a71f8e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape of Good Hope' }],
+        bookings: 0,
+        rating: 4.8,
+    },
+    {
+        _id: 'demo-tour-3',
+        title: 'Kruger Safari – Big Five Experience',
+        subtitle: '2-Day Safari Adventure near Kruger National Park',
+        about: 'Encounter the Big Five — lion, leopard, elephant, buffalo, and rhino — in their natural habitat with a professional guide on an open 4x4 vehicle.',
+        price: 8500,
+        duration: '2 Days',
+        location: 'Mpumalanga, South Africa',
+        capacity: '2–6 Guests',
+        packageCategory: 'Wildlife',
+        images: [{ url: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Kruger Safari' }],
+        bookings: 0,
+        rating: 5.0,
+    },
+] as unknown as Package[];
+
 const ToursPage = () => {
-    const [packages, setPackages] = useState<Package[]>([]);
-    const [filteredPackages, setFilteredPackages] = useState<Package[]>([]);
+    const [packages, setPackages] = useState<Package[]>(demoTours);
+    const [filteredPackages, setFilteredPackages] = useState<Package[]>(demoTours);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [priceFilter, setPriceFilter] = useState("all");
@@ -58,11 +103,15 @@ const ToursPage = () => {
         try {
             const response = await fetch('/api/tours');
             const result = await response.json();
-            if (result.success) {
+            if (result.success && result.data && result.data.length > 0) {
                 setPackages(result.data);
+            } else {
+                // Fallback to demo data if DB returns nothing
+                setPackages(demoTours);
             }
         } catch (error) {
             console.error('Error fetching tours:', error);
+            setPackages(demoTours);
         } finally {
             setLoading(false);
         }
@@ -99,7 +148,7 @@ const ToursPage = () => {
         }).format(price);
     };
 
-    if (loading) {
+    if (loading && packages.length === 0) {
         return (
             <div className="min-h-screen bg-white flex items-center justify-center">
                 <div className="text-center">

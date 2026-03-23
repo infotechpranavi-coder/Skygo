@@ -56,6 +56,8 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
     bestTimeToVisit: { yearRound: "", winter: "", summer: "" },
     isFeaturedDestination: false,
     isPopularPackage: false,
+    transportation: [] as Array<{ type: string; vehicle: string; description: string }>,
+    accommodation: [] as Array<{ city: string; hotel: string; rooms: string; roomType: string; nights: string }>,
   });
 
   const [keyHighlights, setKeyHighlights] = useState<string[]>([""]);
@@ -70,6 +72,9 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
   ]);
   const [exclusions, setExclusions] = useState<InclusionExclusionCategory[]>([
     { id: "1", category: "General", items: ["International airfare", "Visa fees", "Personal expenses"] }
+  ]);
+  const [faqs, setFaqs] = useState<Array<{ id: string; question: string; answer: string }>>([
+    { id: "1", question: "Is this tour suitable for families with children?", answer: "Yes, all experiences are family-friendly and can be tailored to suit the needs of families with children." }
   ]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [images, setImages] = useState<File[]>([]);
@@ -127,18 +132,20 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
       // 2. Build payload
       const payload = {
         ...formData,
+        location: formData.place, // Use place as location to sync both fields
         price: parseFloat(formData.price as string),
         keyHighlights: keyHighlights.filter(h => h.trim()),
         hotelOptions: hotelOptions.filter(h => h.trim()),
         whyChooseThisTrip: whyChooseThisTrip.filter(w => w.trim()),
-        whyPremiumDubaiTours: whyPremiumDubaiTours.filter(w => w.trim()),
+        whyPremiumSkygoTours: whyPremiumDubaiTours.filter(w => w.trim()),
         itinerary: itinerary.map(d => ({ day: d.day, title: d.title, description: d.description })),
         inclusions: inclusions.map(inc => ({ category: inc.category, items: inc.items.filter(i => i.trim()) })),
         exclusions: exclusions.map(exc => ({ category: exc.category, items: exc.items.filter(i => i.trim()) })),
+        faqs: faqs.filter(f => f.question.trim() !== "").map(f => ({ question: f.question, answer: f.answer })),
         reviews,
         images: uploadedImages,
-        transportation: [],
-        accommodation: [],
+        transportation: formData.transportation,
+        accommodation: formData.accommodation,
         isPopularPackage: formData.isPopularPackage,
         bookings: 0,
         rating: 0,
@@ -175,6 +182,8 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
       bestTimeToVisit: { yearRound: "", winter: "", summer: "" },
       isFeaturedDestination: false,
       isPopularPackage: false,
+      transportation: [],
+      accommodation: [],
     });
     setKeyHighlights([""]);
     setHotelOptions(["Deluxe Package: 3★ hotels", "Gold Package: 4★ hotels", "Platinum Package: 5★ hotels"]);
@@ -183,6 +192,8 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
     setItinerary([{ id: "1", day: 1, title: "Arrival & Transfer", description: "Greeting at airport. Private transfer to hotel. Evening at leisure." }]);
     setInclusions([{ id: "1", category: "General", items: ["Airport transfers", "Daily breakfast"] }]);
     setExclusions([{ id: "1", category: "General", items: ["International airfare", "Visa fees"] }]);
+    setFaqs([{ id: "1", question: "Is this tour suitable for families with children?", answer: "Yes, all experiences are family-friendly." }]);
+    setFormData(prev => ({ ...prev, transportation: [], accommodation: [] }));
     setReviews([]);
     setImages([]);
     setExternalImageUrls([]);
@@ -239,28 +250,13 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
                 </SelectContent>
               </Select>
             </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Place *</label>
-              <Select value={formData.place} onValueChange={v => handleInputChange('place', v)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="darjeeling">Darjeeling</SelectItem>
-                  <SelectItem value="sikkim">Sikkim</SelectItem>
-                  <SelectItem value="meghalaya">Meghalaya</SelectItem>
-                  <SelectItem value="kashmir">Kashmir</SelectItem>
-                  <SelectItem value="leh-ladakh">Leh Ladakh</SelectItem>
-                  <SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
-                  <SelectItem value="dubai">Dubai</SelectItem>
-                  <SelectItem value="oman">Oman</SelectItem>
-                  <SelectItem value="bhutan">Bhutan</SelectItem>
-                  <SelectItem value="nepal">Nepal</SelectItem>
-                  <SelectItem value="vietnam">Vietnam</SelectItem>
-                  <SelectItem value="sri-lanka">Sri Lanka</SelectItem>
-                  <SelectItem value="bali">Bali</SelectItem>
-                  <SelectItem value="malaysia">Malaysia</SelectItem>
-                  <SelectItem value="singapore">Singapore</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="space-y-2 col-span-2">
+              <label className="text-sm font-medium">Place / Location *</label>
+              <Input 
+                placeholder="e.g. Darjeeling, West Bengal or Dubai, UAE" 
+                value={formData.place} 
+                onChange={e => handleInputChange('place', e.target.value)} 
+              />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium">Category *</label>
@@ -321,10 +317,6 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
             </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Location</label>
-            <Input placeholder="e.g. Dubai, UAE" value={formData.location} onChange={e => handleInputChange('location', e.target.value)} />
-          </div>
 
           <div className="space-y-2">
             <label className="text-sm font-medium">Idea For</label>
@@ -479,6 +471,52 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
             ))}
           </div>
 
+          {/* Transportation */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium">Transportation</label>
+              <Button type="button" variant="outline" size="sm" onClick={() => setFormData(p => ({ ...p, transportation: [...p.transportation, { type: "", vehicle: "", description: "" }] }))}><Plus className="h-4 w-4 mr-1" /> Add Transport</Button>
+            </div>
+            {formData.transportation.map((t, i) => (
+              <Card key={i}>
+                <CardContent className="pt-4 space-y-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <Input placeholder="Type (e.g. Private Transfer)" value={t.type} onChange={e => setFormData(p => ({ ...p, transportation: p.transportation.map((x, j) => j === i ? { ...x, type: e.target.value } : x) }))} />
+                    <Input placeholder="Vehicle (e.g. Luxury SUV)" value={t.vehicle} onChange={e => setFormData(p => ({ ...p, transportation: p.transportation.map((x, j) => j === i ? { ...x, vehicle: e.target.value } : x) }))} />
+                  </div>
+                  <div className="flex gap-2">
+                    <Input placeholder="Description" value={t.description} onChange={e => setFormData(p => ({ ...p, transportation: p.transportation.map((x, j) => j === i ? { ...x, description: e.target.value } : x) }))} />
+                    <Button variant="ghost" size="icon" onClick={() => setFormData(p => ({ ...p, transportation: p.transportation.filter((_, j) => j !== i) }))}><X className="h-4 w-4 text-red-500" /></Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Accommodation */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium">Accommodation</label>
+              <Button type="button" variant="outline" size="sm" onClick={() => setFormData(p => ({ ...p, accommodation: [...p.accommodation, { city: "", hotel: "", rooms: "", roomType: "", nights: "" }] }))}><Plus className="h-4 w-4 mr-1" /> Add Hotel</Button>
+            </div>
+            {formData.accommodation.map((a, i) => (
+              <Card key={i}>
+                <CardContent className="pt-4 space-y-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <Input placeholder="City" value={a.city} onChange={e => setFormData(p => ({ ...p, accommodation: p.accommodation.map((x, j) => j === i ? { ...x, city: e.target.value } : x) }))} />
+                    <Input placeholder="Hotel" value={a.hotel} onChange={e => setFormData(p => ({ ...p, accommodation: p.accommodation.map((x, j) => j === i ? { ...x, hotel: e.target.value } : x) }))} />
+                  </div>
+                  <div className="grid grid-cols-3 gap-3">
+                    <Input placeholder="Rooms" value={a.rooms} onChange={e => setFormData(p => ({ ...p, accommodation: p.accommodation.map((x, j) => j === i ? { ...x, rooms: e.target.value } : x) }))} />
+                    <Input placeholder="Room Type" value={a.roomType} onChange={e => setFormData(p => ({ ...p, accommodation: p.accommodation.map((x, j) => j === i ? { ...x, roomType: e.target.value } : x) }))} />
+                    <Input placeholder="Nights" value={a.nights} onChange={e => setFormData(p => ({ ...p, accommodation: p.accommodation.map((x, j) => j === i ? { ...x, nights: e.target.value } : x) }))} />
+                  </div>
+                  <Button className="w-full text-red-500" variant="ghost" onClick={() => setFormData(p => ({ ...p, accommodation: p.accommodation.filter((_, j) => j !== i) }))}>Remove Hotel</Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
           {/* Images */}
           <div className="space-y-4">
             <label className="text-sm font-medium">Package Images (Max 5)</label>
@@ -517,6 +555,26 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
                 </div>
               )}
             </div>
+          </div>
+
+          {/* FAQs */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium">Frequently Asked Questions</label>
+              <Button type="button" variant="outline" size="sm" onClick={() => setFaqs(p => [...p, { id: Date.now().toString(), question: "", answer: "" }])}><Plus className="h-4 w-4 mr-1" /> Add FAQ</Button>
+            </div>
+            {faqs.map((faq, i) => (
+              <Card key={faq.id}>
+                <CardContent className="pt-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold uppercase text-gray-400">FAQ {i + 1}</span>
+                    <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setFaqs(p => p.filter(f => f.id !== faq.id))}><X className="h-3 w-3 text-red-500" /></Button>
+                  </div>
+                  <Input placeholder="Question" value={faq.question} onChange={e => setFaqs(p => p.map(f => f.id === faq.id ? { ...f, question: e.target.value } : f))} />
+                  <Textarea placeholder="Answer" value={faq.answer} onChange={e => setFaqs(p => p.map(f => f.id === faq.id ? { ...f, answer: e.target.value } : f))} rows={2} />
+                </CardContent>
+              </Card>
+            ))}
           </div>
 
           {/* Reviews */}

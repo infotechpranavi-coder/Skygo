@@ -96,7 +96,7 @@ const HeroExplore = ({ initialBanners }: HeroExploreProps) => {
     <section
       id="hero"
       ref={sectionRef}
-      className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-[#faf8f3]"
+      className="relative min-h-[110vh] flex items-center justify-center overflow-hidden bg-[#faf8f3]"
     >
       {/* Background Images with AnimatePresence */}
       <div className="absolute inset-0 z-0">
@@ -120,9 +120,9 @@ const HeroExplore = ({ initialBanners }: HeroExploreProps) => {
                 quality={90}
               />
               {/* Overlay for readability */}
-              <div className="absolute inset-0 bg-black/40"></div>
+              <div className="absolute inset-0 bg-black/25"></div>
               {/* Vertical Gradient for depth */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10"></div>
             </div>
           </motion.div>
         </AnimatePresence>
@@ -158,7 +158,7 @@ const HeroExplore = ({ initialBanners }: HeroExploreProps) => {
               ))}
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-24">
               <Button
                 onClick={() => currentBanner.link ? router.push(currentBanner.link) : openForm()}
                 size="lg"

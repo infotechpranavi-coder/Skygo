@@ -9,7 +9,7 @@ import {
     MapPin, Clock, Star, Calendar, Phone,
     CheckCircle, Globe, Heart, Share,
     ShieldCheck, ArrowRight, ChevronLeft,
-    Compass, Mountain, Award
+    Compass, Mountain, Award, Info
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -28,6 +28,69 @@ const inter = Inter({
     variable: '--font-inter',
 });
 
+const demoTours = [
+    {
+        _id: 'demo-tour-1',
+        title: 'Cape Winelands Explorer',
+        subtitle: 'Full Day Wine & Scenery Tour from Cape Town',
+        about: 'Journey through the lush Winelands of Stellenbosch, Franschhoek, and Paarl. Visit award-winning estates, taste world-class wines, and enjoy stunning mountain scenery.',
+        price: 1800,
+        duration: '1 Day',
+        location: 'Cape Town, South Africa',
+        capacity: '2–12 Guests',
+        tourType: 'Cultural',
+        images: [{ url: 'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape Winelands' }],
+        bookings: 0,
+        rating: 4.9,
+        itinerary: [
+            { day: 1, title: 'Departure & Stellenbosch', description: 'Depart from Cape Town city center. First stop at a historic Stellenbosch wine estate for a cellar tour and private tasting session.' },
+            { day: 1, title: 'Franschhoek Lunch', description: 'Head to the culinary capital of the Winelands. Explore the charming streets and enjoy lunch at a boutique bistro.' },
+        ],
+        inclusions: ['Professional Guide', 'Wine Tastings', 'Transport', 'Lunch'],
+        highlights: ['Historic Architecture', 'Valley Views', 'World-class Vintages'],
+    },
+    {
+        _id: 'demo-tour-2',
+        title: 'Boulders Beach Penguins & Cape of Good Hope',
+        subtitle: 'Full Day Cape Peninsula Tour',
+        about: 'Explore the iconic Cape Peninsula. Visit the Cape of Good Hope and encounter the famous African Penguins at Boulders Beach up close.',
+        price: 2200,
+        duration: '1 Day',
+        location: 'Cape Peninsula, South Africa',
+        capacity: '2–8 Guests',
+        tourType: 'Wildlife',
+        images: [{ url: 'https://images.unsplash.com/photo-1572198270420-2e5c1a71f8e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Cape of Good Hope' }],
+        bookings: 0,
+        rating: 4.8,
+        itinerary: [
+            { day: 1, title: 'Coastal Drive', description: 'Cruise along Chapman\'s Peak Drive, one of the world\'s most breathtaking coastal roads.' },
+            { day: 1, title: 'Cape Point Nature Reserve', description: 'Explore the reserve, ride the funicular to the lighthouse, and stand at the edge of the continent.' },
+        ],
+        inclusions: ['Expert Ranger', 'Entry Fees', 'Bottled Water'],
+        highlights: ['African Penguins', 'Cliffs & Ocean Views', 'Scenic Drive'],
+    },
+    {
+        _id: 'demo-tour-3',
+        title: 'Kruger Safari – Big Five Experience',
+        subtitle: '2-Day Safari Adventure near Kruger National Park',
+        about: 'Encounter the Big Five — lion, leopard, elephant, buffalo, and rhino — in their natural habitat with a professional guide on an open 4x4 vehicle.',
+        price: 8500,
+        duration: '2 Days',
+        location: 'Mpumalanga, South Africa',
+        capacity: '2–6 Guests',
+        tourType: 'Wildlife',
+        images: [{ url: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Kruger Safari' }],
+        bookings: 0,
+        rating: 5.0,
+        itinerary: [
+            { day: 1, title: 'Arrival & Sundowner Drive', description: 'Check into the lodge. Afternoon game drive in the reserve followed by a traditional bush dinner.' },
+            { day: 2, title: 'Dawn Game Drive', description: 'Early morning drive for the best chance to spot the big cats. Return for brunch before departure.' },
+        ],
+        inclusions: ['Lodge Stay', 'Safari Drives', 'All Meals', 'Expert Ranger'],
+        highlights: ['Big Five Sightings', 'Luxury Tents', 'Night Safari'],
+    },
+] as unknown as TourData[];
+
 const TourDetailPage = () => {
     const params = useParams();
     const router = useRouter();
@@ -38,6 +101,17 @@ const TourDetailPage = () => {
 
     const fetchTour = useCallback(async () => {
         if (!params?.id) return;
+        
+        // Check for demo data first
+        if (typeof params.id === 'string' && params.id.startsWith('demo-')) {
+            const demo = demoTours.find(t => t._id === params.id);
+            if (demo) {
+                setTourData(demo);
+                setLoading(false);
+                return;
+            }
+        }
+
         try {
             setLoading(true);
             const response = await fetch(`/api/tours/${params.id}`);
@@ -254,6 +328,46 @@ const TourDetailPage = () => {
                                 ))}
                             </div>
                         </section>
+
+                        {/* Highlights */}
+                        {tourData.highlights && tourData.highlights.length > 0 && (
+                            <section className="bg-white p-10 md:p-14 rounded-[48px] shadow-sm border border-gray-100">
+                                <h2 className="text-3xl font-black text-gray-900 mb-8 uppercase tracking-tighter flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center">
+                                        <Star className="h-6 w-6 text-amber-500" />
+                                    </div>
+                                    Tour Highlights
+                                </h2>
+                                <div className="grid md:grid-cols-2 gap-4">
+                                    {tourData.highlights.map((highlight, idx) => (
+                                        <div key={idx} className="flex items-start gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                                            <CheckCircle className="h-5 w-5 text-[#bd9245] mt-0.5" />
+                                            <span className="text-gray-600 font-bold text-sm uppercase tracking-tight">{highlight}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
+
+                        {/* Exclusions */}
+                        {tourData.exclusions && tourData.exclusions.length > 0 && (
+                            <section className="bg-white p-10 md:p-14 rounded-[48px] shadow-sm border border-gray-100">
+                                <h2 className="text-3xl font-black text-gray-900 mb-8 uppercase tracking-tighter flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center">
+                                        <Info className="h-6 w-6 text-red-500" />
+                                    </div>
+                                    Exclusions
+                                </h2>
+                                <div className="grid md:grid-cols-2 gap-4">
+                                    {tourData.exclusions.map((exclusion, idx) => (
+                                        <div key={idx} className="flex items-start gap-3 p-4 bg-red-50/30 rounded-2xl border border-red-50">
+                                            <div className="h-1.5 w-1.5 bg-red-400 rounded-full mt-2 shrink-0" />
+                                            <span className="text-gray-600 font-bold text-sm uppercase tracking-tight">{exclusion}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
 
                         {/* Trusted Badges */}
                         <div className="flex flex-wrap items-center justify-center gap-12 py-10 opacity-30 grayscale contrast-125">

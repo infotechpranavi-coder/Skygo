@@ -19,7 +19,10 @@ import PackageDetailModal from "../../components/PackageDetailModal";
 import EditPackageModal from "../../components/EditPackageModal";
 import CreateBannerModal from "../../components/CreateBannerModal";
 import EditBannerModal from "../../components/EditBannerModal";
+import CreateBlogModal from "../../components/CreateBlogModal";
+import EditBlogModal from "../../components/EditBlogModal";
 import CreateTestimonialModal from "../../components/CreateTestimonialModal";
+import EditTestimonialModal from "../../components/EditTestimonialModal";
 import ReplyEnquiryModal from "../../components/ReplyEnquiryModal";
 import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType, HeadingLevel, ImageRun } from 'docx';
 import { saveAs } from 'file-saver';
@@ -53,7 +56,7 @@ import { Input } from "../../components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 import { cn } from "../../lib/utils";
 
-import { PackageData, TourData, TicketData, BannerData } from "@/lib/types";
+import { PackageData, TourData, TicketData, BannerData, BlogData } from "@/lib/types";
 
 type DashboardView = 'packages' | 'tours' | 'tickets' | 'banners' | 'testimonials' | 'blogs' | 'enquiries' | 'reports';
 
@@ -70,12 +73,14 @@ export default function DashboardPage() {
   const [isCreateBannerModalOpen, setIsCreateBannerModalOpen] = useState(false);
   const [isEditBannerModalOpen, setIsEditBannerModalOpen] = useState(false);
   const [isCreateTestimonialModalOpen, setIsCreateTestimonialModalOpen] = useState(false);
+  const [isEditTestimonialModalOpen, setIsEditTestimonialModalOpen] = useState(false);
   const [isReplyModalOpen, setIsReplyModalOpen] = useState(false);
   const [selectedEnquiry, setSelectedEnquiry] = useState<any | null>(null);
   const [selectedPackage, setSelectedPackage] = useState<PackageData | null>(null);
   const [selectedTour, setSelectedTour] = useState<TourData | null>(null);
   const [selectedTicket, setSelectedTicket] = useState<TicketData | null>(null);
   const [selectedBanner, setSelectedBanner] = useState<BannerData | null>(null);
+  const [selectedTestimonial, setSelectedTestimonial] = useState<any | null>(null);
   const [packages, setPackages] = useState<PackageData[]>([]);
   const [tours, setTours] = useState<TourData[]>([]);
   const [tickets, setTickets] = useState<TicketData[]>([]);
@@ -89,6 +94,14 @@ export default function DashboardPage() {
   const [placeFilter, setPlaceFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [reportModule, setReportModule] = useState<DashboardView>('packages');
+  const [seedingTours, setSeedingTours] = useState(false);
+  const [seedingTickets, setSeedingTickets] = useState(false);
+  const [seedingBanners, setSeedingBanners] = useState(false);
+  const [seedingBlogs, setSeedingBlogs] = useState(false);
+  const [blogs, setBlogs] = useState<BlogData[]>([]);
+  const [selectedBlog, setSelectedBlog] = useState<BlogData | null>(null);
+  const [isCreateBlogModalOpen, setIsCreateBlogModalOpen] = useState(false);
+  const [isEditBlogModalOpen, setIsEditBlogModalOpen] = useState(false);
 
   const fetchPackages = async () => {
     try {
@@ -126,6 +139,9 @@ export default function DashboardPage() {
 
   const fetchTours = async () => {
     try {
+      // Auto-seed if empty
+      await fetch('/api/tours/seed', { method: 'POST' });
+      
       const response = await fetch('/api/tours');
       const data = await response.json();
       if (data.success) setTours(data.data);
@@ -136,6 +152,9 @@ export default function DashboardPage() {
 
   const fetchTickets = async () => {
     try {
+      // Auto-seed if empty
+      await fetch('/api/tickets/seed', { method: 'POST' });
+
       const response = await fetch('/api/tickets');
       const data = await response.json();
       if (data.success) setTickets(data.data);
@@ -146,6 +165,9 @@ export default function DashboardPage() {
 
   const fetchBanners = async () => {
     try {
+      // Auto-seed if empty
+      await fetch('/api/banners/seed', { method: 'POST' });
+
       const response = await fetch('/api/banners');
       const data = await response.json();
       if (data.success) setBanners(data.data);
@@ -174,6 +196,91 @@ export default function DashboardPage() {
     }
   };
 
+  const fetchBlogs = async () => {
+    try {
+      // Auto-seed if empty
+      await fetch('/api/blogs/seed', { method: 'POST' });
+
+      const response = await fetch('/api/blogs');
+      const data = await response.json();
+      if (data.success) setBlogs(data.data);
+    } catch (error) {
+      console.error('Error fetching blogs:', error);
+    }
+  };
+
+  const handleSeedTours = async () => {
+    setSeedingTours(true);
+    try {
+      const res = await fetch('/api/tours/seed', { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        alert(`✅ Sample tours added: ${data.results.created} created, ${data.results.skipped} already existed.`);
+        await fetchTours();
+      } else {
+        alert('❌ Failed to seed tours: ' + (data.error || 'Unknown error'));
+      }
+    } catch (err) {
+      alert('❌ Error seeding tours. Please try again.');
+    } finally {
+      setSeedingTours(false);
+    }
+  };
+
+  const handleSeedTickets = async () => {
+    setSeedingTickets(true);
+    try {
+      const res = await fetch('/api/tickets/seed', { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        alert(`✅ Sample tickets added: ${data.results.created} created, ${data.results.skipped} already existed.`);
+        await fetchTickets();
+      } else {
+        alert('❌ Failed to seed tickets: ' + (data.error || 'Unknown error'));
+      }
+    } catch (err) {
+      alert('❌ Error seeding tickets. Please try again.');
+    } finally {
+      setSeedingTickets(false);
+    }
+  };
+
+  const handleSeedBanners = async () => {
+    setSeedingBanners(true);
+    try {
+      const res = await fetch('/api/banners/seed', { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        alert(`✅ Sample banners added: ${data.results.created} created, ${data.results.skipped} already existed.`);
+        await fetchBanners();
+      } else {
+        alert('❌ Failed to seed banners: ' + (data.error || 'Unknown error'));
+      }
+    } catch (err) {
+      alert('❌ Error seeding banners. Please try again.');
+    } finally {
+      setSeedingBanners(false);
+    }
+  };
+
+  const handleSeedBlogs = async () => {
+    setSeedingBlogs(true);
+    try {
+      const res = await fetch('/api/blogs/seed', { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        alert(`✅ Sample blogs added: ${data.results.created} created, ${data.results.skipped} already existed.`);
+        await fetchBlogs();
+      } else {
+        alert('❌ Failed to seed blogs: ' + (data.error || 'Unknown error'));
+      }
+    } catch (err) {
+      alert('❌ Error seeding blogs. Please try again.');
+    } finally {
+      setSeedingBlogs(false);
+    }
+  };
+
   useEffect(() => {
     fetchPackages();
     fetchTours();
@@ -181,6 +288,7 @@ export default function DashboardPage() {
     fetchBanners();
     fetchEnquiries();
     fetchTestimonials();
+    fetchBlogs();
   }, []);
 
   useEffect(() => {
@@ -257,6 +365,31 @@ export default function DashboardPage() {
     setIsCreateTestimonialModalOpen(false);
   };
 
+  const handleEditTestimonial = (testimonial: any) => {
+    setSelectedTestimonial(testimonial);
+    setIsEditTestimonialModalOpen(true);
+  };
+
+  const handleTestimonialUpdated = (updatedTestimonial: any) => {
+    setTestimonials(prev => prev.map(t => t._id === updatedTestimonial._id ? updatedTestimonial : t));
+    setSelectedTestimonial(null);
+    setIsEditTestimonialModalOpen(false);
+  };
+
+  const handleDeleteTestimonial = async (testimonial: any) => {
+    if (window.confirm(`Are you sure you want to delete feedback from "${testimonial.name}"?`)) {
+      try {
+        const res = await fetch(`/api/testimonials/${testimonial._id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.success) {
+          setTestimonials(prev => prev.filter(t => t._id !== testimonial._id));
+        }
+      } catch (err) {
+        console.error('Error deleting testimonial:', err);
+      }
+    }
+  };
+
   const handleDeleteTour = async (tour: TourData) => {
     if (window.confirm(`Are you sure you want to delete tour "${tour.title}"?`)) {
       try {
@@ -296,6 +429,19 @@ export default function DashboardPage() {
       } catch (err) {
         console.error('Error deleting banner:', err);
       }
+    }
+  };
+
+  const handleDeleteBlog = async (blog: BlogData) => {
+    if (!confirm(`Are you sure you want to delete "${blog.title}"?`)) return;
+    try {
+      const res = await fetch(`/api/blogs/${blog._id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        setBlogs(prev => prev.filter(b => b._id !== blog._id));
+      }
+    } catch (err) {
+      alert('Failed to delete blog narrative');
     }
   };
 
@@ -1116,11 +1262,11 @@ export default function DashboardPage() {
       label: 'Customer Enquiries',
       icon: MessageSquare,
     },
-    {
-      id: 'reports' as DashboardView,
-      label: 'Reports',
-      icon: TrendingUp,
-    }
+    // {
+    //   id: 'reports' as DashboardView,
+    //   label: 'Reports',
+    //   icon: TrendingUp,
+    // }
   ];
 
   return (
@@ -1278,25 +1424,40 @@ export default function DashboardPage() {
           {activeView === 'packages' && (
             <div className="container mx-auto px-8 py-10 space-y-10">
               {/* Quick Stats */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {[
                   { label: 'Total Packages', value: packages.length, icon: Package, color: 'text-blue-600', bg: 'bg-blue-50' },
-                  { label: 'Active Bookings', value: packages.reduce((sum, p) => sum + (p.bookings || 0), 0), icon: Users, color: 'text-[#bd9245]', bg: 'bg-[#bd9245]/10' },
-                  { label: 'Avg Rating', value: packages.length > 0 ? (packages.reduce((sum, p) => sum + (p.rating || 0), 0) / packages.length).toFixed(1) : '0.0', icon: Star, color: 'text-orange-500', bg: 'bg-orange-50' },
-                  { label: 'Regional Coverage', value: '4 Districts', icon: MapPin, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                  {
+                    label: 'Enquiries Received',
+                    value: enquiries.length,
+                    icon: MessageSquare,
+                    color: 'text-[#bd9245]',
+                    bg: 'bg-[#bd9245]/10'
+                  },
+                  {
+                    label: 'Avg Rating',
+                    value: packages.length > 0
+                      ? (packages.reduce((sum, p) => sum + (p.rating || 0), 0) / packages.length).toFixed(1)
+                      : '0.0',
+                    icon: Star,
+                    color: 'text-orange-500',
+                    bg: 'bg-orange-50'
+                  },
                 ].map((stat, i) => (
-                  <Card key={i} className="rounded-[32px] border-white shadow-sm p-6 hover:shadow-md transition-shadow">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center", stat.bg)}>
-                        <stat.icon className={cn("h-6 w-6", stat.color)} />
+                  <Card key={i} className="rounded-[40px] border-none shadow-sm p-10 hover:shadow-md transition-all duration-500 bg-white/80 backdrop-blur-sm group">
+                    <div className="flex items-center justify-between mb-8">
+                      <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 duration-500", stat.bg)}>
+                        <stat.icon className={cn("h-7 w-7", stat.color)} />
                       </div>
-                      <div className="flex items-center gap-1 text-emerald-500 bg-emerald-50 px-2 py-1 rounded-lg">
-                        <TrendingUp className="h-3 w-3" />
-                        <span className="text-[10px] font-black">+12%</span>
+                      <div className="flex items-center gap-1.5 text-emerald-500 bg-emerald-50/50 px-3 py-1.5 rounded-xl border border-emerald-100/50">
+                        <TrendingUp className="h-3.5 w-3.5" />
+                        <span className="text-[10px] font-black tracking-widest">+12%</span>
                       </div>
                     </div>
-                    <div className="text-3xl font-black text-[#111827] tracking-tighter">{stat.value}</div>
-                    <div className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mt-1">{stat.label}</div>
+                    <div className="flex flex-col gap-1">
+                      <div className="text-5xl font-black text-[#111827] tracking-tighter leading-none">{stat.value}</div>
+                      <div className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] mt-3 ml-0.5">{stat.label}</div>
+                    </div>
                   </Card>
                 ))}
               </div>
@@ -1584,7 +1745,7 @@ export default function DashboardPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {tours.map((tour) => (
+                        {tours.length > 0 ? tours.map((tour) => (
                           <tr key={tour._id} className="group hover:bg-[#faf8f3] transition-colors border-b border-gray-50 last:border-0">
                             <td className="p-4">
                               <div className="flex items-center space-x-3">
@@ -1611,7 +1772,24 @@ export default function DashboardPage() {
                               </div>
                             </td>
                           </tr>
-                        ))}
+                        )) : (
+                          <tr>
+                            <td colSpan={6} className="p-12 text-center">
+                              <div className="flex flex-col items-center gap-4">
+                                <Compass className="h-12 w-12 text-gray-200" />
+                                <p className="font-bold text-gray-500">No tours yet</p>
+                                <div className="flex gap-3">
+                                  <Button onClick={() => setIsCreateTourModalOpen(true)} size="sm" className="bg-[#111827] text-white rounded-xl">
+                                    <Plus className="h-4 w-4 mr-2" /> Create Tour
+                                  </Button>
+                                  <Button onClick={handleSeedTours} disabled={seedingTours} size="sm" variant="outline" className="rounded-xl border-[#bd9245] text-[#bd9245] hover:bg-[#bd9245] hover:text-white">
+                                    {seedingTours ? 'Adding...' : '✨ Add Sample Tours'}
+                                  </Button>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        )}
                       </tbody>
                     </table>
                   </div>
@@ -1645,7 +1823,7 @@ export default function DashboardPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {tickets.map((ticket) => (
+                        {tickets.length > 0 ? tickets.map((ticket) => (
                           <tr key={ticket._id} className="group hover:bg-[#faf8f3] transition-colors border-b border-gray-50 last:border-0">
                             <td className="p-4">
                               <div className="flex items-center space-x-3">
@@ -1670,7 +1848,24 @@ export default function DashboardPage() {
                               </div>
                             </td>
                           </tr>
-                        ))}
+                        )) : (
+                          <tr>
+                            <td colSpan={6} className="p-12 text-center">
+                              <div className="flex flex-col items-center gap-4">
+                                <Plane className="h-12 w-12 text-gray-200" />
+                                <p className="font-bold text-gray-500">No tickets yet</p>
+                                <div className="flex gap-3">
+                                  <Button onClick={() => setIsCreateTicketModalOpen(true)} size="sm" className="bg-[#111827] text-white rounded-xl">
+                                    <Plus className="h-4 w-4 mr-2" /> Create Ticket
+                                  </Button>
+                                  <Button onClick={handleSeedTickets} disabled={seedingTickets} size="sm" variant="outline" className="rounded-xl border-[#bd9245] text-[#bd9245] hover:bg-[#bd9245] hover:text-white">
+                                    {seedingTickets ? 'Adding...' : '✨ Add Sample Tickets'}
+                                  </Button>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        )}
                       </tbody>
                     </table>
                   </div>
@@ -1686,7 +1881,15 @@ export default function DashboardPage() {
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                     <div>
                       <CardTitle className="text-2xl font-black text-[#111827] tracking-tight uppercase">Home Page Banners</CardTitle>
-                      <CardDescription className="text-sm font-medium text-gray-400">Manage the hero slider banners on the home page</CardDescription>
+                      <CardDescription className="text-sm font-medium text-gray-400">Manage the hero slider banners on the home page — multiple banners create a slideshow</CardDescription>
+                    </div>
+                    <div className="flex gap-3">
+                      <Button onClick={handleSeedBanners} disabled={seedingBanners} variant="outline" className="rounded-2xl border-[#bd9245] text-[#bd9245] hover:bg-[#bd9245] hover:text-white font-black uppercase tracking-widest text-xs h-12 px-6">
+                        {seedingBanners ? 'Adding...' : '✨ Add Sample Banners'}
+                      </Button>
+                      <Button onClick={() => setIsCreateBannerModalOpen(true)} className="bg-[#111827] hover:bg-[#bd9245] text-white rounded-2xl px-6 h-12 font-black uppercase tracking-widest text-xs shadow-xl flex gap-2">
+                        <Plus className="h-4 w-4" /> New Banner
+                      </Button>
                     </div>
                   </div>
                 </CardHeader>
@@ -1728,10 +1931,15 @@ export default function DashboardPage() {
                       <div className="col-span-full py-20 text-center border-2 border-dashed border-gray-100 rounded-[40px] bg-gray-50/30">
                         <ImageIcon className="h-12 w-12 text-gray-200 mx-auto mb-4" />
                         <h4 className="text-[#111827] font-black uppercase tracking-tighter text-xl">No Banners Found</h4>
-                        <p className="text-gray-400 text-sm font-medium mt-2">Start by creating your first hero banner for the home page.</p>
-                        <Button onClick={() => setIsCreateBannerModalOpen(true)} className="mt-6 bg-[#bd9245] hover:bg-[#111827] text-white rounded-2xl px-8 h-12 font-black uppercase tracking-widest text-[10px] transition-all">
-                          Create Banner
-                        </Button>
+                        <p className="text-gray-400 text-sm font-medium mt-2">Add sample banners to instantly populate the homepage slider, or create your own custom banners.</p>
+                        <div className="flex justify-center gap-3 mt-6">
+                          <Button onClick={handleSeedBanners} disabled={seedingBanners} className="bg-[#bd9245] hover:bg-[#111827] text-white rounded-2xl px-8 h-12 font-black uppercase tracking-widest text-[10px] transition-all">
+                            {seedingBanners ? 'Adding...' : '✨ Add Sample Banners'}
+                          </Button>
+                          <Button onClick={() => setIsCreateBannerModalOpen(true)} variant="outline" className="rounded-2xl px-8 h-12 font-black uppercase tracking-widest text-[10px]">
+                            Create Custom Banner
+                          </Button>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -1761,9 +1969,9 @@ export default function DashboardPage() {
                       <thead>
                         <tr className="border-b">
                           <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Client Info</th>
-                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Rating</th>
                           <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Feedback</th>
-                          <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Date</th>
+                           <th className="text-left p-3 text-xs font-black uppercase tracking-widest text-gray-400">Date</th>
+                           <th className="text-center p-3 text-xs font-black uppercase tracking-widest text-gray-400">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1799,6 +2007,16 @@ export default function DashboardPage() {
                                <td className="p-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest whitespace-nowrap">
                                   {new Date(testimonial.createdAt).toLocaleDateString()}
                                </td>
+                               <td className="p-4 text-center">
+                                  <div className="flex items-center justify-center gap-2">
+                                     <Button variant="ghost" size="sm" onClick={() => handleEditTestimonial(testimonial)} className="text-blue-500 hover:bg-blue-50 rounded-xl">
+                                        <Edit className="h-4 w-4" />
+                                     </Button>
+                                     <Button variant="ghost" size="sm" onClick={() => handleDeleteTestimonial(testimonial)} className="text-red-500 hover:text-red-600 hover:bg-red-50 rounded-xl">
+                                        <Trash2 className="h-4 w-4" />
+                                     </Button>
+                                  </div>
+                               </td>
                             </tr>
                           ))
                         ) : (
@@ -1818,20 +2036,97 @@ export default function DashboardPage() {
           )}
 
           {activeView === 'blogs' && (
-            <div className="container mx-auto px-8 py-12">
-              <Card className="rounded-[40px] border-white shadow-sm overflow-hidden p-12">
-                <div className="max-w-md mx-auto text-center space-y-6">
-                  <div className="w-24 h-24 bg-[#111827] rounded-[32px] flex items-center justify-center mx-auto shadow-2xl">
-                    <FileText className="h-10 w-10 text-white" />
+            <div className="container mx-auto px-8 py-10 space-y-10">
+              <Card className="rounded-[40px] border-white shadow-sm overflow-hidden">
+                <CardHeader className="p-8 pb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                    <div>
+                      <CardTitle className="text-2xl font-black text-[#111827] tracking-tight uppercase">Content Studio</CardTitle>
+                      <CardDescription className="text-sm font-medium text-gray-400">Manage your travel blog narratives, tips, and experiences</CardDescription>
+                    </div>
+                    <div className="flex gap-3">
+                      <Button onClick={handleSeedBlogs} disabled={seedingBlogs} variant="outline" className="rounded-2xl border-[#bd9245] text-[#bd9245] hover:bg-[#bd9245] hover:text-white font-black uppercase tracking-widest text-xs h-12 px-6">
+                        {seedingBlogs ? 'Adding...' : '✨ Seed Stories'}
+                      </Button>
+                      <Button onClick={() => setIsCreateBlogModalOpen(true)} className="bg-[#111827] hover:bg-[#bd9245] text-white rounded-2xl px-6 h-12 font-black uppercase tracking-widest text-xs shadow-xl flex gap-2">
+                        <Plus className="h-4 w-4" /> New Narrative
+                      </Button>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-3xl font-black text-[#111827] tracking-tight uppercase">Content Studio</h3>
-                    <p className="text-gray-400 font-medium text-sm mt-2">The narrative management module is scheduled for implementation in Phase 3. Your current blog posts remain active.</p>
+                </CardHeader>
+                <CardContent className="p-8 pt-0">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b border-gray-100">
+                          <th className="p-4 text-left text-[10px] font-black uppercase tracking-widest text-gray-400">Narrative Title</th>
+                          <th className="p-4 text-left text-[10px] font-black uppercase tracking-widest text-gray-400">Category</th>
+                          <th className="p-4 text-left text-[10px] font-black uppercase tracking-widest text-gray-400">Author</th>
+                          <th className="p-4 text-left text-[10px] font-black uppercase tracking-widest text-gray-400">Featured</th>
+                          <th className="p-4 text-left text-[10px] font-black uppercase tracking-widest text-gray-400 text-center">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-50">
+                        {blogs.length > 0 ? blogs.map((blog) => (
+                          <tr key={blog._id} className="group hover:bg-gray-50/50 transition-colors">
+                            <td className="p-4">
+                              <div className="flex items-center gap-4">
+                                {blog.image?.url ? (
+                                  <div className="w-12 h-12 rounded-xl overflow-hidden border border-gray-100 flex-shrink-0">
+                                    <img src={blog.image.url} className="w-full h-full object-cover" alt="" />
+                                  </div>
+                                ) : (
+                                  <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center">
+                                    <FileText className="h-6 w-6 text-[#bd9245]" />
+                                  </div>
+                                )}
+                                <div>
+                                  <div className="font-bold text-sm text-[#111827] line-clamp-1">{blog.title}</div>
+                                  <div className="text-[10px] text-gray-400 font-medium">/{blog.slug}</div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="p-4">
+                              <Badge className="bg-blue-50 text-blue-600 rounded-lg text-[9px] uppercase font-black tracking-tight whitespace-nowrap">
+                                {blog.category}
+                              </Badge>
+                            </td>
+                            <td className="p-4 text-[11px] font-bold text-gray-500">{blog.author}</td>
+                            <td className="p-4">
+                              {blog.isFeatured && (
+                                <Badge className="bg-orange-50 text-orange-600 rounded-lg text-[9px] uppercase font-black tracking-tight">
+                                  Featured
+                                </Badge>
+                              )}
+                            </td>
+                            <td className="p-4 text-center">
+                              <div className="flex items-center justify-center gap-2">
+                                <Button variant="ghost" size="sm" onClick={() => { setSelectedBlog(blog); setIsEditBlogModalOpen(true); }} className="text-blue-500 hover:bg-blue-50 rounded-xl">
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="sm" onClick={() => handleDeleteBlog(blog)} className="text-red-500 hover:text-red-600 hover:bg-red-50 rounded-xl">
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        )) : (
+                          <tr>
+                            <td colSpan={5} className="p-12 text-center">
+                              <div className="flex flex-col items-center gap-4">
+                                <FileText className="h-12 w-12 text-gray-200" />
+                                <p className="font-bold text-gray-500 uppercase tracking-widest text-xs">No narratives published yet</p>
+                                <Button onClick={() => setIsCreateBlogModalOpen(true)} className="bg-[#111827] text-white rounded-2xl px-8">
+                                  <Plus className="h-4 w-4 mr-2" /> Start Writing
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
                   </div>
-                  <Button variant="outline" className="border-gray-200 text-[#111827] font-black px-10 py-6 rounded-2xl transition-all uppercase text-xs tracking-widest">
-                    View Published Content
-                  </Button>
-                </div>
+                </CardContent>
               </Card>
             </div>
           )}
@@ -1858,9 +2153,9 @@ export default function DashboardPage() {
                           ))}
                         </SelectContent>
                       </Select>
-                      
-                      <Button 
-                        onClick={reportModule === 'packages' ? handleExportToWord : undefined} 
+
+                      <Button
+                        onClick={reportModule === 'packages' ? handleExportToWord : undefined}
                         disabled={reportModule !== 'packages'}
                         className="w-full sm:w-auto bg-[#111827] hover:bg-[#bd9245] text-white font-black h-12 px-6 rounded-2xl shadow-xl shadow-[#111827]/10 transition-all uppercase text-xs tracking-widest disabled:opacity-50"
                       >
@@ -1972,7 +2267,7 @@ export default function DashboardPage() {
                             </td>
                           </tr>
                         )}
-                        {!['testimonials', 'blogs'].includes(reportModule) && 
+                        {!['testimonials', 'blogs'].includes(reportModule) &&
                          ((reportModule === 'packages' && packages.length === 0) ||
                           (reportModule === 'tours' && tours.length === 0) ||
                           (reportModule === 'tickets' && tickets.length === 0) ||
@@ -2041,8 +2336,8 @@ export default function DashboardPage() {
                                 <p className="text-xs text-gray-600 line-clamp-4 max-w-[300px]" title={enq.message}>{enq.message}</p>
                               </td>
                               <td className="p-4 align-top">
-                                <Button 
-                                  size="sm" 
+                                <Button
+                                  size="sm"
                                   variant="outline"
                                   onClick={() => {
                                     setSelectedEnquiry(enq);
@@ -2112,6 +2407,24 @@ export default function DashboardPage() {
         onPackageUpdated={handlePackageUpdated}
       />
 
+      {/* Create Blog Modal */}
+      <CreateBlogModal
+        isOpen={isCreateBlogModalOpen}
+        onClose={() => setIsCreateBlogModalOpen(false)}
+        onBlogCreated={() => fetchBlogs()}
+      />
+
+      {/* Edit Blog Modal */}
+      <EditBlogModal
+        isOpen={isEditBlogModalOpen}
+        onClose={() => {
+          setIsEditBlogModalOpen(false);
+          setSelectedBlog(null);
+        }}
+        blog={selectedBlog}
+        onBlogUpdated={() => fetchBlogs()}
+      />
+
       {/* Edit Tour Modal */}
       <EditTourModal
         isOpen={isEditTourModalOpen}
@@ -2153,6 +2466,16 @@ export default function DashboardPage() {
         isOpen={isCreateTestimonialModalOpen}
         onClose={() => setIsCreateTestimonialModalOpen(false)}
         onTestimonialCreated={handleTestimonialCreated}
+      />
+
+      <EditTestimonialModal
+        isOpen={isEditTestimonialModalOpen}
+        onClose={() => {
+          setIsEditTestimonialModalOpen(false);
+          setSelectedTestimonial(null);
+        }}
+        testimonial={selectedTestimonial}
+        onTestimonialUpdated={handleTestimonialUpdated}
       />
       
       <ReplyEnquiryModal

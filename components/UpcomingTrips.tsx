@@ -50,7 +50,11 @@ const UpcomingTrips = () => {
               <motion.div
                 key={`${trip.id}-${index}`}
                 className="relative flex-shrink-0 w-[300px] sm:w-[380px] h-[500px] mx-4 rounded-2xl overflow-hidden cursor-pointer group shadow-lg"
-                onClick={() => router.push(`/packages/${trip.id}`)}
+                onClick={() => {
+                  const itemType = trip.type || 'package';
+                  const route = itemType === 'tour' ? `/tours/${trip.id}` : itemType === 'ticket' ? `/tickets/${trip.id}` : `/packages/${trip.id}`;
+                  router.push(route);
+                }}
                 whileHover={{
                   y: -10,
                   transition: { duration: 0.3 }

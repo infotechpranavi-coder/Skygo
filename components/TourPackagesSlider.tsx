@@ -17,7 +17,7 @@ const TourPackagesSlider = () => {
       description: "Table Mountain → V&A Waterfront → Cape Point → Wine Tasting → Penguin Colony",
       price: "R12,500/person",
       duration: "4N/5D",
-      redirectUrl: "/packages/domestic"
+      redirectUrl: "/packages"
     },
     {
       id: 2,
@@ -26,7 +26,7 @@ const TourPackagesSlider = () => {
       description: "Big Five Spotting → Morning & Evening Drives → Bush Dinner → Luxury Lodge",
       price: "R18,900/person",
       duration: "3N/4D",
-      redirectUrl: "/packages/domestic"
+      redirectUrl: "/packages"
     },
     {
       id: 3,
@@ -35,7 +35,7 @@ const TourPackagesSlider = () => {
       description: "Knysna Lagoon → Cango Caves → Whale Watching → Scenic Coastal Drives",
       price: "R15,400/person",
       duration: "5N/6D",
-      redirectUrl: "/packages/domestic"
+      redirectUrl: "/packages"
     },
     {
       id: 4,
@@ -44,7 +44,7 @@ const TourPackagesSlider = () => {
       description: "Cableway → Boulders Beach → Cape of Good Hope → Castle of Good Hope",
       price: "R6,500/person",
       duration: "1 Day",
-      redirectUrl: "/packages/domestic"
+      redirectUrl: "/packages"
     },
     {
       id: 5,
@@ -53,7 +53,7 @@ const TourPackagesSlider = () => {
       description: "Exclusive Wine Tasting → Gourmet Dining → Spa Treatments → Helicopter Tour",
       price: "R25,000/person",
       duration: "3N/4D",
-      redirectUrl: "/packages/domestic"
+      redirectUrl: "/packages"
     }
   ];
 

@@ -4,6 +4,7 @@ export interface Destination {
   subtitle: string;
   image: string;
   link: string;
+  type?: 'package' | 'tour' | 'ticket';
 }
 
 export interface Trip {
@@ -13,6 +14,7 @@ export interface Trip {
   price: string;
   image: string;
   link: string;
+  type?: 'package' | 'tour' | 'ticket';
 }
 
 export interface Package {
@@ -23,6 +25,7 @@ export interface Package {
   price: string;
   image: string;
   link: string;
+  type?: 'package' | 'tour' | 'ticket';
 }
 
 export interface Testimonial {
@@ -39,28 +42,32 @@ export const destinations: Destination[] = [
     title: 'Cape Town Waterfront',
     subtitle: 'Beauty at the foot of Table Mountain',
     image: 'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    link: '/packages'
+    link: '/packages/1',
+    type: 'package'
   },
   {
     id: '2',
     title: 'Kruger National Park',
     subtitle: 'Ultimate wildlife safari experience',
     image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    link: '/packages'
+    link: '/packages',
+    type: 'package'
   },
   {
     id: '3',
     title: 'Johannesburg City',
     subtitle: 'The vibrant heart of South Africa',
     image: 'https://images.unsplash.com/photo-1549417229-aa67d3263c09?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    link: '/packages'
+    link: '/packages',
+    type: 'package'
   },
   {
     id: '4',
     title: 'Garden Route Scenic Drive',
     subtitle: 'Majestic coastal landscapes',
     image: 'https://images.unsplash.com/photo-1549417229-aa67d3263c09?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    link: '/packages'
+    link: '/packages',
+    type: 'package'
   }
 ];
 
@@ -71,7 +78,8 @@ export const upcomingTrips: Trip[] = [
     location: 'Western Cape',
     price: 'from R2,999',
     image: '/coast , south afirca.webp',
-    link: '/packages'
+    link: '/packages/1',
+    type: 'package'
   },
   {
     id: '2',
@@ -79,7 +87,8 @@ export const upcomingTrips: Trip[] = [
     location: 'Cape Town',
     price: 'from R1,299',
     image: '/cape town,south africa.webp',
-    link: '/packages'
+    link: '/packages/2',
+    type: 'package'
   },
   {
     id: '3',
@@ -87,7 +96,8 @@ export const upcomingTrips: Trip[] = [
     location: 'Cape Town',
     price: 'from R1,999',
     image: '/cape town.webp',
-    link: '/packages'
+    link: '/packages/3',
+    type: 'package'
   }
 ];
 
@@ -99,7 +109,8 @@ export const popularPackages: Package[] = [
     duration: '4 Days',
     price: 'R15,999',
     image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    link: '/packages'
+    link: '/packages',
+    type: 'package'
   },
   {
     id: '2',
@@ -108,7 +119,8 @@ export const popularPackages: Package[] = [
     duration: '3 Days',
     price: 'R8,499',
     image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    link: '/packages'
+    link: '/packages/2',
+    type: 'package'
   },
   {
     id: '3',
@@ -117,7 +129,8 @@ export const popularPackages: Package[] = [
     duration: '5 Days',
     price: 'R12,899',
     image: 'https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    link: '/packages'
+    link: '/packages/3',
+    type: 'package'
   },
   {
     id: '4',
@@ -126,7 +139,8 @@ export const popularPackages: Package[] = [
     duration: '6 Days',
     price: 'R18,999',
     image: 'https://images.unsplash.com/photo-1549417229-aa67d3263c09?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    link: '/packages'
+    link: '/packages',
+    type: 'package'
   },
   {
     id: '5',
@@ -135,7 +149,8 @@ export const popularPackages: Package[] = [
     duration: '5 Days',
     price: 'R11,499',
     image: '/cape town,south africa.webp',
-    link: '/packages'
+    link: '/packages/5',
+    type: 'package'
   }
 ];
 

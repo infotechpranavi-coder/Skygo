@@ -31,12 +31,12 @@ const PopularPackages = ({ initialPackages }: PopularPackagesProps) => {
         if (result.success && result.data && result.data.length > 0) {
           setPackages(result.data);
         } else {
-          // Fallback to static data formatted for the UI
-          setPackages(staticPackages);
+          // No longer falling back to static data as per user request
+          setPackages([]);
         }
       } catch (error) {
         console.error('Error fetching popular packages:', error);
-        setPackages(staticPackages);
+        setPackages([]);
       } finally {
         setIsLoading(false);
       }
@@ -118,13 +118,15 @@ const PopularPackages = ({ initialPackages }: PopularPackagesProps) => {
 
 // Helper component for cleaner code
 const PackageCard = ({ pkg, index, router }: any) => {
-  const packageId = pkg._id || pkg.id;
-  const imageUrl = pkg.images && pkg.images.length > 0 ? pkg.images[0].url : pkg.image;
+    const packageId = pkg._id || pkg.id;
+    const itemType = pkg.type || 'package';
+    const route = itemType === 'tour' ? `/tours/${packageId}` : itemType === 'ticket' ? `/tickets/${packageId}` : `/packages/${packageId}`;
+    const imageUrl = pkg.images && pkg.images.length > 0 ? pkg.images[0].url : pkg.image;
 
-  return (
-    <motion.div
-      className="group bg-white rounded-[40px] overflow-hidden p-3 shadow-[0_10px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_70px_rgba(0,0,0,0.1)] transition-all duration-700 cursor-pointer flex flex-col sm:flex-row h-full sm:h-[320px] border border-white"
-      onClick={() => router.push(`/packages/${packageId}`)}
+    return (
+      <motion.div
+        className="group bg-white rounded-[40px] overflow-hidden p-3 shadow-[0_10px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_70px_rgba(0,0,0,0.1)] transition-all duration-700 cursor-pointer flex flex-col sm:flex-row h-full sm:h-[320px] border border-white"
+        onClick={() => router.push(route)}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -166,7 +168,7 @@ const PackageCard = ({ pkg, index, router }: any) => {
             className="flex-1 bg-[#bd9245] hover:bg-[#a07835] text-white font-bold py-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
             onClick={(e) => {
               e.stopPropagation();
-              router.push(`/packages/${packageId}`);
+              router.push(route);
             }}
           >
             <span>View Details</span>

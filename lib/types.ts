@@ -11,7 +11,7 @@ export interface PackageData {
     subtitle: string;
     ideaFor?: string;
     about: string;
-    services: string;
+    services: string | string[];
     tourDetails: string;
     abstract?: string;
     tourOverview?: string;
@@ -63,6 +63,10 @@ export interface PackageData {
         items: string[];
     }>;
     reviews?: Review[];
+    faqs?: Array<{
+        question: string;
+        answer: string;
+    }>;
     bookings: number;
     rating: number;
     isFeaturedDestination?: boolean;
@@ -121,6 +125,11 @@ export interface TicketData {
         alt: string;
     }>;
     description: string;
+    itinerary: Array<{
+        day: number;
+        title: string;
+        description: string;
+    }>;
     isAvailable: boolean;
     bookings: number;
     createdAt: string;
@@ -139,6 +148,26 @@ export interface BannerData {
     link?: string;
     order?: number;
     isActive: boolean;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface BlogData {
+    _id: string;
+    title: string;
+    slug: string;
+    excerpt: string;
+    content: string;
+    author: string;
+    category: 'Travel Tips' | 'Destinations' | 'Lifestyle' | 'News' | 'Experience';
+    image: {
+        public_id: string;
+        url: string;
+        alt: string;
+    };
+    isFeatured: boolean;
+    status: 'draft' | 'published';
+    tags?: string[];
     createdAt: string;
     updatedAt: string;
 }

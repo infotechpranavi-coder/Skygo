@@ -21,7 +21,10 @@ import {
   PlayCircle,
   Heart,
   ShieldCheck,
-  Check
+  Check,
+  MessageSquare,
+  Car as CarIcon,
+  Award
 } from "lucide-react";
 
 // Utility function to render text with bold formatting
@@ -141,6 +144,49 @@ const PackageDetailModal = ({ isOpen, onClose, packageData }: PackageDetailModal
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Idea For & Services */}
+                <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {packageData.ideaFor && (
+                    <div className="bg-emerald-50/50 p-8 rounded-3xl border border-emerald-100/50">
+                      <div className="flex items-center gap-4 mb-4">
+                        <Users className="h-6 w-6 text-emerald-600" />
+                        <h4 className="text-xl font-bold text-gray-900">Ideal For</h4>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {packageData.ideaFor.split(',').map((tag, idx) => (
+                          <Badge key={idx} variant="outline" className="bg-white/80 border-emerald-100 text-emerald-700 font-bold px-4 py-1.5 rounded-full text-[10px] uppercase tracking-widest">
+                            {tag.trim()}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {packageData.services && (
+                    <div className="bg-blue-50/50 p-8 rounded-3xl border border-blue-100/50">
+                      <div className="flex items-center gap-4 mb-4">
+                        <Award className="h-6 w-6 text-blue-600" />
+                        <h4 className="text-xl font-bold text-gray-900">Our Services</h4>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {typeof packageData.services === 'string' ? (
+                          packageData.services.split(',').map((s, idx) => (
+                            <Badge key={idx} variant="outline" className="bg-white/80 border-blue-100 text-blue-700 font-bold px-4 py-1.5 rounded-full text-[10px] uppercase tracking-widest">
+                              {s.trim()}
+                            </Badge>
+                          ))
+                        ) : (
+                          packageData.services.map((s, idx) => (
+                            <Badge key={idx} variant="outline" className="bg-white/80 border-blue-100 text-blue-700 font-bold px-4 py-1.5 rounded-full text-[10px] uppercase tracking-widest">
+                              {s}
+                            </Badge>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 {/* Abstract Card */}
                 {packageData.abstract && (
                   <DetailCard
@@ -410,6 +456,79 @@ const PackageDetailModal = ({ isOpen, onClose, packageData }: PackageDetailModal
                   </div>
                 </div>
               </div>
+
+              {/* Logistics & Stay Details Section */}
+              {(packageData.transportation?.length > 0 || packageData.accommodation?.length > 0) && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 pt-8">
+                  {/* Transportation */}
+                  {packageData.transportation?.length > 0 && (
+                    <div className="space-y-8">
+                      <h3 className="text-2xl font-black text-gray-900 flex items-center gap-4 px-2">
+                        <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center">
+                          <CarIcon className="h-6 w-6 text-slate-600" />
+                        </div>
+                        Logistics
+                      </h3>
+                      <div className="p-10 rounded-[40px] bg-white border border-gray-100 shadow-sm space-y-6">
+                        {packageData.transportation.map((t, idx) => (
+                          <div key={idx} className="pb-6 border-b border-gray-50 last:border-0 last:pb-0">
+                            <p className="font-black text-gray-900 text-sm uppercase mb-1">{t.type}</p>
+                            <p className="text-gray-500 font-bold text-xs mb-2 tracking-tight">{t.vehicle}</p>
+                            <p className="text-gray-600 text-sm leading-relaxed">{t.description}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Accommodation */}
+                  {packageData.accommodation?.length > 0 && (
+                    <div className="space-y-8">
+                      <h3 className="text-2xl font-black text-gray-900 flex items-center gap-4 px-2">
+                        <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center">
+                          <Hotel className="h-6 w-6 text-indigo-600" />
+                        </div>
+                        Stay Details
+                      </h3>
+                      <div className="p-10 rounded-[40px] bg-white border border-gray-100 shadow-sm space-y-6">
+                        {packageData.accommodation.map((a, idx) => (
+                          <div key={idx} className="pb-6 border-b border-gray-50 last:border-0 last:pb-0">
+                            <p className="font-black text-gray-900 text-sm uppercase mb-1">{a.city}: {a.hotel}</p>
+                            <p className="text-gray-500 font-bold text-xs tracking-tight">{a.roomType} • {a.nights} • {a.rooms} Room(s)</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* FAQs Section */}
+              {packageData.faqs && packageData.faqs.length > 0 && (
+                <div className="space-y-10 pt-8">
+                  <div className="flex items-center gap-4 pb-4 border-b border-gray-100">
+                    <div className="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center shadow-inner">
+                      <MessageSquare className="h-7 w-7 text-indigo-600" />
+                    </div>
+                    <h2 className="text-3xl font-black text-gray-900 tracking-tight">Need to Know (FAQs)</h2>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {packageData.faqs.map((faq, idx) => (
+                      <div key={idx} className="bg-white border border-gray-100 rounded-[32px] p-8 shadow-sm hover:shadow-lg transition-all">
+                        <div className="flex items-start gap-4">
+                          <div className="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center shrink-0 mt-1">
+                            <Plus className="h-4 w-4 text-indigo-600" />
+                          </div>
+                          <div className="space-y-2">
+                            <p className="font-black text-gray-900 text-base leading-tight uppercase tracking-tight">{faq.question}</p>
+                            <p className="text-gray-600 text-sm italic font-medium leading-relaxed border-l-2 border-indigo-100 pl-4">{faq.answer}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Guest Reviews Section */}
               {packageData.reviews && packageData.reviews.length > 0 && (

@@ -34,9 +34,72 @@ interface Ticket {
     updatedAt: string;
 }
 
+const demoTickets = [
+    {
+        _id: 'demo-ticket-1',
+        title: 'Cape Town to Dubai – Premium Economy',
+        carrier: 'Emirates',
+        route: 'CPT → DXB',
+        price: 12500,
+        travelClass: 'Premium Economy',
+        departureTime: '23:30',
+        arrivalTime: '08:45 +1',
+        luggageAllowance: '2 x 23kg checked + 7kg cabin',
+        refundPolicy: 'Refundable with 15% fee before departure',
+        validity: '12 months from issue date',
+        location: 'Dubai, UAE',
+        images: [{ url: 'https://images.unsplash.com/photo-1436491865332-7a61a109c0f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Emirates Flight' }],
+        description: 'Direct overnight flight from Cape Town International to Dubai International. Wide seats, enhanced dining, and dedicated cabin service.',
+        isAvailable: true,
+        bookings: 0,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+    },
+    {
+        _id: 'demo-ticket-2',
+        title: 'Johannesburg to London Heathrow – Business Class',
+        carrier: 'South African Airways',
+        route: 'JNB → LHR',
+        price: 38000,
+        travelClass: 'Business',
+        departureTime: '18:15',
+        arrivalTime: '07:30 +1',
+        luggageAllowance: '3 x 32kg checked + 18kg cabin',
+        refundPolicy: 'Fully refundable up to 24 hours before departure',
+        validity: '12 months from issue date',
+        location: 'London, United Kingdom',
+        images: [{ url: 'https://images.unsplash.com/photo-1542296332-2e4473faf563?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Business Class Flight' }],
+        description: 'Non-stop overnight service from OR Tambo to London Heathrow. Lie-flat seats, premium dining, and exclusive lounge access at both airports.',
+        isAvailable: true,
+        bookings: 0,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+    },
+    {
+        _id: 'demo-ticket-3',
+        title: 'Durban to Cape Town – Economy Saver',
+        carrier: 'Airlink',
+        route: 'DUR → CPT',
+        price: 1800,
+        travelClass: 'Economy',
+        departureTime: '06:00',
+        arrivalTime: '08:10',
+        luggageAllowance: '1 x 20kg checked + 7kg cabin',
+        refundPolicy: 'Non-refundable, name change allowed once',
+        validity: '3 months from issue date',
+        location: 'Cape Town, South Africa',
+        images: [{ url: 'https://images.unsplash.com/photo-1587019158091-1a103c5dd17f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', alt: 'Domestic Flight' }],
+        description: 'Quick and affordable domestic flight from King Shaka International in Durban to Cape Town International. Perfect for early morning arrivals.',
+        isAvailable: true,
+        bookings: 0,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+    },
+] as Ticket[];
+
 const TicketsPage = () => {
-    const [tickets, setTickets] = useState<Ticket[]>([]);
-    const [filteredTickets, setFilteredTickets] = useState<Ticket[]>([]);
+    const [tickets, setTickets] = useState<Ticket[]>(demoTickets);
+    const [filteredTickets, setFilteredTickets] = useState<Ticket[]>(demoTickets);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [classFilter, setClassFilter] = useState("all");
@@ -55,11 +118,14 @@ const TicketsPage = () => {
         try {
             const response = await fetch('/api/tickets');
             const result = await response.json();
-            if (result.success) {
+            if (result.success && result.data && result.data.length > 0) {
                 setTickets(result.data);
+            } else {
+                setTickets(demoTickets);
             }
         } catch (error) {
             console.error('Error fetching flights:', error);
+            setTickets(demoTickets);
         } finally {
             setLoading(false);
         }
@@ -91,7 +157,7 @@ const TicketsPage = () => {
         }).format(price);
     };
 
-    if (loading) {
+    if (loading && tickets.length === 0) {
         return (
             <div className="min-h-screen bg-white flex items-center justify-center">
                 <div className="text-center">
