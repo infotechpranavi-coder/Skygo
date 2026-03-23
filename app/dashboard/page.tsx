@@ -106,19 +106,6 @@ export default function DashboardPage() {
   const fetchPackages = async () => {
     try {
       setLoading(true);
-
-      // First, try to seed packages if database is empty
-      try {
-        const seedResponse = await fetch('/api/packages/seed', { method: 'POST' });
-        const seedData = await seedResponse.json();
-        console.log('Seed response:', seedData);
-      } catch (seedError) {
-        console.log('Seed attempt completed or failed:', seedError);
-      }
-
-      // Wait a bit for database to update
-      await new Promise(resolve => setTimeout(resolve, 500));
-
       const response = await fetch('/api/packages');
       const data = await response.json();
       console.log('Fetched packages:', data);
@@ -139,9 +126,6 @@ export default function DashboardPage() {
 
   const fetchTours = async () => {
     try {
-      // Auto-seed if empty
-      await fetch('/api/tours/seed', { method: 'POST' });
-      
       const response = await fetch('/api/tours');
       const data = await response.json();
       if (data.success) setTours(data.data);
@@ -152,9 +136,6 @@ export default function DashboardPage() {
 
   const fetchTickets = async () => {
     try {
-      // Auto-seed if empty
-      await fetch('/api/tickets/seed', { method: 'POST' });
-
       const response = await fetch('/api/tickets');
       const data = await response.json();
       if (data.success) setTickets(data.data);
@@ -165,9 +146,6 @@ export default function DashboardPage() {
 
   const fetchBanners = async () => {
     try {
-      // Auto-seed if empty
-      await fetch('/api/banners/seed', { method: 'POST' });
-
       const response = await fetch('/api/banners');
       const data = await response.json();
       if (data.success) setBanners(data.data);
@@ -198,9 +176,6 @@ export default function DashboardPage() {
 
   const fetchBlogs = async () => {
     try {
-      // Auto-seed if empty
-      await fetch('/api/blogs/seed', { method: 'POST' });
-
       const response = await fetch('/api/blogs');
       const data = await response.json();
       if (data.success) setBlogs(data.data);
