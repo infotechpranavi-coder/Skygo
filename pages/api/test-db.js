@@ -1,5 +1,6 @@
 import connectDB from '../../lib/mongodb';
 import { isConnected } from '../../lib/mongodb';
+import mongoose from 'mongoose';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -8,16 +9,21 @@ export default async function handler(req, res) {
 
   try {
     console.log('Testing MongoDB connection...');
-    console.log('MONGODB_URI exists:', !!process.env.MONGODB_URI);
+    const hasEnvVar = !!process.env.MONGODB_URI;
     
     const dbConnection = await connectDB();
     const connected = isConnected();
+    
+    // Check if models are registered
+    const models = Object.keys(mongoose.models);
     
     return res.status(200).json({
       success: true,
       connected: connected,
       hasConnection: !!dbConnection,
-      hasEnvVar: !!process.env.MONGODB_URI,
+      hasEnvVar: hasEnvVar,
+      models: models,
+      readyState: mongoose.connection.readyState,
       message: connected 
         ? 'MongoDB is connected successfully!' 
         : 'MongoDB connection failed. Check console for details.'
@@ -26,8 +32,8 @@ export default async function handler(req, res) {
     return res.status(500).json({
       success: false,
       error: error.message,
+      stack: error.stack,
       connected: false
     });
   }
 }
-

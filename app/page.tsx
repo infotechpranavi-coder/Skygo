@@ -23,7 +23,7 @@ export default async function Home() {
       .lean();
     
     // Fetch popular packages limited to top 5
-    const packageDocs = await Package.find({ isPopular: true })
+    const packageDocs = await Package.find({ isPopularPackage: true })
       .limit(5)
       .lean();
     

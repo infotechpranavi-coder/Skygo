@@ -240,9 +240,4 @@ PackageSchema.pre('save', function (next) {
   next();
 });
 
-// Clear cached model if it exists to ensure schema changes are picked up
-if (mongoose.models.Package) {
-  delete mongoose.models.Package;
-}
-
-export default mongoose.model('Package', PackageSchema);
+export default mongoose.models.Package || mongoose.model('Package', PackageSchema);
