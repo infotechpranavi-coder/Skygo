@@ -94,7 +94,7 @@ const CreateBlogModal = ({ isOpen, onClose, onBlogCreated }: CreateBlogModalProp
                     uploadedImage = { public_id: uploadData.public_id, url: uploadData.url, alt: formData.title };
                 }
             } else if (externalImageUrl) {
-                uploadedImage = { url: externalImageUrl, alt: formData.title };
+                uploadedImage = { public_id: "external", url: externalImageUrl, alt: formData.title };
             }
 
             const payload = {

@@ -123,7 +123,7 @@ const EditTourModal = ({ isOpen, onClose, onTourUpdated, tourData }: EditTourMod
 
             // Add new external URLs
             for (const url of externalImageUrls) {
-                uploadedImages.push({ url, alt: formData.title });
+                uploadedImages.push({ public_id: "external", url, alt: formData.title });
             }
 
             const payload = {
