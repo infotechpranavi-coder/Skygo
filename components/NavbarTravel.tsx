@@ -213,7 +213,7 @@ const NavbarTravel = () => {
               <Search className="h-5 w-5" />
             </Button>
             <Button
-              onClick={openForm}
+              onClick={() => openForm()}
               className="bg-[#bd9245] hover:bg-[#a07835] text-gray-900 font-bold px-6 py-2 rounded-full shadow-lg"
             >
               Book Now

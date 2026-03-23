@@ -523,7 +523,7 @@ const Navbar = () => {
             <Button
               size="sm"
               className="bg-black hover:bg-gray-800 text-white whitespace-nowrap"
-              onClick={openForm}
+              onClick={() => openForm()}
             >
               Book Now
             </Button>

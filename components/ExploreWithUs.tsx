@@ -90,7 +90,7 @@ const ExploreWithUs = () => {
             {/* CTA Button and Phone */}
             <div className="flex items-center gap-6">
               <Button
-                onClick={openForm}
+                onClick={() => openForm()}
                 className="bg-[#bd9245] hover:bg-[#a07835] text-gray-900 font-bold px-8 py-6 rounded-lg text-base"
               >
                 Book Now
