@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Upload, X } from "lucide-react";
 import { BannerData } from "@/lib/types";
+import { compressImage } from "@/lib/utils";
 
 interface EditBannerModalProps {
     isOpen: boolean;
@@ -59,13 +60,7 @@ const EditBannerModal = ({ isOpen, onClose, onBannerUpdated, banner }: EditBanne
         }
     };
 
-    const fileToBase64 = (file: File): Promise<string> =>
-        new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result as string);
-            reader.onerror = e => reject(e);
-        });
+    // Image compression is now handled within handleSubmit using the global utility
 
     const handleSubmit = async () => {
         if (!banner) return;
@@ -81,7 +76,7 @@ const EditBannerModal = ({ isOpen, onClose, onBannerUpdated, banner }: EditBanne
             let updatedImage = banner.image;
 
             if (image) {
-                const base64 = await fileToBase64(image);
+                const base64 = await compressImage(image);
                 const uploadRes = await fetch('/api/upload', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

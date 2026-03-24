@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Plus, Minus, X, Upload, Star } from "lucide-react";
+import { compressImage } from "@/lib/utils";
 
 interface ItineraryDay {
   id: string;
@@ -94,13 +95,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
     }
   };
 
-  const fileToBase64 = (file: File): Promise<string> =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = e => reject(e);
-    });
+  // Image compression is now handled within handleSubmit using the global utility
 
   const handleSubmit = async () => {
     if (!formData.title || !formData.price) {
@@ -113,7 +108,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
       // 1. Upload images to Cloudinary
       const uploadedImages: Array<{ public_id?: string; url: string; alt: string }> = [];
       for (const file of images) {
-        const base64 = await fileToBase64(file);
+        const base64 = await compressImage(file);
         const uploadRes = await fetch('/api/upload', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

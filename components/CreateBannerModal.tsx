@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Upload, X } from "lucide-react";
 import { BannerData } from "@/lib/types";
+import { compressImage } from "@/lib/utils";
 
 interface CreateBannerModalProps {
     isOpen: boolean;
@@ -45,13 +46,7 @@ const CreateBannerModal = ({ isOpen, onClose, onBannerCreated }: CreateBannerMod
         }
     };
 
-    const fileToBase64 = (file: File): Promise<string> =>
-        new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result as string);
-            reader.onerror = e => reject(e);
-        });
+    // Image compression is now handled within handleSubmit using the global utility
 
     const handleSubmit = async () => {
         if (!formData.title || !formData.subtitle || (!image && !externalImageUrl)) {
@@ -66,7 +61,7 @@ const CreateBannerModal = ({ isOpen, onClose, onBannerCreated }: CreateBannerMod
             let uploadedImage = { public_id: "", url: "", alt: "" };
 
             if (image) {
-                const base64 = await fileToBase64(image);
+                const base64 = await compressImage(image);
                 const uploadRes = await fetch('/api/upload', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

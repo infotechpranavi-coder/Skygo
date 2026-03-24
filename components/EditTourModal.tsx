@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Minus, X, Upload } from "lucide-react";
+import { Plus, Minus, X, Upload, Star } from "lucide-react";
+import { compressImage } from "@/lib/utils";
 import { TourData } from "@/lib/types";
 
 import { Badge } from "@/components/ui/badge";
@@ -89,13 +90,7 @@ const EditTourModal = ({ isOpen, onClose, onTourUpdated, tourData }: EditTourMod
         }
     };
 
-    const fileToBase64 = (file: File): Promise<string> =>
-        new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result as string);
-            reader.onerror = e => reject(e);
-        });
+    // Image compression handled in handleSubmit
 
     const handleSubmit = async () => {
         if (!formData.title || !formData.price || !formData.location || !tourData) {
@@ -109,7 +104,7 @@ const EditTourModal = ({ isOpen, onClose, onTourUpdated, tourData }: EditTourMod
             
             // Upload new local files
             for (const file of newImages) {
-                const base64 = await fileToBase64(file);
+                const base64 = await compressImage(file);
                 const uploadRes = await fetch('/api/upload', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

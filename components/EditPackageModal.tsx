@@ -7,7 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Plus, Minus, X, Upload, Image as ImageIcon, Bold, Star } from "lucide-react";
+import { Plus, Minus, X, Upload, Star, Image as ImageIcon, Bold } from "lucide-react";
+import { compressImage } from "@/lib/utils";
 
 // Utility function to render text with bold formatting
 const renderBoldText = (text: string) => {
@@ -570,13 +571,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
     fileInputRef.current?.click();
   };
 
-  const fileToBase64 = (file: File): Promise<string> =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = e => reject(e);
-    });
+  // Image compression is now handled within handleSubmit using the global utility
 
   const handleSubmit = async () => {
     try {
@@ -588,7 +583,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
         console.log('Uploading', newImages.length, 'new images to Cloudinary...');
         for (const file of newImages) {
           try {
-            const base64 = await fileToBase64(file);
+            const base64 = await compressImage(file);
             const uploadRes = await fetch('/api/upload', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
