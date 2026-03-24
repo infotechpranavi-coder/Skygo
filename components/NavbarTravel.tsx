@@ -11,6 +11,8 @@ import { useInquiryForm } from "../contexts/InquiryFormContext";
 const NavbarTravel = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [pillStyle, setPillStyle] = useState({ width: 0, left: 0, opacity: 0 });
   const navRefs = useRef<(HTMLAnchorElement | null)[]>([]);
@@ -120,6 +122,24 @@ const NavbarTravel = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, [currentIndex]);
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+
+    const query = searchQuery.toLowerCase();
+    
+    if (query.includes('tour') || query.includes('visit') || query.includes('sightsee')) {
+      router.push(`/tours?search=${encodeURIComponent(searchQuery)}`);
+    } else if (query.includes('ticket') || query.includes('flight') || query.includes('air')) {
+      router.push(`/tickets?search=${encodeURIComponent(searchQuery)}`);
+    } else {
+      router.push(`/packages?search=${encodeURIComponent(searchQuery)}`);
+    }
+    
+    setIsSearchOpen(false);
+    setSearchQuery("");
+  };
+
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
       ? 'bg-white/95 backdrop-blur-md shadow-lg'
@@ -142,7 +162,7 @@ const NavbarTravel = () => {
           </Link>
 
           {/* Centered Navigation Pill */}
-          <div className="hidden lg:flex items-center justify-center flex-1">
+          <div className={`hidden lg:flex items-center justify-center flex-1 transition-all duration-300 ${isSearchOpen ? 'opacity-0 pointer-events-none scale-95' : 'opacity-100'}`}>
             <div className="relative flex items-center gap-[10px] rounded-full px-[12px] py-[10px] bg-black/55 backdrop-blur-[10px] border border-black/20">
               {/* Sliding White Pill Indicator */}
               <div
@@ -204,17 +224,36 @@ const NavbarTravel = () => {
           </div>
 
           {/* Right Side: Search + Book Now */}
-          <div className="hidden lg:flex items-center space-x-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              className={`${isScrolled ? 'text-gray-700' : 'text-white'}`}
-            >
-              <Search className="h-5 w-5" />
-            </Button>
+          <div className="hidden lg:flex items-center space-x-4 relative">
+            <div className={`flex items-center transition-all duration-500 overflow-hidden ${isSearchOpen ? 'w-[400px] absolute right-32' : 'w-10'}`}>
+              {isSearchOpen ? (
+                <form onSubmit={handleSearch} className="flex items-center w-full bg-white/80 backdrop-blur-xl rounded-full border border-[#bd9245]/30 shadow-sm px-2 overflow-hidden">
+                  <Input
+                    autoFocus
+                    placeholder="Search trips, flights, or packages..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="border-none outline-none shadow-none ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent text-gray-800 h-10 w-full rounded-full"
+                  />
+                  <Button type="button" variant="ghost" size="icon" onClick={() => setIsSearchOpen(false)} className="text-gray-400 hover:text-red-400 rounded-full h-8 w-8 ml-1 shrink-0">
+                    <X className="h-4 w-4" />
+                  </Button>
+                </form>
+              ) : (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsSearchOpen(true)}
+                  className={`${isScrolled ? 'text-gray-700' : 'text-white'} hover:bg-white/10`}
+                >
+                  <Search className="h-5 w-5" />
+                </Button>
+              )}
+            </div>
+            
             <Button
               onClick={() => openForm()}
-              className="bg-[#bd9245] hover:bg-[#a07835] text-gray-900 font-bold px-6 py-2 rounded-full shadow-lg"
+              className="bg-[#bd9245] hover:bg-[#a07835] text-gray-900 font-bold px-6 py-2 rounded-full shadow-lg h-10 whitespace-nowrap"
             >
               Book Now
             </Button>
