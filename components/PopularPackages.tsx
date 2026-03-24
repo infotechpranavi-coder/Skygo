@@ -65,12 +65,24 @@ const PopularPackages = ({ initialPackages }: PopularPackagesProps) => {
       className="py-24 bg-[#faf8f3]"
     >
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        {/* Force single column for anything below very large desktop to avoid overlap */}
+        <style jsx>{`
+          .popular-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+          }
+          @media (min-width: 1440px) {
+            .popular-grid {
+              grid-template-columns: 1fr 1fr;
+            }
+          }
+        `}</style>
+        <div className="popular-grid gap-8 items-start">
 
           {/* Left Column: Title + 2 Cards */}
-          <div className="space-y-8">
-            <div className="mb-12">
-              <h2 className="text-7xl md:text-8xl lg:text-9xl font-[1000] text-[#1e1f44] leading-[0.8] tracking-tighter uppercase">
+          <div className="space-y-8 2xl:pr-4">
+            <div className="mb-6 md:mb-10 lg:overflow-hidden">
+              <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-[1000] text-[#1e1f44] leading-[0.9] tracking-tighter uppercase break-words">
                 POPULAR<br />PACKAGES
               </h2>
             </div>
@@ -86,7 +98,7 @@ const PopularPackages = ({ initialPackages }: PopularPackagesProps) => {
           </div>
 
           {/* Right Column: 3 Cards + View All Button (With Offset) */}
-          <div className="space-y-8 lg:pt-20">
+          <div className="space-y-8 2xl:pt-20">
             {col2.map((pkg, idx) => (
               <PackageCard
                 key={pkg._id || pkg.id}

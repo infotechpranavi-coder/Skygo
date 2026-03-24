@@ -78,7 +78,7 @@ const ClientFeedback = () => {
 
         <div className="flex flex-col lg:flex-row items-center gap-12 relative h-full">
           {/* Main Image Area */}
-          <div className="relative w-[220px] h-[220px] md:w-[280px] md:h-[280px] flex-shrink-0 overflow-hidden rounded-full">
+          <div className="relative w-[160px] h-[160px] md:w-[280px] md:h-[280px] flex-shrink-0 overflow-hidden rounded-full">
             <div className="absolute inset-0 bg-[#ffc107] rounded-full scale-90" />
             <AnimatePresence mode="popLayout" custom={direction} initial={false}>
               <motion.div
@@ -107,10 +107,10 @@ const ClientFeedback = () => {
           <div className="hidden lg:block w-[1.5px] h-[220px] bg-[#1e1f44]/10 mx-6 flex-shrink-0" />
 
           {/* Testimonial Content */}
-          <div className="flex-grow relative min-h-[400px] flex flex-col justify-center overflow-hidden">
-            <AnimatePresence mode="popLayout" custom={direction} initial={false}>
+          <div className="flex-grow relative min-h-[300px] md:min-h-[400px] flex flex-col justify-center">
+            <AnimatePresence mode="popLayout" custom={direction} initial={true}>
               <motion.div
-                key={displayTestimonials[activeIndex].id}
+                key={displayTestimonials[activeIndex].id || activeIndex}
                 custom={direction}
                 variants={variants}
                 initial="enter"
@@ -120,17 +120,17 @@ const ClientFeedback = () => {
                   x: { type: "spring", stiffness: 200, damping: 25 },
                   opacity: { duration: 0.5 },
                 }}
-                className="absolute w-full"
+                className="relative md:absolute md:inset-x-0 md:top-0 md:bottom-0 flex flex-col justify-center py-8 md:py-0"
               >
-                <Quote className="w-14 h-14 text-[#bd9245] mb-4 fill-[#bd9245]" />
-                <p className="text-lg md:text-[20px] text-gray-700 leading-snug font-medium mb-8 max-w-3xl tracking-tight">
+                <Quote className="w-10 h-10 md:w-14 md:h-14 text-[#bd9245] mb-4 fill-[#bd9245]" />
+                <p className="text-lg md:text-[20px] text-gray-700 leading-snug font-medium mb-6 md:mb-8 max-w-3xl tracking-tight">
                   {displayTestimonials[activeIndex].quote}
                 </p>
                 <div>
-                  <h4 className="text-2xl font-black text-[#1e1f44] uppercase tracking-tighter">
+                  <h4 className="text-xl md:text-2xl font-black text-[#1e1f44] uppercase tracking-tighter">
                     {displayTestimonials[activeIndex].name}
                   </h4>
-                  <p className="text-gray-400 font-bold uppercase tracking-[0.2em] text-xs mt-2">
+                  <p className="text-gray-400 font-bold uppercase tracking-[0.2em] text-[10px] md:text-xs mt-1 md:mt-2">
                     {displayTestimonials[activeIndex].role}
                   </p>
                 </div>

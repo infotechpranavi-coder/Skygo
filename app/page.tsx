@@ -5,7 +5,6 @@ import DestinationsGrid from "../components/DestinationsGrid";
 import UpcomingTrips from "../components/UpcomingTrips";
 import PopularPackages from "../components/PopularPackages";
 import ClientFeedback from "../components/ClientFeedback";
-import FloatingCallButton from "../components/FloatingCallButton";
 import connectDB from "@/lib/mongodb";
 import Banner from "@/models/Banner";
 import Package from "@/models/Package";
@@ -45,8 +44,6 @@ export default async function Home() {
       <ClientFeedback />
 
 
-      {/* Floating Call Button */}
-      <FloatingCallButton />
     </div>
   );
 }
