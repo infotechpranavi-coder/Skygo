@@ -100,13 +100,13 @@ const HeroExplore = ({ initialBanners }: HeroExploreProps) => {
     >
       {/* Background Images with AnimatePresence */}
       <div className="absolute inset-0 z-0">
-        <AnimatePresence mode="wait">
+        <AnimatePresence initial={false}>
           <motion.div
             key={currentBanner._id}
-            initial={{ opacity: 0, scale: 1.1 }}
+            initial={{ opacity: 0, scale: 1.05 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
             className="absolute inset-0"
           >
             <div className="absolute inset-0">
@@ -135,42 +135,42 @@ const HeroExplore = ({ initialBanners }: HeroExploreProps) => {
 
       {/* Content with AnimatePresence */}
       <div className="relative z-20 container mx-auto px-4 text-center pt-24 md:pt-32">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentIndex}
-            className="max-w-5xl mx-auto"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -30 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <p className="text-amber-500 font-black uppercase tracking-[0.5em] text-xs sm:text-sm mb-6 drop-shadow-[0_2px_12px_rgba(0,0,0,1)]">
-              PREMIUM EXPERIENCES
-            </p>
-            
-            <h2 className="text-6xl sm:text-7xl md:text-8xl lg:text-[140px] font-[1000] leading-[0.85] tracking-tighter uppercase drop-shadow-[0_10px_40px_rgba(0,0,0,1)] mb-8">
-              {renderTitle(currentBanner.title)}
-            </h2>
+        <div className="max-w-5xl mx-auto">
+          <AnimatePresence mode="popLayout" initial={false}>
+            <motion.div
+              key={currentIndex}
+              initial={{ opacity: 0, scale: 0.95, y: -40 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 1.05, y: 40 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            >
+              <p className="text-amber-500 font-black uppercase tracking-[0.5em] text-xs sm:text-sm mb-6 drop-shadow-[0_2px_12px_rgba(0,0,0,1)]">
+                PREMIUM EXPERIENCES
+              </p>
+              
+              <h2 className="text-6xl sm:text-7xl md:text-8xl lg:text-[140px] font-[1000] leading-[0.85] tracking-tighter uppercase drop-shadow-[0_10px_40px_rgba(0,0,0,1)] mb-8">
+                {renderTitle(currentBanner.title)}
+              </h2>
 
-            <p className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-12 max-w-3xl mx-auto tracking-widest drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)] uppercase">
-              {currentBanner.subtitle.split('\n').filter(l => l.trim()).map((line, i) => (
-                <span key={i} className="block">{line}</span>
-              ))}
-            </p>
+              <p className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-12 max-w-3xl mx-auto tracking-widest drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)] uppercase">
+                {currentBanner.subtitle.split('\n').filter(l => l.trim()).map((line, i) => (
+                  <span key={i} className="block">{line}</span>
+                ))}
+              </p>
+            </motion.div>
+          </AnimatePresence>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-24">
-              <Button
-                onClick={() => currentBanner.link ? router.push(currentBanner.link) : openForm()}
-                size="lg"
-                className="bg-amber-500 hover:bg-white hover:text-gray-900 text-gray-900 font-black px-12 py-8 text-xs rounded-2xl shadow-2xl transition-all uppercase tracking-widest border-none"
-              >
-                {currentBanner.link ? 'View Details' : 'Start With Sky Go'}
-              </Button>
-            </div>
-            
-
-          </motion.div>
-        </AnimatePresence>
+          {/* Static CTA Button */}
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-12 mb-24">
+            <Button
+              onClick={() => currentBanner.link ? router.push(currentBanner.link) : openForm()}
+              size="lg"
+              className="bg-amber-500 hover:bg-white hover:text-gray-900 text-gray-900 font-black px-12 py-8 text-xs rounded-2xl shadow-2xl transition-all uppercase tracking-widest border-none"
+            >
+              {currentBanner.link ? 'View Details' : 'Start With Sky Go'}
+            </Button>
+          </div>
+        </div>
       </div>
 
       {/* Slider Indicators */}
